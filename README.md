@@ -1,6 +1,8 @@
 # Speed Dial Quantum
 
 [![Build Status](https://travis-ci.org/Ahimta/speed-dial-quantum.svg?branch=master)](https://travis-ci.org/Ahimta/speed-dial-quantum)
+[![Maintainability](https://api.codeclimate.com/v1/badges/15c3eccd9ed65250d0d1/maintainability)](https://codeclimate.com/github/Ahimta/speed-dial-quantum/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/15c3eccd9ed65250d0d1/test_coverage)](https://codeclimate.com/github/Ahimta/speed-dial-quantum/test_coverage)
 
 ## Development
 
