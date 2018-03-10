@@ -14,7 +14,6 @@ document.addEventListener('keypress', event => {
 
   const [, digitString] = match
   const digit = parseInt(digitString, 10)
-  window.alert(digit)
 
   // @ts-ignore
   browser.runtime.sendMessage({ digit })

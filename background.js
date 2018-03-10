@@ -8,7 +8,6 @@ browser.runtime.onMessage.addListener(async request => {
   }
 
   const url = await storedUrl(index)
-  window.alert(url)
   if (!url) {
     return
   }
