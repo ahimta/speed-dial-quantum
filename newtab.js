@@ -343,7 +343,7 @@ function thumbnailsElements (thumbnails, selectedGroupId) {
 }
 
 document.addEventListener('keypress', event => {
-  if (!event.ctrlKey || !event.code) {
+  if (!(event.code && (event.altKey || event.ctrlKey))) {
     return
   }
 
@@ -359,7 +359,11 @@ document.addEventListener('keypress', event => {
   const digit = parseInt(digitString, 10)
 
   // @ts-ignore
-  browser.runtime.sendMessage({ digit })
+  browser.runtime.sendMessage({
+    digit,
+    altKey: event.altKey,
+    ctrlKey: event.ctrlKey
+  })
 })
 
 render('d7bc0008-67ec-478f-b792-ae9591574939')

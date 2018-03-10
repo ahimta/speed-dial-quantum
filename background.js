@@ -12,8 +12,13 @@ browser.runtime.onMessage.addListener(async request => {
     return
   }
 
-  // @ts-ignore
-  browser.tabs.create({ url })
+  if (request.altKey) {
+    // @ts-ignore
+    browser.tabs.create({ url })
+  } else if (request.ctrlKey) {
+    // @ts-ignore
+    browser.tabs.update({ url })
+  }
 })
 
 async function storedUrl (index) {
