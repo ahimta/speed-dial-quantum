@@ -1,0 +1,25 @@
+{
+  "name": "speed-dial-quantum",
+  "description": "Speed Dial Quantum",
+  "version": "0.0.1",
+  "private": true,
+  "repository": "https://github.com/Ahimta/speed-dial-quantum",
+  "author": "Abdullah Alansari",
+  "license": "GPL-3.0-only",
+  "scripts": {
+    "start": "web-ext run",
+    "test": "npm run lint",
+    "lint": "npm run prettier && npm run standard && web-ext lint",
+    "prettier": "prettier --write *.{js,json,md}",
+    "standard": "standard --fix",
+    "web-ext": "web-ext"
+  },
+  "devDependencies": {
+    "prettier": "^1.11.1",
+    "standard": "^11.0.0",
+    "web-ext": "^2.4.0"
+  },
+  "standard": {
+    "globals": ["browser"]
+  }
+}
