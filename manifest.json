@@ -1,9 +1,11 @@
 {
   "manifest_version": 2,
-  "name": "speed-dial-quantum",
-  "description": "Speed Dial Quantum",
+  "name": "Speed Dial Quantum",
+  "short_name": "Speed Dial",
+  "description": "Minimal speed-dial extension with support for importing Speed Dial pages",
   "homepage_url": "https://github.com/Ahimta/speed-dial-quantum",
-  "version": "0.0.1",
+  "author": "Abdullah Alansari",
+  "version": "0.0.2",
   "permissions": ["storage", "tabs", "unlimitedStorage", "<all_urls>"],
   "background": {
     "scripts": ["background.js"]
@@ -19,7 +21,7 @@
   },
   "applications": {
     "gecko": {
-      "id": "{267adfc6-7036-451b-aee7-60f0ae4ec2e9}",
+      "id": "{71ec5708-2489-11e8-8697-87e8af1da1d9}",
       "strict_min_version": "57.0"
     }
   }
