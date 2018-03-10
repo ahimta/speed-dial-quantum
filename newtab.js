@@ -133,8 +133,6 @@ async function render (selectedGroupId) {
 }
 
 function tabElement (groups, thumbnailsElements, selectedGroupId) {
-  console.log({ groups, selectedGroupId })
-
   const tab = createElement('section', { className: 'card text-center' })
   const header = createElement('header', {
     className: 'card-header',
@@ -196,6 +194,7 @@ function tabElement (groups, thumbnailsElements, selectedGroupId) {
     children: [
       createElement('button', {
         className: 'btn btn-block btn-success',
+        disabled: 'disabled',
         innerText: 'Import Speed Dial',
         type: 'button'
       })
@@ -370,6 +369,7 @@ function createElement (
   {
     alt = null,
     className = null,
+    disabled = null,
     href = null,
     innerText = null,
     role = null,
@@ -387,6 +387,9 @@ function createElement (
   }
   if (className) {
     element.className = className
+  }
+  if (disabled) {
+    element.disabled = disabled
   }
   if (href) {
     element.href = href
