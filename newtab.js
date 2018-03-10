@@ -343,6 +343,26 @@ function thumbnailsElements (thumbnails, selectedGroupId) {
   return cardGroups
 }
 
+document.addEventListener('keypress', event => {
+  if (!event.ctrlKey || !event.code) {
+    return
+  }
+
+  const match = event.code.match(/^Digit([0-9])$/)
+
+  if (!match) {
+    return
+  }
+
+  event.preventDefault()
+
+  const [, digitString] = match
+  const digit = parseInt(digitString, 10)
+
+  // @ts-ignore
+  browser.runtime.sendMessage({ digit })
+})
+
 render('d7bc0008-67ec-478f-b792-ae9591574939')
 
 function createElement (
