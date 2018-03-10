@@ -7,13 +7,12 @@
   "author": "Abdullah Alansari",
   "license": "GPL-3.0-only",
   "scripts": {
+    "build": "web-ext build",
     "start": "web-ext run",
     "test": "npm run lint",
     "lint": "npm run prettier && npm run standard && web-ext lint",
     "prettier": "prettier --write *.{js,json,md}",
-    "standard": "standard --fix",
-    "web-ext": "web-ext",
-    "sign": "web-ext sign"
+    "standard": "standard --fix"
   },
   "devDependencies": {
     "prettier": "^1.11.1",

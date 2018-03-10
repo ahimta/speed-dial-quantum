@@ -14,6 +14,11 @@
 1.  `yarn install --emoji`
 2.  `yarn test`
 
+## Build
+
+1.  `yarn install --emoji`
+2.  `yarn build`
+
 ## Design (in Scala)
 
 ### Entities
