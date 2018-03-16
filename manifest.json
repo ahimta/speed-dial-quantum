@@ -3,7 +3,7 @@
   "name": "Speed Dial Quantum",
   "short_name": "Speed Dial",
   "description":
-    "Minimal speed-dial extension with support for importing Speed Dial pages",
+    "Minimal speed-dial extension with support for keyboard shortcuts & importing Speed Dial pages",
   "homepage_url": "https://github.com/Ahimta/speed-dial-quantum",
   "author": "Abdullah Alansari",
   "version": "0.0.7",

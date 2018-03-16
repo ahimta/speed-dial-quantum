@@ -4,6 +4,8 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/15c3eccd9ed65250d0d1/maintainability)](https://codeclimate.com/github/Ahimta/speed-dial-quantum/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/15c3eccd9ed65250d0d1/test_coverage)](https://codeclimate.com/github/Ahimta/speed-dial-quantum/test_coverage)
 
+Minimal speed-dial extension with support for keyboard shortcuts & importing Speed Dial pages
+
 ## Development
 
 1.  `yarn install --emoji`
