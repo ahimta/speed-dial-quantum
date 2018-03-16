@@ -3,9 +3,6 @@
 // @ts-ignore
 browser.runtime.onMessage.addListener(async request => {
   const index = parseInt(request.digit, 10) - 1
-  if (index < 0 || index >= 8) {
-    return
-  }
 
   const url = await storedUrl(index)
   if (!url) {

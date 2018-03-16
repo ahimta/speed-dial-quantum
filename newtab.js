@@ -32,6 +32,7 @@ const groupRepo = (() => {
       const newGroups = oldGroups.filter(t => t.id !== id)
       await updateGroups(newGroups)
     },
+    replace: updateGroups,
     update: async (id, { name = null } = {}) => {
       const oldGroups = await getOldGroups()
       const group = oldGroups.filter(t => t.id === id)[0]
@@ -82,6 +83,7 @@ const thumbnailRepo = (() => {
       const newThumbnails = oldThumbnails.filter(t => t.id !== id)
       await updateThumbnails(newThumbnails)
     },
+    replace: updateThumbnails,
     update: async (
       id,
       { url = null, groupId = null, title = null, imgUrl = null } = {}
@@ -119,10 +121,7 @@ async function render (selectedGroupId) {
     thumbnailRepo.list()
   ])
 
-  const x = thumbnailsElements(
-    thumbnails.filter(t => t.groupId === selectedGroupId),
-    selectedGroupId
-  )
+  const x = thumbnailsElements(thumbnails, selectedGroupId)
   const y = tabElement(groups, x, selectedGroupId)
 
   const root = document.getElementById('root')
@@ -189,14 +188,100 @@ function tabElement (groups, thumbnailsElements, selectedGroupId) {
     children: thumbnailsElements
   })
 
+  const speedDialFile = createElement('input', {
+    type: 'file',
+    style: { display: 'none' },
+    onChange: async event => {
+      const file = event.target.files[0]
+      // @ts-ignore
+      const reader = new window.FileReader()
+      reader.readAsText(file)
+      const text = await (() =>
+        new Promise(resolve => {
+          reader.onload = () => resolve(reader.result)
+        }))()
+      const lines = text.split(/[\r\n]+/)
+      const groupsLines = lines.filter(line =>
+        line.match(/^group-\d+-((columns)|(rows)|(title))=.+$/g)
+      )
+      const thumbnailsLines = lines.filter(line =>
+        line.match(/^thumbnail-\d+-((label)|(url))=.+$/g)
+      )
+      const groupsLength = Math.ceil(groupsLines.length / 3)
+      const __groups = new Array(groupsLength)
+
+      for (let i = 0; i < groupsLines.length; i++) {
+        const groupLine = groupsLines[i]
+        const match = groupLine.match(/^group-(\d+)-(\w+)=(.+)$/)
+        const [, no, _attr, _value] = match
+        const index = parseInt(no, 10) - 1
+        const attr = _attr !== 'title' ? _attr : 'name'
+        const value =
+          attr === 'name' ? decodeURIComponent(_value) : parseInt(_value, 10)
+        const group = __groups[index] || {}
+        group[attr] = value
+        __groups[index] = group
+      }
+
+      const _groups = __groups.map(({ name, rows, columns }) => ({
+        name,
+        id: uuid(),
+        length: rows * columns
+      }))
+
+      const thumbnailsLength = _groups
+        .map(({ length }) => length)
+        .reduce((acc, x) => acc + x, 0)
+      const thumbnails = new Array(thumbnailsLength)
+
+      for (let i = 0; i < thumbnailsLines.length; i++) {
+        const thumbnailLine = thumbnailsLines[i]
+        const match = thumbnailLine.match(/^thumbnail-(\d+)-(\w+)=(.+)$/)
+        const [, no, _attr, _value] = match
+        const index = parseInt(no, 10) - 1
+        const attr = _attr !== 'label' ? _attr : 'title'
+        const value = attr !== 'title' ? _value : decodeURIComponent(_value)
+        const thumbnail = thumbnails[index] || { id: uuid(), imgUrl: null }
+        thumbnail[attr] = value
+        thumbnails[index] = thumbnail
+      }
+
+      for (let i = 0; i < thumbnails.length; i++) {
+        thumbnails[i] = thumbnails[i] || {
+          id: uuid(),
+          title: '<empty>',
+          url: 'https://twitter.com/Ahymta'
+        }
+      }
+
+      for (let i = 0, offset = 0; i < _groups.length; i++) {
+        const group = _groups[i]
+
+        for (let j = offset; j < offset + group.length; j++) {
+          thumbnails[j].groupId = group.id
+        }
+
+        offset += group.length
+      }
+
+      const groups = _groups.map(({ id, name }) => ({ id, name }))
+      console.log({ groups, thumbnails })
+      await groupRepo.replace(groups)
+      await thumbnailRepo.replace(thumbnails)
+      render(groups[0].id)
+    }
+  })
+
   const cardFooter = createElement('footer', {
     className: 'card-footer',
     children: [
       createElement('button', {
         className: 'btn btn-block btn-success',
-        disabled: 'disabled',
         innerText: 'Import Speed Dial',
-        type: 'button'
+        type: 'button',
+        onClick: () => {
+          speedDialFile.click()
+        }
       })
     ]
   })
@@ -208,108 +293,114 @@ function tabElement (groups, thumbnailsElements, selectedGroupId) {
 }
 
 function thumbnailsElements (thumbnails, selectedGroupId) {
-  const elements = thumbnails.map(({ id, url, title, imgUrl }, i) => {
-    const card = createElement('article', {
-      className: 'card',
-      children: [
-        createElement('a', {
-          href: url,
-          children: [
-            createElement('img', {
-              alt: 'Card image cap',
-              className: 'card-img-top',
-              src:
-                imgUrl || `https://via.placeholder.com/350x150?text=${i + 1}`,
-              onDrop: async event => {
-                event.preventDefault()
+  const elements = thumbnails
+    .map(({ groupId, id, url, title, imgUrl }, i) => {
+      if (groupId !== selectedGroupId) {
+        return null
+      }
 
-                if (!event.dataTransfer.items) {
-                  return
+      const card = createElement('article', {
+        className: 'card',
+        children: [
+          createElement('a', {
+            href: url,
+            children: [
+              createElement('img', {
+                alt: 'Card image cap',
+                className: 'card-img-top',
+                src:
+                  imgUrl || `https://via.placeholder.com/350x150?text=${i + 1}`,
+                onDrop: async event => {
+                  event.preventDefault()
+
+                  if (!event.dataTransfer.items) {
+                    return
+                  }
+
+                  const img = event.dataTransfer.items[0].getAsFile()
+
+                  // @ts-ignore
+                  const reader = new window.FileReader()
+                  reader.readAsDataURL(img)
+                  const newImgUrl = await (() =>
+                    new Promise(resolve => {
+                      reader.onload = () => resolve(reader.result)
+                    }))()
+
+                  await thumbnailRepo.update(id, { imgUrl: newImgUrl })
+                  render(selectedGroupId)
                 }
+              })
+            ]
+          })
+        ]
+      })
 
-                const img = event.dataTransfer.items[0].getAsFile()
+      const cardBody = createElement('div', {
+        className: 'card-body',
+        children: [
+          createElement('h5', {
+            className: 'card-title',
+            innerText: title
+          })
+        ]
+      })
+      const cardFooter = createElement('footer', {
+        className: 'card-footer',
+        children: [
+          createElement('div', {
+            className: 'btn-group',
+            role: 'group',
+            children: [
+              createElement('button', {
+                className: 'btn btn-primary',
+                innerText: 'T',
+                type: 'button',
+                onClick: async () => {
+                  const newTitle = window.prompt('New Title')
 
-                // @ts-ignore
-                const reader = new window.FileReader()
-                reader.readAsDataURL(img)
-                const newImgUrl = await (() =>
-                  new Promise(resolve => {
-                    reader.onload = () => resolve(reader.result)
-                  }))()
+                  if (!newTitle) {
+                    return
+                  }
 
-                await thumbnailRepo.update(id, { imgUrl: newImgUrl })
-                render(selectedGroupId)
-              }
-            })
-          ]
-        })
-      ]
-    })
-
-    const cardBody = createElement('div', {
-      className: 'card-body',
-      children: [
-        createElement('h5', {
-          className: 'card-title',
-          innerText: title
-        })
-      ]
-    })
-    const cardFooter = createElement('footer', {
-      className: 'card-footer',
-      children: [
-        createElement('div', {
-          className: 'btn-group',
-          role: 'group',
-          children: [
-            createElement('button', {
-              className: 'btn btn-primary',
-              innerText: 'T',
-              type: 'button',
-              onClick: async () => {
-                const newTitle = window.prompt('New Title')
-
-                if (!newTitle) {
-                  return
+                  await thumbnailRepo.update(id, { title: newTitle })
+                  render(selectedGroupId)
                 }
+              }),
+              createElement('button', {
+                className: 'btn btn-primary',
+                innerText: 'U',
+                type: 'button',
+                onClick: async () => {
+                  const newUrl = window.prompt('New URL')
 
-                await thumbnailRepo.update(id, { title: newTitle })
-                render(selectedGroupId)
-              }
-            }),
-            createElement('button', {
-              className: 'btn btn-primary',
-              innerText: 'U',
-              type: 'button',
-              onClick: async () => {
-                const newUrl = window.prompt('New URL')
+                  if (!newUrl) {
+                    return
+                  }
 
-                if (!newUrl) {
-                  return
+                  await thumbnailRepo.update(id, { url: newUrl })
+                  render(selectedGroupId)
                 }
+              }),
+              createElement('button', {
+                className: 'btn btn-danger',
+                innerText: 'D',
+                type: 'button',
+                onClick: async () => {
+                  await thumbnailRepo.remove(id)
+                  render(selectedGroupId)
+                }
+              })
+            ]
+          })
+        ]
+      })
 
-                await thumbnailRepo.update(id, { url: newUrl })
-                render(selectedGroupId)
-              }
-            }),
-            createElement('button', {
-              className: 'btn btn-danger',
-              innerText: 'D',
-              type: 'button',
-              onClick: async () => {
-                await thumbnailRepo.remove(id)
-                render(selectedGroupId)
-              }
-            })
-          ]
-        })
-      ]
+      card.appendChild(cardBody)
+      card.appendChild(cardFooter)
+      return card
     })
-
-    card.appendChild(cardBody)
-    card.appendChild(cardFooter)
-    return card
-  })
+    .filter(x => x)
 
   const cardGroups = []
   for (let i = 0; i < elements.length; i = i + 3) {
@@ -347,7 +438,7 @@ document.addEventListener('keypress', event => {
     return
   }
 
-  const match = event.code.match(/^Digit([0-9])$/)
+  const match = event.code.match(/^Digit([1-9])$/)
 
   if (!match) {
     return
@@ -365,8 +456,10 @@ document.addEventListener('keypress', event => {
     ctrlKey: event.ctrlKey
   })
 })
-
-render('d7bc0008-67ec-478f-b792-ae9591574939')
+;(async () => {
+  const groups = await groupRepo.list()
+  render(groups[0].id)
+})()
 
 function createElement (
   name,
@@ -379,7 +472,9 @@ function createElement (
     role = null,
     src = null,
     type = null,
+    style = null,
     children = [],
+    onChange = null,
     onClick = null,
     onDrop = null
   } = {}
@@ -415,6 +510,15 @@ function createElement (
     children.forEach(child => element.appendChild(child))
   }
 
+  if (style) {
+    Object.keys(style).forEach(styleAttr => {
+      element[styleAttr] = style[styleAttr]
+    })
+  }
+
+  if (onChange) {
+    element.addEventListener('change', onChange)
+  }
   if (onClick) {
     element.addEventListener('click', onClick)
   }
