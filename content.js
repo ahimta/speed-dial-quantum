@@ -1,6 +1,27 @@
 // @ts-check
+let altKeyDown = false
+let ctrlKeyDown = false
+let digits = [0, 0]
+let digitIndex = 0
+
+document.addEventListener('keydown', event => {
+  if (
+    !(
+      event.code === 'AltLeft' ||
+      event.code === 'AltRight' ||
+      event.code === 'ControlLeft' ||
+      event.code === 'ControlRight'
+    )
+  ) {
+    return
+  }
+
+  altKeyDown = event.code === 'AltLeft' || event.code === 'AltRight'
+  ctrlKeyDown = event.code === 'ControlLeft' || event.code === 'ControlRight'
+})
+
 document.addEventListener('keypress', event => {
-  if (!(event.code && (event.altKey || event.ctrlKey))) {
+  if (!(event.code && (altKeyDown || ctrlKeyDown))) {
     return
   }
 
@@ -14,11 +35,35 @@ document.addEventListener('keypress', event => {
 
   const [, digitString] = match
   const digit = parseInt(digitString, 10)
+  digits[digitIndex++ % 2] = digit
+})
 
-  // @ts-ignore
-  browser.runtime.sendMessage({
-    digit,
-    altKey: event.altKey,
-    ctrlKey: event.ctrlKey
-  })
+document.addEventListener('keyup', event => {
+  if (
+    !(
+      (altKeyDown && (event.code === 'AltLeft' || event.code === 'AltRight')) ||
+      (ctrlKeyDown &&
+        (event.code === 'ControlLeft' || event.code === 'ControlRight'))
+    )
+  ) {
+    return
+  }
+
+  const index =
+    digitIndex === 1 ? digits[0] - 1 : digits[0] * 10 + digits[1] - 1
+
+  console.log({ digits, index })
+  if (index >= 0) {
+    // @ts-ignore
+    browser.runtime.sendMessage({
+      digit: index + 1,
+      altKey: altKeyDown,
+      ctrlKey: ctrlKeyDown
+    })
+  }
+
+  altKeyDown = false
+  ctrlKeyDown = false
+  digits = [0, 0]
+  digitIndex = 0
 })
