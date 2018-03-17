@@ -381,8 +381,10 @@ function thumbnailsElements (thumbnails, selectedGroupId) {
               createElement('img', {
                 alt: 'Card image cap',
                 className: 'card-img-top',
+                height: 150,
                 src:
                   imgUrl || `https://via.placeholder.com/350x150?text=${i + 1}`,
+                width: 350,
                 onDrop: async event => {
                   event.preventDefault()
 
@@ -516,11 +518,13 @@ function createElement (
     alt = null,
     className = null,
     disabled = null,
+    height = null,
     href = null,
     innerText = null,
     role = null,
     src = null,
     type = null,
+    width = null,
     style = null,
     children = [],
     onChange = null,
@@ -539,6 +543,9 @@ function createElement (
   if (disabled) {
     element.disabled = disabled
   }
+  if (height) {
+    element.height = height
+  }
   if (href) {
     element.href = href
   }
@@ -553,6 +560,9 @@ function createElement (
   }
   if (type) {
     element.type = type
+  }
+  if (width) {
+    element.width = width
   }
 
   if (children.length) {
