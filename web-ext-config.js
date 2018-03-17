@@ -2,7 +2,6 @@ module.exports = {
   ignoreFiles: [
     'node_modules',
     '.editorconfig',
-    '.env',
     '.gitignore',
     '.nvmrc',
     '.prettierrc',
