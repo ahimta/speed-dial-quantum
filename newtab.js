@@ -141,7 +141,8 @@ document.addEventListener('keypress', event => {
     return
   }
 
-  const match = event.code.match(/^Digit([0-9])$/)
+  const match =
+    event.code.match(/^Digit([0-9])$/) || event.code.match(/^Numpad([0-9])$/)
 
   if (!match) {
     return
