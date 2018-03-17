@@ -380,7 +380,7 @@ function thumbnailsElements (thumbnails, selectedGroupId) {
             href: url || '#',
             children: [
               createElement('img', {
-                alt: 'Card image cap',
+                alt: `${i + 1}`,
                 className: 'card-img-top',
                 height: 150,
                 src:
