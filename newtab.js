@@ -414,6 +414,10 @@ function thumbnailsElements (thumbnails, selectedGroupId) {
         children: [
           createElement('h5', {
             className: 'card-title',
+            innerText: `(${i + 1})`
+          }),
+          createElement('p', {
+            className: 'card-text',
             innerText: title || '(No Title -_-)'
           })
         ]
