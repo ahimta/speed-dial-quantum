@@ -25,10 +25,21 @@ Minimal speed-dial extension with support for keyboard shortcuts & importing Spe
 
 ### Entities
 
-* `Thumbnail(id: String, groupId: String, title: String, url: String, imgUrl: Option[String])`
-* `Group(id: String, name: String, thumbnails: () => Array[Thumbnail])`
-* `Tab(groups: Array[Group], thumbnails: Array[Thumbnail])`
+```scala
+Thumbnail(
+  id: String,
+  groupId: String,
+  title: Option[String],
+  url: Option[String],
+  imgUrl: Option[String]
+)
+
+Group(id: String, name: String, thumbnails: () => Array[Thumbnail])
+Tab(groups: Array[Group], thumbnails: Array[Thumbnail])
+```
 
 ### Constraints
 
-* `Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length`
+```scala
+Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
+```

@@ -322,8 +322,8 @@ function tabElement (groups, thumbnailsElements, selectedGroupId) {
       for (let i = 0; i < thumbnails.length; i++) {
         thumbnails[i] = thumbnails[i] || {
           id: uuid(),
-          title: '<empty>',
-          url: 'https://twitter.com/Ahymta'
+          title: null,
+          url: null
         }
       }
 
@@ -376,7 +376,7 @@ function thumbnailsElements (thumbnails, selectedGroupId) {
         className: 'card',
         children: [
           createElement('a', {
-            href: url,
+            href: url || '#',
             children: [
               createElement('img', {
                 alt: 'Card image cap',
@@ -414,7 +414,7 @@ function thumbnailsElements (thumbnails, selectedGroupId) {
         children: [
           createElement('h5', {
             className: 'card-title',
-            innerText: title
+            innerText: title || '(No Title -_-)'
           })
         ]
       })
