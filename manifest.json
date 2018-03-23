@@ -25,5 +25,9 @@
       "id": "{71ec5708-2489-11e8-8697-87e8af1da1d9}",
       "strict_min_version": "56.0"
     }
+  },
+  "icons": {
+    "48": "icon.png",
+    "96": "icon@2x.png"
   }
 }
