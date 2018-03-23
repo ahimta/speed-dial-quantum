@@ -28,6 +28,7 @@
   },
   "icons": {
     "48": "icon.png",
+    "64": "icon@1.34x.png",
     "96": "icon@2x.png"
   }
 }
