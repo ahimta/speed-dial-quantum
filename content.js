@@ -1,19 +1,74 @@
 // @ts-check
+const storage = {
+  get: async key => {
+    // @ts-ignore
+    if (typeof browser !== 'undefined') {
+      // @ts-ignore
+      return (await browser.storage.local.get())[key]
+      // @ts-ignore
+    } else if (typeof chrome !== 'undefined') {
+      return (async () =>
+        new Promise(resolve => {
+          // @ts-ignore
+          chrome.storage.local.get([key], result => {
+            // @ts-ignore
+            console.log({ err: chrome.runtime.lastError })
+            resolve(result[key])
+          })
+        }))()
+    }
+  }
+}
+
 let altKeyDown = false
 let ctrlKeyDown = false
 let digits = [0, 0]
 let digitIndex = 0
 let element = null
 
-document.addEventListener('keydown', event => {
+document.addEventListener('keydown', async event => {
   if (
     !(
       event.code === 'AltLeft' ||
       event.code === 'AltRight' ||
       event.code === 'ControlLeft' ||
-      event.code === 'ControlRight'
+      event.code === 'ControlRight' ||
+      (event.code && (altKeyDown || ctrlKeyDown))
     )
   ) {
+    return
+  }
+
+  const isControl =
+    event.code === 'AltLeft' ||
+    event.code === 'AltRight' ||
+    event.code === 'ControlLeft' ||
+    event.code === 'ControlRight'
+
+  if (!isControl) {
+    if (!(event.code && (altKeyDown || ctrlKeyDown))) {
+      return
+    }
+
+    const match =
+      event.code.match(/^Digit([0-9])$/) || event.code.match(/^Numpad([0-9])$/)
+
+    if (!match) {
+      return
+    }
+
+    event.preventDefault()
+
+    const [, digitString] = match
+    const digit = parseInt(digitString, 10)
+    digits[digitIndex++ % 2] = digit
+
+    const index =
+      digitIndex === 1 ? digits[0] - 1 : digits[0] * 10 + digits[1] - 1
+
+    const results = await storage.get('thumbnails')
+    const thumbnail = results[index]
+    element.innerText = `${index + 1} - ${thumbnail.title || '(Empty -_-)'}`
     return
   }
 
@@ -36,33 +91,6 @@ document.addEventListener('keydown', event => {
   ctrlKeyDown = event.code === 'ControlLeft' || event.code === 'ControlRight'
 })
 
-document.addEventListener('keypress', async event => {
-  if (!(event.code && (altKeyDown || ctrlKeyDown))) {
-    return
-  }
-
-  const match =
-    event.code.match(/^Digit([0-9])$/) || event.code.match(/^Numpad([0-9])$/)
-
-  if (!match) {
-    return
-  }
-
-  event.preventDefault()
-
-  const [, digitString] = match
-  const digit = parseInt(digitString, 10)
-  digits[digitIndex++ % 2] = digit
-
-  const index =
-    digitIndex === 1 ? digits[0] - 1 : digits[0] * 10 + digits[1] - 1
-
-  // @ts-ignore
-  const results = (await browser.storage.local.get()).thumbnails
-  const thumbnail = results[index]
-  element.innerText = `${index + 1} - ${thumbnail.title || '(Empty -_-)'}`
-})
-
 document.addEventListener('keyup', event => {
   if (
     !(
@@ -80,11 +108,22 @@ document.addEventListener('keyup', event => {
   console.log({ digits, index })
   if (index >= 0) {
     // @ts-ignore
-    browser.runtime.sendMessage({
-      digit: index + 1,
-      altKey: altKeyDown,
-      ctrlKey: ctrlKeyDown
-    })
+    if (typeof browser !== 'undefined') {
+      // @ts-ignore
+      browser.runtime.sendMessage({
+        digit: index + 1,
+        altKey: altKeyDown,
+        ctrlKey: ctrlKeyDown
+      })
+      // @ts-ignore
+    } else if (typeof chrome !== 'undefined') {
+      // @ts-ignore
+      chrome.runtime.sendMessage({
+        digit: index + 1,
+        altKey: altKeyDown,
+        ctrlKey: ctrlKeyDown
+      })
+    }
   }
 
   document.body.removeChild(element)

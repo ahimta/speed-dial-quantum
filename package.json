@@ -21,6 +21,6 @@
     "web-ext": "^2.4.0"
   },
   "standard": {
-    "globals": ["browser"]
+    "globals": ["browser", "chrome"]
   }
 }
