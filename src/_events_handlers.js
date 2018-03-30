@@ -58,6 +58,7 @@ export default function () {
 
       if (!isControl) {
         if (!(event.code && (altKeyDown || ctrlKeyDown))) {
+          down()
           return
         }
 
@@ -66,6 +67,7 @@ export default function () {
           event.code.match(/^Numpad([0-9])$/)
 
         if (!match) {
+          down()
           return
         }
 
