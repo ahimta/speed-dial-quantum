@@ -6,30 +6,30 @@ export default function () {
   let ctrlKeyDown = false
   let digits = [0, 0]
   let digitIndex = 0
-  let element = null
+  let dialView = null
 
   function up () {
-    if (!element) {
-      element = document.createElement('section')
-      element.style.fontSize = '1em'
-      element.style.minHeight = '2em'
-      element.style.backgroundColor = '#f5f5f5f5'
-      element.style.color = 'red'
-      element.style.width = '100%'
-      element.style.top = '0px'
-      element.style.textAlign = 'center'
-      element.style.position = 'fixed'
-      element.style.opacity = '100%'
-      element.style.zIndex = '2147483647'
-      element.innerText = '*_^'
+    if (!dialView) {
+      dialView = document.createElement('section')
+      dialView.style.fontSize = '1em'
+      dialView.style.minHeight = '2em'
+      dialView.style.backgroundColor = '#f5f5f5f5'
+      dialView.style.color = 'red'
+      dialView.style.width = '100%'
+      dialView.style.top = '0px'
+      dialView.style.textAlign = 'center'
+      dialView.style.position = 'fixed'
+      dialView.style.opacity = '100%'
+      dialView.style.zIndex = '2147483647'
+      dialView.innerText = '*_^'
 
-      document.body.appendChild(element)
+      document.body.appendChild(dialView)
     }
   }
 
   function down () {
-    document.body.removeChild(element)
-    element = null
+    document.body.removeChild(dialView)
+    dialView = null
     altKeyDown = false
     ctrlKeyDown = false
     digits = [0, 0]
@@ -82,7 +82,8 @@ export default function () {
 
         const results = await repos.thumnail.list()
         const thumbnail = results[index] || {}
-        element.innerText = `${index + 1} - ${thumbnail.title || '(Empty -_-)'}`
+        dialView.innerText = `${index + 1} - ${thumbnail.title ||
+          '(Empty -_-)'}`
         return
       }
 
