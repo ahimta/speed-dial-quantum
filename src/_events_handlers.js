@@ -61,10 +61,10 @@ export default function () {
       element.style.minHeight = '2em'
       element.style.backgroundColor = '#f5f5f5f5'
       element.style.color = 'red'
-      element.style.width = `${window.innerWidth}px`
-      element.style.top = `${window.scrollY + 1}px`
+      element.style.width = '100%'
+      element.style.top = '0px'
       element.style.textAlign = 'center'
-      element.style.position = 'absolute'
+      element.style.position = 'fixed'
       element.style.opacity = '100%'
       element.style.zIndex = '2147483647'
       element.innerText = '*_^'
