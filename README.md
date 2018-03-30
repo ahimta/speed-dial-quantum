@@ -52,3 +52,10 @@ Tab(groups: Array[Group], thumbnails: Array[Thumbnail])
 ```scala
 Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 ```
+
+## Todo
+
+* Extract some parts into their own modules (e.g: UI/DOM)
+* Stop logging, especially in content script -\_-
+* Clear dial view with any mouse click
+* Add cursor to dial view to
