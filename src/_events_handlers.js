@@ -51,8 +51,7 @@ export default function () {
           digitIndex === 1 ? digits[0] - 1 : digits[0] * 10 + digits[1] - 1
 
         const results = await repos.thumnail.list()
-        const thumbnail = results[index]
-        // @fixme: thumbnail may be null/undefined when title is accessed -_-
+        const thumbnail = results[index] || {}
         element.innerText = `${index + 1} - ${thumbnail.title || '(Empty -_-)'}`
         return
       }
