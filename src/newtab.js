@@ -161,7 +161,9 @@ function tabElement (groups, thumbnailsElements, selectedGroupId) {
       }
 
       const groups = _groups.map(({ id, name }) => ({ id, name }))
+
       console.log({ groups, thumbnails })
+
       await repos.group.replace(groups)
       await repos.thumnail.replace(thumbnails)
       render(groups[0].id)

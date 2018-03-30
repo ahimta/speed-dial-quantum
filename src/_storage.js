@@ -7,11 +7,16 @@ export async function get (key) {
     // @ts-ignore
   } else if (typeof chrome !== 'undefined') {
     return (async () =>
-      new Promise(resolve => {
+      new Promise((resolve, reject) => {
         // @ts-ignore
         chrome.storage.local.get([key], result => {
           // @ts-ignore
-          console.log({ err: chrome.runtime.lastError })
+          const err = chrome.runtime.lastError
+          if (err) {
+            reject(err)
+            return
+          }
+
           resolve(result[key])
         })
       }))()
@@ -26,11 +31,16 @@ export async function set (key, value) {
     // @ts-ignore
   } else if (typeof chrome !== 'undefined') {
     return (async () =>
-      new Promise(resolve => {
+      new Promise((resolve, reject) => {
         // @ts-ignore
         chrome.storage.local.set({ [key]: value }, () => {
           // @ts-ignore
-          console.log({ err: chrome.runtime.lastError })
+          const err = chrome.runtime.lastError
+          if (err) {
+            reject(err)
+            return
+          }
+
           resolve()
         })
       }))()

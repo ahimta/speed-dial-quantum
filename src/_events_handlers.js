@@ -113,7 +113,6 @@ export default function () {
       const index =
         digitIndex === 1 ? digits[0] - 1 : digits[0] * 10 + digits[1] - 1
 
-      console.log({ digits, index })
       if (index >= 0) {
         // @ts-ignore
         if (typeof browser !== 'undefined') {

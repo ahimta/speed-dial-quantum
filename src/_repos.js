@@ -84,7 +84,7 @@ export const thumnail = {
 
 async function getOldGroups () {
   const storedGroups = await storage.get('groups')
-  console.log({ storedGroups })
+
   if (!Array.isArray(storedGroups)) {
     await storage.set('groups', [
       { id: 'd7bc0008-67ec-478f-b792-ae9591574939', name: ':)' }
