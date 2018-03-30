@@ -1,5 +1,5 @@
 // @ts-check
-import * as storage from './_storage'
+import * as repos from './_repos'
 
 export default function () {
   let altKeyDown = false
@@ -50,8 +50,9 @@ export default function () {
         const index =
           digitIndex === 1 ? digits[0] - 1 : digits[0] * 10 + digits[1] - 1
 
-        const results = await storage.get('thumbnails')
+        const results = await repos.thumnail.list()
         const thumbnail = results[index]
+        // @fixme: thumbnail may be null/undefined when title is accessed -_-
         element.innerText = `${index + 1} - ${thumbnail.title || '(Empty -_-)'}`
         return
       }

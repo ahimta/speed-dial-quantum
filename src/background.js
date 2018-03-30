@@ -1,5 +1,5 @@
 // @ts-check
-import * as storage from './_storage'
+import * as repos from './_repos'
 
 // @ts-ignore
 if (typeof browser !== 'undefined') {
@@ -42,7 +42,7 @@ if (typeof browser !== 'undefined') {
 }
 
 async function storedUrl (index) {
-  const results = await storage.get('thumbnails')
+  const results = await repos.thumnail.list()
   const thumbnail = results[index]
   return thumbnail && thumbnail.url
 }
