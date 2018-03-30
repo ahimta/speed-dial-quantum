@@ -56,20 +56,22 @@ export default function () {
         return
       }
 
-      element = document.createElement('section')
-      element.style.fontSize = '1em'
-      element.style.minHeight = '2em'
-      element.style.backgroundColor = '#f5f5f5f5'
-      element.style.color = 'red'
-      element.style.width = '100%'
-      element.style.top = '0px'
-      element.style.textAlign = 'center'
-      element.style.position = 'fixed'
-      element.style.opacity = '100%'
-      element.style.zIndex = '2147483647'
-      element.innerText = '*_^'
+      if (!element) {
+        element = document.createElement('section')
+        element.style.fontSize = '1em'
+        element.style.minHeight = '2em'
+        element.style.backgroundColor = '#f5f5f5f5'
+        element.style.color = 'red'
+        element.style.width = '100%'
+        element.style.top = '0px'
+        element.style.textAlign = 'center'
+        element.style.position = 'fixed'
+        element.style.opacity = '100%'
+        element.style.zIndex = '2147483647'
+        element.innerText = '*_^'
 
-      document.body.appendChild(element)
+        document.body.appendChild(element)
+      }
 
       altKeyDown = event.code === 'AltLeft' || event.code === 'AltRight'
       ctrlKeyDown =
