@@ -57,4 +57,4 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 
 * Extract some parts into their own modules (e.g: UI/DOM)
 * Stop logging, especially in content script -\_-
-* Add cursor to dial view to
+* Add cursor to dial view
