@@ -4,6 +4,7 @@ import * as repos from './_repos'
 
 const handlers = eventsHandlers()
 document.addEventListener('keydown', handlers.keydown)
+document.addEventListener('mousedown', handlers.mousedown)
 document.addEventListener('keyup', handlers.keyup)
 ;(async () => {
   const groups = await repos.group.list()

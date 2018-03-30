@@ -93,6 +93,11 @@ export default function () {
       ctrlKeyDown =
         event.code === 'ControlLeft' || event.code === 'ControlRight'
     },
+    mousedown: function (event) {
+      if (dialView) {
+        down()
+      }
+    },
     keyup: async function (event) {
       if (
         !(
