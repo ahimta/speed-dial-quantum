@@ -63,3 +63,8 @@ typings/
 # web-ext
 web-ext-artifacts
 .web-extension-id
+
+# generated rollup bundles
+/background.js
+/content.js
+/newtab.js

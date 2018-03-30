@@ -1,24 +1,5 @@
 // @ts-check
-const storage = {
-  get: async key => {
-    // @ts-ignore
-    if (typeof browser !== 'undefined') {
-      // @ts-ignore
-      return (await browser.storage.local.get())[key]
-      // @ts-ignore
-    } else if (typeof chrome !== 'undefined') {
-      return (async () =>
-        new Promise(resolve => {
-          // @ts-ignore
-          chrome.storage.local.get([key], result => {
-            // @ts-ignore
-            console.log({ err: chrome.runtime.lastError })
-            resolve(result[key])
-          })
-        }))()
-    }
-  }
-}
+import * as storage from './_storage'
 
 // @ts-ignore
 if (typeof browser !== 'undefined') {

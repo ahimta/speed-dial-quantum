@@ -1,6 +1,7 @@
 module.exports = {
   ignoreFiles: [
     'node_modules',
+    'src',
     '.editorconfig',
     '.gitignore',
     '.nvmrc',
@@ -9,6 +10,7 @@ module.exports = {
     'LICENSE',
     'README.md',
     'packages.json',
+    'rollup.config.js',
     'yarn.lock'
   ]
 }

@@ -1,278 +1,19 @@
 // @ts-check
+import eventsHandlers from './_events_handlers'
+import * as repos from './_repos'
 
-// @ts-ignore
-const storage = {
-  get: async key => {
-    // @ts-ignore
-    if (typeof browser !== 'undefined') {
-      // @ts-ignore
-      return (await browser.storage.local.get())[key]
-      // @ts-ignore
-    } else if (typeof chrome !== 'undefined') {
-      return (async () =>
-        new Promise(resolve => {
-          // @ts-ignore
-          chrome.storage.local.get([key], result => {
-            // @ts-ignore
-            console.log({ err: chrome.runtime.lastError })
-            resolve(result[key])
-          })
-        }))()
-    }
-  },
-  set: async (key, value) => {
-    // @ts-ignore
-    if (typeof browser !== 'undefined') {
-      // @ts-ignore
-      return browser.storage.local.set({ [key]: value })
-      // @ts-ignore
-    } else if (typeof chrome !== 'undefined') {
-      return (async () =>
-        new Promise(resolve => {
-          // @ts-ignore
-          chrome.storage.local.set({ [key]: value }, () => {
-            // @ts-ignore
-            console.log({ err: chrome.runtime.lastError })
-            resolve()
-          })
-        }))()
-    }
-  }
-}
-
-const groupRepo = (() => {
-  async function getOldGroups () {
-    const storedGroups = await storage.get('groups')
-    console.log({ storedGroups })
-    if (!Array.isArray(storedGroups)) {
-      await storage.set('groups', [
-        { id: 'd7bc0008-67ec-478f-b792-ae9591574939', name: ':)' }
-      ])
-      return [{ id: 'd7bc0008-67ec-478f-b792-ae9591574939', name: ':)' }]
-    }
-
-    return storedGroups
-  }
-
-  function updateGroups (newGroups) {
-    return storage.set('groups', newGroups)
-  }
-
-  return {
-    add: async ({ name }) => {
-      const oldGroups = await getOldGroups()
-      const newGroups = oldGroups.concat({ id: uuid(), name })
-      await updateGroups(newGroups)
-    },
-    list: getOldGroups,
-    remove: async id => {
-      const oldGroups = await getOldGroups()
-      const newGroups = oldGroups.filter(t => t.id !== id)
-      await updateGroups(newGroups)
-    },
-    replace: updateGroups,
-    update: async (id, { name = null } = {}) => {
-      const oldGroups = await getOldGroups()
-      const group = oldGroups.filter(t => t.id === id)[0]
-
-      if (!group) {
-        throw new Error(`groupRepo.update: group with id "${id}" not found`)
-      }
-
-      const index = oldGroups.indexOf(group)
-      const newGroup = { id: group.id, name: name || group.name }
-
-      const newGroups = oldGroups
-        .slice(0, index)
-        .concat(newGroup, ...oldGroups.slice(index + 1))
-
-      await updateGroups(newGroups)
-    }
-  }
-})()
-
-const thumbnailRepo = (() => {
-  async function getOldThumbnails () {
-    const storedThumbnails = await storage.get('thumbnails')
-    return Array.isArray(storedThumbnails) ? storedThumbnails : []
-  }
-
-  function updateThumbnails (newThumbnails) {
-    return storage.set('thumbnails', newThumbnails)
-  }
-
-  return {
-    add: async ({ url, groupId, title = null, imgUrl = null }) => {
-      const oldThumbnails = await getOldThumbnails()
-      const newThumbnails = oldThumbnails.concat({
-        id: uuid(),
-        groupId,
-        title: title || url,
-        url,
-        imgUrl
-      })
-      await updateThumbnails(newThumbnails)
-    },
-    list: getOldThumbnails,
-    remove: async id => {
-      const oldThumbnails = await getOldThumbnails()
-      const newThumbnails = oldThumbnails.filter(t => t.id !== id)
-      await updateThumbnails(newThumbnails)
-    },
-    replace: updateThumbnails,
-    update: async (
-      id,
-      { url = null, groupId = null, title = null, imgUrl = null } = {}
-    ) => {
-      const oldThumbnails = await getOldThumbnails()
-      const thumbnail = oldThumbnails.filter(t => t.id === id)[0]
-
-      if (!thumbnail) {
-        throw new Error(
-          `thumbnailRepo.update: thumbnail with id "${id}" not found`
-        )
-      }
-
-      const index = oldThumbnails.indexOf(thumbnail)
-      const newThumbnail = {
-        id: thumbnail.id,
-        groupId: groupId || thumbnail.groupId,
-        title: title || thumbnail.title,
-        url: url || thumbnail.url,
-        imgUrl: imgUrl || thumbnail.imgUrl
-      }
-
-      const newThumbnails = oldThumbnails
-        .slice(0, index)
-        .concat(newThumbnail, ...oldThumbnails.slice(index + 1))
-
-      await updateThumbnails(newThumbnails)
-    }
-  }
-})()
-
-let altKeyDown = false
-let ctrlKeyDown = false
-let digits = [0, 0]
-let digitIndex = 0
-let element = null
-
-document.addEventListener('keydown', async event => {
-  if (
-    !(
-      event.code === 'AltLeft' ||
-      event.code === 'AltRight' ||
-      event.code === 'ControlLeft' ||
-      event.code === 'ControlRight' ||
-      (event.code && (altKeyDown || ctrlKeyDown))
-    )
-  ) {
-    return
-  }
-
-  const isControl =
-    event.code === 'AltLeft' ||
-    event.code === 'AltRight' ||
-    event.code === 'ControlLeft' ||
-    event.code === 'ControlRight'
-
-  if (!isControl) {
-    if (!(event.code && (altKeyDown || ctrlKeyDown))) {
-      return
-    }
-
-    const match =
-      event.code.match(/^Digit([0-9])$/) || event.code.match(/^Numpad([0-9])$/)
-
-    if (!match) {
-      return
-    }
-
-    event.preventDefault()
-
-    const [, digitString] = match
-    const digit = parseInt(digitString, 10)
-    digits[digitIndex++ % 2] = digit
-
-    const index =
-      digitIndex === 1 ? digits[0] - 1 : digits[0] * 10 + digits[1] - 1
-
-    const results = await storage.get('thumbnails')
-    const thumbnail = results[index]
-    element.innerText = `${index + 1} - ${thumbnail.title || '(Empty -_-)'}`
-    return
-  }
-
-  element = document.createElement('section')
-  element.style.fontSize = '1em'
-  element.style.minHeight = '2em'
-  element.style.backgroundColor = '#f5f5f5f5'
-  element.style.color = 'red'
-  element.style.width = `${window.innerWidth}px`
-  element.style.top = `${window.scrollY + 1}px`
-  element.style.textAlign = 'center'
-  element.style.position = 'absolute'
-  element.style.opacity = '100%'
-  element.style.zIndex = '2147483647'
-  element.innerText = '*_^'
-
-  document.body.appendChild(element)
-
-  altKeyDown = event.code === 'AltLeft' || event.code === 'AltRight'
-  ctrlKeyDown = event.code === 'ControlLeft' || event.code === 'ControlRight'
-})
-
-document.addEventListener('keyup', event => {
-  if (
-    !(
-      (altKeyDown && (event.code === 'AltLeft' || event.code === 'AltRight')) ||
-      (ctrlKeyDown &&
-        (event.code === 'ControlLeft' || event.code === 'ControlRight'))
-    )
-  ) {
-    return
-  }
-
-  const index =
-    digitIndex === 1 ? digits[0] - 1 : digits[0] * 10 + digits[1] - 1
-
-  console.log({ digits, index })
-  if (index >= 0) {
-    // @ts-ignore
-    if (typeof browser !== 'undefined') {
-      // @ts-ignore
-      browser.runtime.sendMessage({
-        digit: index + 1,
-        altKey: altKeyDown,
-        ctrlKey: ctrlKeyDown
-      })
-      // @ts-ignore
-    } else if (typeof chrome !== 'undefined') {
-      // @ts-ignore
-      chrome.runtime.sendMessage({
-        digit: index + 1,
-        altKey: altKeyDown,
-        ctrlKey: ctrlKeyDown
-      })
-    }
-  }
-
-  document.body.removeChild(element)
-  element = null
-  altKeyDown = false
-  ctrlKeyDown = false
-  digits = [0, 0]
-  digitIndex = 0
-})
+const handlers = eventsHandlers()
+document.addEventListener('keydown', handlers.keydown)
+document.addEventListener('keyup', handlers.keyup)
 ;(async () => {
-  const groups = await groupRepo.list()
+  const groups = await repos.group.list()
   render(groups[0].id)
 })()
 
 async function render (selectedGroupId) {
   const [groups, thumbnails] = await Promise.all([
-    groupRepo.list(),
-    thumbnailRepo.list()
+    repos.group.list(),
+    repos.thumnail.list()
   ])
 
   const x = thumbnailsElements(thumbnails, selectedGroupId)
@@ -321,7 +62,7 @@ function tabElement (groups, thumbnailsElements, selectedGroupId) {
                   return
                 }
 
-                await groupRepo.add({ name })
+                await repos.group.add({ name })
                 render(selectedGroupId)
               },
               children: [
@@ -420,8 +161,8 @@ function tabElement (groups, thumbnailsElements, selectedGroupId) {
 
       const groups = _groups.map(({ id, name }) => ({ id, name }))
       console.log({ groups, thumbnails })
-      await groupRepo.replace(groups)
-      await thumbnailRepo.replace(thumbnails)
+      await repos.group.replace(groups)
+      await repos.thumnail.replace(thumbnails)
       render(groups[0].id)
     }
   })
@@ -483,7 +224,7 @@ function thumbnailsElements (thumbnails, selectedGroupId) {
                       reader.onload = () => resolve(reader.result)
                     }))()
 
-                  await thumbnailRepo.update(id, { imgUrl: newImgUrl })
+                  await repos.thumnail.update(id, { imgUrl: newImgUrl })
                   render(selectedGroupId)
                 }
               })
@@ -523,7 +264,7 @@ function thumbnailsElements (thumbnails, selectedGroupId) {
                     return
                   }
 
-                  await thumbnailRepo.update(id, { title: newTitle })
+                  await repos.thumnail.update(id, { title: newTitle })
                   render(selectedGroupId)
                 }
               }),
@@ -538,7 +279,7 @@ function thumbnailsElements (thumbnails, selectedGroupId) {
                     return
                   }
 
-                  await thumbnailRepo.update(id, { url: newUrl })
+                  await repos.thumnail.update(id, { url: newUrl })
                   render(selectedGroupId)
                 }
               }),
@@ -547,7 +288,7 @@ function thumbnailsElements (thumbnails, selectedGroupId) {
                 innerText: 'D',
                 type: 'button',
                 onClick: async () => {
-                  await thumbnailRepo.remove(id)
+                  await repos.thumnail.remove(id)
                   render(selectedGroupId)
                 }
               })
@@ -585,7 +326,7 @@ function thumbnailsElements (thumbnails, selectedGroupId) {
       return
     }
 
-    await thumbnailRepo.add({ url, groupId: selectedGroupId })
+    await repos.thumnail.add({ url, groupId: selectedGroupId })
     render(selectedGroupId)
   })
 
