@@ -6,20 +6,28 @@
 
 Minimal speed-dial extension with support for keyboard shortcuts & importing Speed Dial pages
 
+## Build
+
+1.  `yarn install --emoji`
+2.  `yarn run build`
+
 ## Development
 
 1.  `yarn install --emoji`
-2.  `yarn start`
+2.  `yarn run build`
+3.  `yarn start`
 
 ## Test
 
 1.  `yarn install --emoji`
-2.  `yarn test`
+2.  `yarn run build`
+3.  `yarn test`
 
-## Build
+## Package
 
 1.  `yarn install --emoji`
-2.  `yarn build`
+2.  `yarn run build`
+3.  `yarn run package`
 
 ## Design (in Scala)
 
