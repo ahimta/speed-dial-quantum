@@ -15,7 +15,8 @@
       "prettier --write packages.json README.md rollup.config.js web-ext-config.js src/*.js",
     "start": "web-ext run",
     "standard": "standard --fix rollup.config.js src/*.js",
-    "test": "npm run lint"
+    "test": "npm run lint",
+    "watch": "npm run build -- --watch"
   },
   "devDependencies": {
     "prettier": "^1.11.1",

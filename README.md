@@ -16,6 +16,7 @@ Minimal speed-dial extension with support for keyboard shortcuts & importing Spe
 1.  `yarn install --emoji`
 2.  `yarn run build`
 3.  `yarn start`
+4.  `yarn run watch` (in another terminal tab)
 
 ## Test
 
