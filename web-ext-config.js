@@ -9,6 +9,9 @@ module.exports = {
     '.travis.yml',
     'LICENSE',
     'README.md',
+    'background.js.map',
+    'content.js.map',
+    'newtab.js.map',
     'packages.json',
     'rollup.config.js',
     'yarn.lock'
