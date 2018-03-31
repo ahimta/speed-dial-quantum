@@ -55,7 +55,6 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 
 ## Todo
 
-* Extract some parts into their own modules (e.g: UI/DOM)
 * Add Architecture/Dependency Graph section to README.md
 * Add support for reordering groups
 * Add support for deleting groups
