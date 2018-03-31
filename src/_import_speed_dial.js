@@ -1,9 +1,7 @@
-// @ts-check
 import uuid from './_uuid'
 
 // imports thumbnails of Firefox's pre-quantum famous Speed Dial extension
 export default async function (file) {
-  // @ts-ignore
   const reader = new window.FileReader()
   reader.readAsText(file)
   const text = await (() =>

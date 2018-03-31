@@ -1,4 +1,3 @@
-// @ts-check
 import eventsHandlers from './_events_handlers'
 
 const handlers = eventsHandlers()

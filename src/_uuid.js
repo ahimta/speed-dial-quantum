@@ -1,4 +1,3 @@
-// @ts-check
 // copied and modified from StackOverflow -_-:
 // https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
 export default function uuid () {

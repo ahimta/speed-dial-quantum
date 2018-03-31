@@ -1,4 +1,3 @@
-// @ts-check
 import * as platform from './_platform'
 import * as repos from './_repos'
 

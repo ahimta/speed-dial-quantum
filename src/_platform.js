@@ -1,5 +1,3 @@
-// @ts-check
-
 // at the moment, only Firefox and Chromium are supported :)
 const platformName = typeof browser !== 'undefined' ? 'firefox' : 'chromium'
 

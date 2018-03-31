@@ -1,4 +1,3 @@
-// @ts-check
 import eventsHandlers from './_events_handlers'
 import * as repos from './_repos'
 import render from './_ui'

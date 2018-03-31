@@ -1,4 +1,3 @@
-// @ts-check
 import importSpeedDial from './_import_speed_dial'
 import * as repos from './_repos'
 
@@ -137,7 +136,6 @@ function thumbnailsElements (thumbnails, selectedGroupId) {
 
                   const img = event.dataTransfer.items[0].getAsFile()
 
-                  // @ts-ignore
                   const reader = new window.FileReader()
                   reader.readAsDataURL(img)
                   const newImgUrl = await (() =>

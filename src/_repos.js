@@ -1,4 +1,3 @@
-// @ts-check
 import * as platform from './_platform'
 import uuid from './_uuid'
 
