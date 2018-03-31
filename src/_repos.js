@@ -1,5 +1,5 @@
 // @ts-check
-import * as storage from './_storage'
+import * as platform from './_platform'
 import uuid from './_uuid'
 
 export const group = {
@@ -84,10 +84,10 @@ export const thumnail = {
 }
 
 async function getOldGroups () {
-  const storedGroups = await storage.get('groups')
+  const storedGroups = await platform.get('groups')
 
   if (!Array.isArray(storedGroups)) {
-    await storage.set('groups', [
+    await platform.set('groups', [
       { id: 'd7bc0008-67ec-478f-b792-ae9591574939', name: ':)' }
     ])
     return [{ id: 'd7bc0008-67ec-478f-b792-ae9591574939', name: ':)' }]
@@ -97,14 +97,14 @@ async function getOldGroups () {
 }
 
 function updateGroups (newGroups) {
-  return storage.set('groups', newGroups)
+  return platform.set('groups', newGroups)
 }
 
 async function getOldThumbnails () {
-  const storedThumbnails = await storage.get('thumbnails')
+  const storedThumbnails = await platform.get('thumbnails')
   return Array.isArray(storedThumbnails) ? storedThumbnails : []
 }
 
 function updateThumbnails (newThumbnails) {
-  return storage.set('thumbnails', newThumbnails)
+  return platform.set('thumbnails', newThumbnails)
 }
