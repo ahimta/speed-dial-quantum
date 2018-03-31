@@ -3,5 +3,5 @@
     "target": "es2015",
     "checkJs": true
   },
-  "include": ["src/*.js"]
+  "exclude": ["node_modules"]
 }
