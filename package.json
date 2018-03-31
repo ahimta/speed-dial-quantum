@@ -12,7 +12,7 @@
     "lint": "npm run prettier && npm run standard && web-ext lint",
     "package": "web-ext build",
     "prettier":
-      "prettier --write packages.json README.md rollup.config.js web-ext-config.js src/*.js",
+      "prettier --write jsconfig.json packages.json README.md rollup.config.js web-ext-config.js src/*.js",
     "start": "web-ext run",
     "standard": "standard --fix rollup.config.js src/*.js",
     "test": "npm run lint",
