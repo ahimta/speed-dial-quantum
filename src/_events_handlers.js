@@ -1,4 +1,5 @@
 // @ts-check
+import * as platform from './_platform'
 import * as repos from './_repos'
 
 export default function () {
@@ -114,23 +115,11 @@ export default function () {
         digitIndex === 1 ? digits[0] - 1 : digits[0] * 10 + digits[1] - 1
 
       if (index >= 0) {
-        // @ts-ignore
-        if (typeof browser !== 'undefined') {
-          // @ts-ignore
-          browser.runtime.sendMessage({
-            digit: index + 1,
-            altKey: altKeyDown,
-            ctrlKey: ctrlKeyDown
-          })
-          // @ts-ignore
-        } else if (typeof chrome !== 'undefined') {
-          // @ts-ignore
-          chrome.runtime.sendMessage({
-            digit: index + 1,
-            altKey: altKeyDown,
-            ctrlKey: ctrlKeyDown
-          })
-        }
+        platform.sendMessage({
+          digit: index + 1,
+          altKey: altKeyDown,
+          ctrlKey: ctrlKeyDown
+        })
       }
 
       down()
