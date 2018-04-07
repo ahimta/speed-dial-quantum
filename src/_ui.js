@@ -7,14 +7,50 @@ export default async function render (selectedGroupId) {
     repos.thumnail.list()
   ])
 
-  const x = thumbnailsElements(thumbnails, selectedGroupId)
-  const y = tabElement(groups, x, selectedGroupId)
+  const thumnails = thumbnailsElements(thumbnails, selectedGroupId)
+  const tab = tabElement(groups, thumnails, selectedGroupId)
 
   const root = document.getElementById('root')
   while (root.firstChild) {
     root.removeChild(root.firstChild)
   }
-  root.appendChild(y)
+
+  root.appendChild(tab)
+  renderGroupModal(groups)
+}
+
+function groupsElements (groups) {
+  return groups.map(({ id, name }) =>
+    createElement('li', {
+      className: 'list-group-item',
+      children: [
+        createElement('span', { innerText: name }),
+        createElement('div', {
+          className: 'btn-group float-right',
+          children: [
+            createElement('a', {
+              className: 'btn btn-sm btn-primary',
+              href: '#',
+              innerText: 'UP',
+              onClick: () => moveGroupUp(id, groups)
+            }),
+            createElement('a', {
+              className: 'btn btn-sm btn-primary',
+              href: '#',
+              innerText: 'DOWN',
+              onClick: () => moveGroupDown(id, groups)
+            }),
+            createElement('a', {
+              className: 'btn btn-sm btn-danger',
+              href: '#',
+              innerText: 'DELETE',
+              onClick: () => removeGroup(id, groups)
+            })
+          ]
+        })
+      ]
+    })
+  )
 }
 
 function tabElement (groups, thumbnailsElements, selectedGroupId) {
@@ -61,6 +97,20 @@ function tabElement (groups, thumbnailsElements, selectedGroupId) {
                   className: 'nav-link',
                   href: '#',
                   innerText: 'Add Group'
+                })
+              ]
+            }),
+            createElement('li', {
+              className: 'nav-item',
+              children: [
+                createElement('a', {
+                  className: 'nav-link',
+                  href: '#',
+                  innerText: 'Edit Groups',
+                  map: element => {
+                    element.setAttribute('data-toggle', 'modal')
+                    element.setAttribute('data-target', '#exampleModal')
+                  }
                 })
               ]
             })
@@ -270,7 +320,8 @@ function createElement (
     children = [],
     onChange = null,
     onClick = null,
-    onDrop = null
+    onDrop = null,
+    map = null
   } = {}
 ) {
   const element = document.createElement(name)
@@ -329,5 +380,59 @@ function createElement (
     element.addEventListener('drop', onDrop)
   }
 
+  if (map) {
+    map(element)
+  }
+
   return element
+}
+
+async function moveGroupDown (groupId, groups) {
+  const group = groups.filter(({ id }) => id === groupId)[0]
+  const index = groups.indexOf(group)
+
+  if (index === groups.length - 1) {
+    return
+  }
+
+  const groupAfter = groups[index + 1]
+  const newGroups = groups
+    .slice(0, index)
+    .concat([groupAfter, group])
+    .concat(groups.slice(index + 2))
+
+  console.log({ groups, newGroups, group, groupAfter })
+  renderGroupModal(newGroups)
+}
+
+async function moveGroupUp (groupId, groups) {
+  const group = groups.filter(({ id }) => id === groupId)[0]
+  const index = groups.indexOf(group)
+
+  if (index === 0) {
+    return
+  }
+
+  const groupBefore = groups[index - 1]
+  const newGroups = groups
+    .slice(0, index - 1)
+    .concat([group, groupBefore])
+    .concat(groups.slice(index + 1))
+
+  console.log({ groups, newGroups, group, groupBefore })
+  renderGroupModal(newGroups)
+}
+
+function removeGroup (groupId, groups) {
+  const newGroups = groups.filter(({ id }) => id !== groupId)
+  renderGroupModal(newGroups)
+}
+
+function renderGroupModal (groups) {
+  const groupsList = document.getElementById('groupsList')
+  const _groupsElements = groupsElements(groups)
+  while (groupsList.firstChild) {
+    groupsList.removeChild(groupsList.firstChild)
+  }
+  _groupsElements.forEach(group => groupsList.appendChild(group))
 }
