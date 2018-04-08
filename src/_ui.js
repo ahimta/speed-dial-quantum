@@ -7,8 +7,13 @@ export default async function render (selectedGroupId) {
     repos.thumnail.list()
   ])
 
-  const thumnails = thumbnailsElements(thumbnails, selectedGroupId)
-  const tab = tabElement(groups, thumnails, selectedGroupId)
+  renderTab(groups, thumbnails, selectedGroupId)
+  renderGroupModal(groups, selectedGroupId)
+}
+
+function renderTab (groups, thumbnails, selectedGroupId) {
+  const _thumbnails = thumbnailsElements(thumbnails, selectedGroupId)
+  const tab = tabElement(groups, _thumbnails, selectedGroupId)
 
   const root = document.getElementById('root')
   while (root.firstChild) {
@@ -16,10 +21,9 @@ export default async function render (selectedGroupId) {
   }
 
   root.appendChild(tab)
-  renderGroupModal(groups)
 }
 
-function groupsElements (groups) {
+function groupsElements (groups, selectedGroupId) {
   return groups.map(({ id, name }) =>
     createElement('li', {
       className: 'list-group-item',
@@ -32,19 +36,19 @@ function groupsElements (groups) {
               className: 'btn btn-sm btn-primary',
               href: '#',
               innerText: 'UP',
-              onClick: () => moveGroupUp(id, groups)
+              onClick: () => moveGroupUp(id, groups, selectedGroupId)
             }),
             createElement('a', {
               className: 'btn btn-sm btn-primary',
               href: '#',
               innerText: 'DOWN',
-              onClick: () => moveGroupDown(id, groups)
+              onClick: () => moveGroupDown(id, groups, selectedGroupId)
             }),
             createElement('a', {
               className: 'btn btn-sm btn-danger',
               href: '#',
               innerText: 'DELETE',
-              onClick: () => removeGroup(id, groups)
+              onClick: () => removeGroup(id, groups, selectedGroupId)
             })
           ]
         })
@@ -387,7 +391,7 @@ function createElement (
   return element
 }
 
-async function moveGroupDown (groupId, groups) {
+async function moveGroupDown (groupId, groups, selectedGroupId) {
   const group = groups.filter(({ id }) => id === groupId)[0]
   const index = groups.indexOf(group)
 
@@ -401,11 +405,11 @@ async function moveGroupDown (groupId, groups) {
     .concat([groupAfter, group])
     .concat(groups.slice(index + 2))
 
-  console.log({ groups, newGroups, group, groupAfter })
-  renderGroupModal(newGroups)
+  await sync(newGroups, await repos.thumnail.list())
+  render(selectedGroupId)
 }
 
-async function moveGroupUp (groupId, groups) {
+async function moveGroupUp (groupId, groups, selectedGroupId) {
   const group = groups.filter(({ id }) => id === groupId)[0]
   const index = groups.indexOf(group)
 
@@ -419,20 +423,44 @@ async function moveGroupUp (groupId, groups) {
     .concat([group, groupBefore])
     .concat(groups.slice(index + 1))
 
-  console.log({ groups, newGroups, group, groupBefore })
-  renderGroupModal(newGroups)
+  await sync(newGroups, await repos.thumnail.list())
+  render(selectedGroupId)
 }
 
-function removeGroup (groupId, groups) {
+async function removeGroup (groupId, groups, selectedGroupId) {
   const newGroups = groups.filter(({ id }) => id !== groupId)
-  renderGroupModal(newGroups)
+  await sync(newGroups, await repos.thumnail.list())
+
+  if (newGroups.length) {
+    render(newGroups[0].id)
+  } else {
+    render(selectedGroupId)
+  }
 }
 
-function renderGroupModal (groups) {
+function renderGroupModal (groups, selectedGroupId) {
   const groupsList = document.getElementById('groupsList')
-  const _groupsElements = groupsElements(groups)
+  const _groupsElements = groupsElements(groups, selectedGroupId)
   while (groupsList.firstChild) {
     groupsList.removeChild(groupsList.firstChild)
   }
   _groupsElements.forEach(group => groupsList.appendChild(group))
+}
+
+async function sync (groups, thumbnails) {
+  const thumnailsByGroupId = thumbnails.reduce((byId, thumbnail) => {
+    const groupId = thumbnail.groupId
+    byId[groupId] = byId[groupId] || []
+    byId[groupId].push(thumbnail)
+    return byId
+  }, {})
+
+  const sortedThumbnails = Array.prototype.concat(
+    ...groups.map(({ id }) => thumnailsByGroupId[id])
+  )
+
+  await Promise.all([
+    repos.group.replace(groups),
+    repos.thumnail.replace(sortedThumbnails)
+  ])
 }

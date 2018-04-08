@@ -68,6 +68,4 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 
 * Add support for updating groups (name, rows, and columns)
 * Add support for rows & columns for each group
-* Add support for reordering groups
-* Add support for deleting groups
 * Add cursor to dial view
