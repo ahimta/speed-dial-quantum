@@ -36,13 +36,13 @@ export default async function render (selectedGroupId) {
     repos.group.list(),
     repos.thumnail.list()
   ])
-
-  renderTab(groups, thumbnails, selectedGroupId)
+  const group = groups.filter(({ id }) => id === selectedGroupId)[0]
+  renderTab(groups, thumbnails, selectedGroupId, group)
   renderGroupModal(groups, selectedGroupId)
 }
 
-function renderTab (groups, thumbnails, selectedGroupId) {
-  const _thumbnails = thumbnailsElements(thumbnails, selectedGroupId)
+function renderTab (groups, thumbnails, selectedGroupId, group) {
+  const _thumbnails = thumbnailsElements(thumbnails, selectedGroupId, group)
   const tab = tabElement(groups, _thumbnails, selectedGroupId)
 
   const root = document.getElementById('root')
@@ -187,7 +187,7 @@ function tabElement (groups, thumbnailsElements, selectedGroupId) {
   return tab
 }
 
-function thumbnailsElements (thumbnails, selectedGroupId) {
+function thumbnailsElements (thumbnails, selectedGroupId, group) {
   const elements = thumbnails
     .map(({ groupId, id, url, title, imgUrl }, i) => {
       if (groupId !== selectedGroupId) {
@@ -319,6 +319,7 @@ function thumbnailsElements (thumbnails, selectedGroupId) {
   addThumbnailBtn.type = 'button'
   addThumbnailBtn.className = 'btn btn-block btn-primary'
   addThumbnailBtn.innerText = 'Add Thumbnail'
+  addThumbnailBtn.disabled = group.rows && group.cols
   addThumbnailBtn.addEventListener('click', async () => {
     const url = window.prompt('New URL')
     if (!url) {
