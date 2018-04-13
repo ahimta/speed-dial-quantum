@@ -4,8 +4,10 @@ import uuid from './_uuid'
 export const group = {
   add: async ({ name }) => {
     const oldGroups = await getOldGroups()
-    const newGroups = oldGroups.concat({ id: uuid(), name })
+    const newGroup = { id: uuid(), name }
+    const newGroups = oldGroups.concat(newGroup)
     await updateGroups(newGroups)
+    return newGroup
   },
   list: getOldGroups,
   remove: async id => {
