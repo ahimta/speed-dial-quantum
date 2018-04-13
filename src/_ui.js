@@ -286,6 +286,7 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
                 className: 'btn btn-danger',
                 innerText: 'D',
                 type: 'button',
+                disabled: group.rows && group.cols,
                 onClick: async () => {
                   await repos.thumnail.remove(id)
                   render(selectedGroupId)
