@@ -9,7 +9,22 @@ document.getElementById('newGroupBtn').addEventListener('click', async () => {
     return
   }
 
-  const group = await repos.group.add({ name })
+  // @ts-ignore
+  const rows = parseInt(document.getElementById('newGroupRows').value, 10)
+  // @ts-ignore
+  const cols = parseInt(document.getElementById('newGroupCols').value, 10)
+
+  const withRowsAndCols =
+    rows && rows > 0 && rows < 100 && cols && cols > 0 && cols < 100
+  const groupDetails = !withRowsAndCols ? { name } : { name, rows, cols }
+  const group = await repos.group.add(groupDetails)
+
+  if (withRowsAndCols) {
+    for (let i = 0; i < rows * cols; i++) {
+      await repos.thumnail.add({ groupId: group.id })
+    }
+  }
+
   // @note: jQuery is used only for Bootstrap:sweat_smile:
   // @ts-ignore
   $('#newGroupModal').modal('hide')

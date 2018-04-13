@@ -2,9 +2,14 @@ import * as platform from './_platform'
 import uuid from './_uuid'
 
 export const group = {
-  add: async ({ name }) => {
+  add: async ({ name, rows = 0, cols = 0 }) => {
     const oldGroups = await getOldGroups()
-    const newGroup = { id: uuid(), name }
+    const newGroup = {
+      id: uuid(),
+      name,
+      rows: rows || null,
+      cols: cols || null
+    }
     const newGroups = oldGroups.concat(newGroup)
     await updateGroups(newGroups)
     return newGroup
@@ -36,7 +41,8 @@ export const group = {
 }
 
 export const thumnail = {
-  add: async ({ url, groupId, title = null, imgUrl = null }) => {
+  // @fixme: add thumbnail at correct position at the of its group:sweat_smile:
+  add: async ({ groupId, url = '', title = null, imgUrl = null }) => {
     const oldThumbnails = await getOldThumbnails()
     const newThumbnails = oldThumbnails.concat({
       id: uuid(),

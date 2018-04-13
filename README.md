@@ -43,7 +43,13 @@ Thumbnail(
   imgUrl: Option[String]
 )
 
-Group(id: String, name: String, thumbnails: () => Array[Thumbnail])
+Group(
+  id: String,
+  name: String,
+  rows: Option[Int],
+  cols: Option[Int],
+  thumbnails: () => Array[Thumbnail],
+)
 Tab(groups: Array[Group], thumbnails: Array[Thumbnail])
 ```
 
