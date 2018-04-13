@@ -465,7 +465,7 @@ async function sync (groups, thumbnails) {
   }, {})
 
   const sortedThumbnails = Array.prototype.concat(
-    ...groups.map(({ id }) => thumnailsByGroupId[id])
+    ...groups.map(({ id }) => thumnailsByGroupId[id] || [])
   )
 
   await Promise.all([
