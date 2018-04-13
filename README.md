@@ -55,7 +55,7 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 
 ## Architecture
 
-| Layer+ (explanation)                                                     |
+| Layer (explanation)                                                      |
 | ------------------------------------------------------------------------ |
 | Content (JS injected into all web pages), Newtab (HTML/JS for newtab)    |
 | Event Handlers (dial-view & shortcuts in Content & Newtab)               |
@@ -63,6 +63,11 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 | Repos (handles the data-management/persistence using the Platform)       |
 | Platform (thin-layer on-top of browser web-ext. APIs), Speed Dial Import |
 | ES2017 JS (native browser/DOM APIs without any libraries :))             |
+
+## Know Issues & Limitations
+
+* Keyboard shortcuts only work when the page is focused (because a content
+  script is used)
 
 ## Todo
 
