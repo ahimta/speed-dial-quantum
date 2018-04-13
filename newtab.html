@@ -55,6 +55,35 @@
     </div>
   </div>
 
+  <div class="modal fade" id="newGroupModal" tabindex="-1" role="dialog" aria-labelledby="newGroupModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="newGroupModalLabel">New Group</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <input class="form-control" id="newGroupName" placeholder="Name" type="text" required />
+            </div>
+            <div class="form-group">
+              <input class="form-control" id="newGroupRows" placeholder="Rows" type="number" min="1" />
+            </div>
+            <div class="form-group">
+              <input class="form-control" id="newGroupCols" placeholder="Columns" type="number" min="1" />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-block btn-success" id="newGroupBtn">Add Group</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
     crossorigin="anonymous"></script>
 

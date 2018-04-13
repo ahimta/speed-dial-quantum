@@ -1,6 +1,21 @@
 import importSpeedDial from './_import_speed_dial'
 import * as repos from './_repos'
 
+document.getElementById('newGroupBtn').addEventListener('click', async () => {
+  // @ts-ignore
+  const name = document.getElementById('newGroupName').value
+
+  if (!name) {
+    return
+  }
+
+  const group = await repos.group.add({ name })
+  // @note: jQuery is used only for Bootstrap:sweat_smile:
+  // @ts-ignore
+  $('#newGroupModal').modal('hide')
+  render(group.id)
+})
+
 export default async function render (selectedGroupId) {
   const [groups, thumbnails] = await Promise.all([
     repos.group.list(),
@@ -86,15 +101,9 @@ function tabElement (groups, thumbnailsElements, selectedGroupId) {
           .concat(
             createElement('li', {
               className: 'nav-item',
-              onClick: async () => {
-                const name = window.prompt('New Group Name')
-
-                if (!name) {
-                  return
-                }
-
-                await repos.group.add({ name })
-                render(selectedGroupId)
+              map: element => {
+                element.setAttribute('data-toggle', 'modal')
+                element.setAttribute('data-target', '#newGroupModal')
               },
               children: [
                 createElement('a', {
