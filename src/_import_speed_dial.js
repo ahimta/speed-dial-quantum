@@ -34,6 +34,8 @@ export default async function (file) {
   const _groups = __groups.map(({ name, rows, columns }) => ({
     name,
     id: uuid(),
+    rows,
+    cols: columns,
     length: rows * columns
   }))
 
@@ -72,7 +74,12 @@ export default async function (file) {
     offset += group.length
   }
 
-  const groups = _groups.map(({ id, name }) => ({ id, name }))
+  const groups = _groups.map(({ id, name, rows, cols }) => ({
+    id,
+    name,
+    rows,
+    cols
+  }))
 
   console.log({ groups, thumbnails })
   return { groups, thumbnails }
