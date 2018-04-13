@@ -51,7 +51,9 @@ export const thumnail = {
       url,
       imgUrl
     })
-    await updateThumbnails(newThumbnails)
+
+    const groups = await group.list()
+    await sync(groups, newThumbnails)
   },
   list: getOldThumbnails,
   remove: async id => {
@@ -88,6 +90,21 @@ export const thumnail = {
 
     await updateThumbnails(newThumbnails)
   }
+}
+
+export async function sync (groups, thumbnails) {
+  const thumnailsByGroupId = thumbnails.reduce((byId, thumbnail) => {
+    const groupId = thumbnail.groupId
+    byId[groupId] = byId[groupId] || []
+    byId[groupId].push(thumbnail)
+    return byId
+  }, {})
+
+  const sortedThumbnails = Array.prototype.concat(
+    ...groups.map(({ id }) => thumnailsByGroupId[id] || [])
+  )
+
+  await Promise.all([group.replace(groups), thumnail.replace(sortedThumbnails)])
 }
 
 async function getOldGroups () {

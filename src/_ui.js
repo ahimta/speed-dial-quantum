@@ -429,7 +429,7 @@ async function moveGroupDown (groupId, groups, selectedGroupId) {
     .concat([groupAfter, group])
     .concat(groups.slice(index + 2))
 
-  await sync(newGroups, await repos.thumnail.list())
+  await repos.sync(newGroups, await repos.thumnail.list())
   render(selectedGroupId)
 }
 
@@ -447,13 +447,13 @@ async function moveGroupUp (groupId, groups, selectedGroupId) {
     .concat([group, groupBefore])
     .concat(groups.slice(index + 1))
 
-  await sync(newGroups, await repos.thumnail.list())
+  await repos.sync(newGroups, await repos.thumnail.list())
   render(selectedGroupId)
 }
 
 async function removeGroup (groupId, groups, selectedGroupId) {
   const newGroups = groups.filter(({ id }) => id !== groupId)
-  await sync(newGroups, await repos.thumnail.list())
+  await repos.sync(newGroups, await repos.thumnail.list())
 
   if (newGroups.length) {
     render(newGroups[0].id)
@@ -469,22 +469,4 @@ function renderGroupModal (groups, selectedGroupId) {
     groupsList.removeChild(groupsList.firstChild)
   }
   _groupsElements.forEach(group => groupsList.appendChild(group))
-}
-
-async function sync (groups, thumbnails) {
-  const thumnailsByGroupId = thumbnails.reduce((byId, thumbnail) => {
-    const groupId = thumbnail.groupId
-    byId[groupId] = byId[groupId] || []
-    byId[groupId].push(thumbnail)
-    return byId
-  }, {})
-
-  const sortedThumbnails = Array.prototype.concat(
-    ...groups.map(({ id }) => thumnailsByGroupId[id] || [])
-  )
-
-  await Promise.all([
-    repos.group.replace(groups),
-    repos.thumnail.replace(sortedThumbnails)
-  ])
 }
