@@ -108,7 +108,9 @@ function tabElement (groups, thumbnailsElements, selectedGroupId) {
                       ? 'nav-link active'
                       : 'nav-link',
                   href: '#',
-                  innerText: group.name
+                  innerText: !(group.rows && group.cols)
+                    ? group.name
+                    : `${group.name} (${group.rows}x${group.cols})`
                 })
               ]
             })
