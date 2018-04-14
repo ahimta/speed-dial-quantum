@@ -5,24 +5,19 @@ document.getElementById('newGroupBtn').addEventListener('click', async () => {
   // @ts-ignore
   const name = document.getElementById('newGroupName').value
 
-  if (!name) {
-    return
-  }
-
   // @ts-ignore
   const rows = parseInt(document.getElementById('newGroupRows').value, 10)
   // @ts-ignore
   const cols = parseInt(document.getElementById('newGroupCols').value, 10)
 
-  const withRowsAndCols =
-    rows && rows > 0 && rows < 100 && cols && cols > 0 && cols < 100
-  const groupDetails = !withRowsAndCols ? { name } : { name, rows, cols }
-  const group = await repos.group.add(groupDetails)
+  if (!(name && rows && rows > 0 && rows < 100 && cols > 0 && cols < 100)) {
+    return
+  }
 
-  if (withRowsAndCols) {
-    for (let i = 0; i < rows * cols; i++) {
-      await repos.thumnail.add({ groupId: group.id })
-    }
+  const group = await repos.group.add({ name, rows, cols })
+
+  for (let i = 0; i < rows * cols; i++) {
+    await repos.thumnail.add({ groupId: group.id })
   }
 
   // @note: jQuery is used only for Bootstrap:sweat_smile:
