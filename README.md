@@ -50,6 +50,7 @@ Group(
   cols: Option[Int],
   thumbnails: () => Array[Thumbnail],
 )
+
 Tab(groups: Array[Group], thumbnails: Array[Thumbnail])
 ```
 
