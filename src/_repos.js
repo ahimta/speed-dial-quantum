@@ -2,7 +2,7 @@ import * as platform from './_platform'
 import uuid from './_uuid'
 
 export const group = {
-  add: async ({ name, rows = 0, cols = 0 }) => {
+  add: async ({ name, rows, cols }) => {
     const oldGroups = await getOldGroups()
     const newGroup = {
       id: uuid(),
@@ -41,7 +41,6 @@ export const group = {
 }
 
 export const thumnail = {
-  // @fixme: add thumbnail at correct position at the of its group:sweat_smile:
   add: async ({ groupId, url = '', title = null, imgUrl = null }) => {
     const oldThumbnails = await getOldThumbnails()
     const newThumbnails = oldThumbnails.concat({
@@ -110,11 +109,24 @@ export async function sync (groups, thumbnails) {
 async function getOldGroups () {
   const storedGroups = await platform.get('groups')
 
-  if (!Array.isArray(storedGroups)) {
-    await platform.set('groups', [
-      { id: 'd7bc0008-67ec-478f-b792-ae9591574939', name: ':)' }
+  if (!Array.isArray(storedGroups) || storedGroups.length === 0) {
+    const group = {
+      id: 'd7bc0008-67ec-478f-b792-ae9591574939',
+      name: ':)',
+      rows: 1,
+      cols: 1
+    }
+    await platform.set('groups', [group])
+    await platform.set('thumbnails', [
+      {
+        id: uuid(),
+        groupId: 'd7bc0008-67ec-478f-b792-ae9591574939',
+        title: null,
+        url: null,
+        imgUrl: null
+      }
     ])
-    return [{ id: 'd7bc0008-67ec-478f-b792-ae9591574939', name: ':)' }]
+    return [group]
   }
 
   return storedGroups
