@@ -78,5 +78,6 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 
 ## Todo
 
+* Add support for opening all thunmbnails in a group at once (in new tabs)
 * Add support for updating groups (name, rows, and columns)
 * Add cursor to dial view
