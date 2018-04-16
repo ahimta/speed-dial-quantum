@@ -121,7 +121,7 @@ function tabElement (groups, thumbnailsElements, selectedGroupId) {
                 createElement('a', {
                   className: 'nav-link',
                   href: '#',
-                  innerText: 'Add Group'
+                  innerText: 'Add Group...'
                 })
               ]
             }),
@@ -131,7 +131,7 @@ function tabElement (groups, thumbnailsElements, selectedGroupId) {
                 createElement('a', {
                   className: 'nav-link',
                   href: '#',
-                  innerText: 'Edit Groups',
+                  innerText: 'Edit Groups...',
                   map: element => {
                     element.setAttribute('data-toggle', 'modal')
                     element.setAttribute('data-target', '#exampleModal')
@@ -167,7 +167,7 @@ function tabElement (groups, thumbnailsElements, selectedGroupId) {
     children: [
       createElement('button', {
         className: 'btn btn-block btn-success',
-        innerText: 'Import Speed Dial',
+        innerText: 'Import Speed Dial...',
         type: 'button',
         onClick: () => {
           speedDialFile.click()
@@ -249,7 +249,7 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
             children: [
               createElement('button', {
                 className: 'btn btn-primary',
-                innerText: 'T',
+                innerText: 'T...',
                 type: 'button',
                 onClick: async () => {
                   const newTitle = window.prompt('New Title')
@@ -264,7 +264,7 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
               }),
               createElement('button', {
                 className: 'btn btn-primary',
-                innerText: 'U',
+                innerText: 'U...',
                 type: 'button',
                 onClick: async () => {
                   const newUrl = window.prompt('New URL')
@@ -314,7 +314,7 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
   const addThumbnailBtn = document.createElement('button')
   addThumbnailBtn.type = 'button'
   addThumbnailBtn.className = 'btn btn-block btn-primary'
-  addThumbnailBtn.innerText = 'Add Thumbnail'
+  addThumbnailBtn.innerText = 'Add Thumbnail...'
   addThumbnailBtn.disabled = group.rows && group.cols
   addThumbnailBtn.addEventListener('click', async () => {
     const url = window.prompt('New URL')
