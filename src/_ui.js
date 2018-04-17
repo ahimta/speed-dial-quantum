@@ -26,6 +26,29 @@ document.getElementById('newGroupBtn').addEventListener('click', async () => {
   render(group.id)
 })
 
+document.getElementById('editGroupBtn').addEventListener('click', async () => {
+  // @ts-ignore
+  const id = document.getElementById('editGroupId').value
+  // @ts-ignore
+  const name = document.getElementById('editGroupName').value
+  // @ts-ignore
+  const rows = parseInt(document.getElementById('editGroupRows').value, 10)
+  // @ts-ignore
+  const cols = parseInt(document.getElementById('editGroupCols').value, 10)
+
+  if (!(name && rows && rows > 0 && rows < 100 && cols > 0 && cols < 100)) {
+    return
+  }
+
+  const group = await repos.group.update(id, { name, rows, cols })
+  await repos.thumnail.resizeByGroupId(id, rows, cols)
+
+  // @note: jQuery is used only for Bootstrap:sweat_smile:
+  // @ts-ignore
+  $('#editGroupModal').modal('hide')
+  render(group.id)
+})
+
 export default async function render (selectedGroupId) {
   const [groups, thumbnails] = await Promise.all([
     repos.group.list(),
@@ -49,7 +72,7 @@ function renderTab (groups, thumbnails, selectedGroupId, group) {
 }
 
 function groupsElements (groups, selectedGroupId) {
-  return groups.map(({ id, name }) =>
+  return groups.map(({ id, name, rows, cols }) =>
     createElement('li', {
       className: 'list-group-item',
       children: [
@@ -68,6 +91,22 @@ function groupsElements (groups, selectedGroupId) {
               href: '#',
               innerText: 'DOWN',
               onClick: () => moveGroupDown(id, groups, selectedGroupId)
+            }),
+            createElement('button', {
+              className: 'btn btn-sm btn-primary',
+              innerText: 'EDIT',
+              onClick: () => {
+                // @ts-ignore
+                document.getElementById('editGroupId').value = id
+                // @ts-ignore
+                document.getElementById('editGroupName').value = name
+                // @ts-ignore
+                document.getElementById('editGroupRows').value = rows
+                // @ts-ignore
+                document.getElementById('editGroupCols').value = cols
+                // @ts-ignore
+                $('#editGroupModal').modal('show')
+              }
             }),
             createElement('a', {
               className: 'btn btn-sm btn-danger',

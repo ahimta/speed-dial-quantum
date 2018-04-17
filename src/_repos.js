@@ -21,7 +21,7 @@ export const group = {
     await updateGroups(newGroups)
   },
   replace: updateGroups,
-  update: async (id, { name = null } = {}) => {
+  update: async (id, { name = null, rows = 0, cols = 0 } = {}) => {
     const oldGroups = await getOldGroups()
     const group = oldGroups.filter(t => t.id === id)[0]
 
@@ -30,13 +30,19 @@ export const group = {
     }
 
     const index = oldGroups.indexOf(group)
-    const newGroup = { id: group.id, name: name || group.name }
+    const newGroup = {
+      id: group.id,
+      name: name || group.name,
+      rows: rows || group.rows,
+      cols: cols || group.cols
+    }
 
     const newGroups = oldGroups
       .slice(0, index)
       .concat(newGroup, ...oldGroups.slice(index + 1))
 
     await updateGroups(newGroups)
+    return newGroup
   }
 }
 
@@ -61,6 +67,48 @@ export const thumnail = {
     await updateThumbnails(newThumbnails)
   },
   replace: updateThumbnails,
+  resizeByGroupId: async (groupId, rows, cols) => {
+    const oldThumbnails = await getOldThumbnails()
+    const groupThumbnails = oldThumbnails.filter(
+      ({ groupId: gId }) => gId === groupId
+    )
+
+    if (groupThumbnails.length === rows * cols) {
+      return
+    }
+
+    const firstThumbnail = groupThumbnails[0]
+    const lastThumbnail = groupThumbnails[groupThumbnails.length - 1]
+    const firstThumbnailIndex = oldThumbnails.indexOf(firstThumbnail)
+    const lastThumbnailIndex = oldThumbnails.lastIndexOf(lastThumbnail)
+
+    let newThumbnails = null
+    if (groupThumbnails.length > rows * cols) {
+      newThumbnails = oldThumbnails
+        .slice(0, firstThumbnailIndex + rows * cols)
+        .concat(oldThumbnails.slice(lastThumbnailIndex + 1))
+    }
+
+    if (groupThumbnails.length < rows * cols) {
+      const fillingLength = rows * cols - groupThumbnails.length
+      const emptyThumbnails = new Array(fillingLength)
+      for (let i = 0; i < fillingLength; i++) {
+        emptyThumbnails[i] = {
+          groupId,
+          id: uuid(),
+          imgUrl: null,
+          title: null,
+          url: null
+        }
+      }
+      newThumbnails = oldThumbnails
+        .slice(0, lastThumbnailIndex + 1)
+        .concat(emptyThumbnails)
+        .concat(oldThumbnails.slice(lastThumbnailIndex + 1))
+    }
+
+    await updateThumbnails(newThumbnails)
+  },
   update: async (
     id,
     { url = null, groupId = null, title = null, imgUrl = null } = {}
