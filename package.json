@@ -27,7 +27,7 @@
   },
   "lint-staged": {
     "{jsconfig.json,manifest.json,README.md}": ["prettier --write", "git add"],
-    "{rollup.config.js,web-ext-config.js,src/*.js}": ["prettier --write", "standard --fx", "git add"]
+    "{rollup.config.js,web-ext-config.js,src/*.js}": ["prettier --write", "standard --fix", "git add"]
   },
   "standard": {
     "globals": [
