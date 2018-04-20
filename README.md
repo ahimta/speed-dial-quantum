@@ -93,10 +93,8 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 
 ## Todo
 
-* Add support for opening all thunmbnails in a group at once (in new tabs)
+* Fix can't use default-browser `{Alt,Ctrl}+<number>`:sweat_smile:
 * Add support for adding thumbnails for the url-bar/context-menu
+* Fix `base64` image URLs slow down everything:sweat_smile:
 * Add cursor to dial view
-* Store images in a different array/data-structure
 * Fix broken `rollup` watch (maybe just use Typescript instead):sweat_smile:
-* Fix default-browser `{Alt,Ctrl}+<number>` by having an option for a modifier
-  key (e.g: `Shift`):sweat_smile:
