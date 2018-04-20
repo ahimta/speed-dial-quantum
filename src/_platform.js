@@ -5,12 +5,16 @@ const platformName = typeof browser !== 'undefined' ? 'firefox' : 'chromium'
 export const get =
   platformName === 'firefox'
     ? firefoxGet
-    : platformName === 'chromium' ? chromiumGet : null
+    : platformName === 'chromium'
+      ? chromiumGet
+      : null
 
 export const set =
   platformName === 'firefox'
     ? firefoxSet
-    : platformName === 'chromium' ? chromiumSet : null
+    : platformName === 'chromium'
+      ? chromiumSet
+      : null
 
 // messaging: onMessage, sendMessage
 export const onMessage =
