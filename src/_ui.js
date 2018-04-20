@@ -49,6 +49,28 @@ document.getElementById('editGroupBtn').addEventListener('click', async () => {
   render(group.id)
 })
 
+document
+  .getElementById('editThumbnailBtn')
+  .addEventListener('click', async () => {
+    // @ts-ignore
+    const id = document.getElementById('editThumbnailId').value
+    // @ts-ignore
+    const title = document.getElementById('editThumbnailTitle').value
+    // @ts-ignore
+    const url = document.getElementById('editThumbnailUrl').value
+    // @ts-ignore
+    const img = document.getElementById('editThumbnailImg').files[0]
+
+    const imgUrl = !img ? null : await getImageUrl(img)
+
+    const thumbnail = await repos.thumnail.update(id, { title, url, imgUrl })
+
+    // @note: jQuery is used only for Bootstrap:sweat_smile:
+    // @ts-ignore
+    $('#editThumbnailModal').modal('hide')
+    render(thumbnail.groupId)
+  })
+
 export default async function render (selectedGroupId) {
   const [groups, thumbnails] = await Promise.all([
     repos.group.list(),
@@ -288,37 +310,24 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
             children: [
               createElement('button', {
                 className: 'btn btn-primary',
-                innerText: 'T...',
+                innerText: 'Edit',
                 type: 'button',
-                onClick: async () => {
-                  const newTitle = window.prompt('New Title')
-
-                  if (!newTitle) {
-                    return
-                  }
-
-                  await repos.thumnail.update(id, { title: newTitle })
-                  render(selectedGroupId)
-                }
-              }),
-              createElement('button', {
-                className: 'btn btn-primary',
-                innerText: 'U...',
-                type: 'button',
-                onClick: async () => {
-                  const newUrl = window.prompt('New URL')
-
-                  if (!newUrl) {
-                    return
-                  }
-
-                  await repos.thumnail.update(id, { url: newUrl })
-                  render(selectedGroupId)
+                onClick: () => {
+                  // @ts-ignore
+                  document.getElementById('editThumbnailId').value = id
+                  // @ts-ignore
+                  document.getElementById('editThumbnailTitle').value = title
+                  // @ts-ignore
+                  document.getElementById('editThumbnailUrl').value = url
+                  // @ts-ignore
+                  document.getElementById('editThumbnailImg').value = ''
+                  // @ts-ignore
+                  $('#editThumbnailModal').modal('show')
                 }
               }),
               createElement('button', {
                 className: 'btn btn-danger',
-                innerText: 'D',
+                innerText: 'Delete',
                 type: 'button',
                 disabled: group.rows && group.cols,
                 onClick: async () => {
@@ -451,6 +460,17 @@ function createElement (
   }
 
   return element
+}
+
+async function getImageUrl (img) {
+  const reader = new window.FileReader()
+  reader.readAsDataURL(img)
+  const url = await (() =>
+    new Promise(resolve => {
+      reader.onload = () => resolve(reader.result)
+    }))()
+
+  return url
 }
 
 async function moveGroupDown (groupId, groups, selectedGroupId) {
