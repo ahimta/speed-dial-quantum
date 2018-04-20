@@ -95,9 +95,6 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 ### Tasks
 
 * Upgrade `Bootstrap` to the latest & greatest
-* Use `include` option in `jsconfig.json`
-* Add Firefox and Chrome extension urls
-* Use `snyk` & `nsp`
 * Use `lint-staged`
 
 ### Features
@@ -106,4 +103,3 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 * Add support for adding thumbnails for the url-bar/context-menu
 * Add edit-thumbnail modal
 * Add cursor to dial view
-* Add new-thumbnail modal
