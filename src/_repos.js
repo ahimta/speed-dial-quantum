@@ -136,6 +136,7 @@ export const thumnail = {
       .concat(newThumbnail, ...oldThumbnails.slice(index + 1))
 
     await updateThumbnails(newThumbnails)
+    return newThumbnail
   }
 }
 
