@@ -1,4 +1,5 @@
 import importSpeedDial from './_import_speed_dial'
+import * as platform from './_platform'
 import * as repos from './_repos'
 
 document.getElementById('newGroupBtn').addEventListener('click', async () => {
@@ -154,7 +155,20 @@ function tabElement (groups, thumbnailsElements, selectedGroupId) {
           .map(group =>
             createElement('li', {
               className: 'nav-item',
-              onClick: () => {
+              onMousedown: event => {
+                event.preventDefault()
+
+                if (
+                  event.button === 1 ||
+                  (event.button === 0 && event.ctrlKey)
+                ) {
+                  platform.sendMessage({
+                    type: 'open-all-tabs',
+                    groupId: group.id
+                  })
+                  return
+                }
+
                 render(group.id)
               },
               children: [
@@ -396,6 +410,7 @@ function createElement (
     onChange = null,
     onClick = null,
     onDrop = null,
+    onMousedown = null,
     map = null
   } = {}
 ) {
@@ -453,6 +468,9 @@ function createElement (
       event.preventDefault()
     })
     element.addEventListener('drop', onDrop)
+  }
+  if (onMousedown) {
+    element.addEventListener('mousedown', onMousedown)
   }
 
   if (map) {
