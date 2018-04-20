@@ -2,6 +2,20 @@ import * as platform from './_platform'
 import * as repos from './_repos'
 
 platform.onMessage(async request => {
+  if (request.type === 'open-all-tabs') {
+    const groupId = request.groupId
+    const thumbnails = await repos.thumnail.list()
+
+    const groupThumbnails = thumbnails.filter(
+      ({ groupId: gId }) => gId === groupId
+    )
+    groupThumbnails.filter(({ url }) => url).forEach(async ({ url }) => {
+      await platform.createTab({ url })
+    })
+
+    return
+  }
+
   const index = parseInt(request.digit, 10) - 1
 
   const url = await storedUrl(index)
