@@ -78,5 +78,20 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 
 ## Todo
 
+### Tasks
+
+* Add more badges (Standard, Prettier, Mozilla, Chrome, etc...)
+* Upgrade all packages to the latest & greatest
+* Upgrade `Bootstrap` to the latest & greatest
+* Use `include` option in `jsconfig.json`
+* Add Firefox and Chrome extension urls
+* Use `lint-staged`
+* Use `snyk` & `nsp`
+
+### Features
+
 * Add support for opening all thunmbnails in a group at once (in new tabs)
+* Add support for adding thumbnails for the url-bar/context-menu
+* Add edit-thumbnail modal
 * Add cursor to dial view
+* Add new-thumbnail modal
