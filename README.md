@@ -80,13 +80,12 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 
 ### Tasks
 
-* Add more badges (Standard, Prettier, Mozilla, Chrome, etc...)
-* Upgrade all packages to the latest & greatest
+* Add more badges (Standard, Prettier, Mozilla, Chrome, Snyk, etc...)
 * Upgrade `Bootstrap` to the latest & greatest
 * Use `include` option in `jsconfig.json`
 * Add Firefox and Chrome extension urls
-* Use `lint-staged`
 * Use `snyk` & `nsp`
+* Use `lint-staged`
 
 ### Features
 
