@@ -92,11 +92,6 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 
 ## Todo
 
-### Tasks
-
-* Upgrade `Bootstrap` to the latest & greatest
-* Use `lint-staged`
-
 ### Features
 
 * Add support for opening all thunmbnails in a group at once (in new tabs)
