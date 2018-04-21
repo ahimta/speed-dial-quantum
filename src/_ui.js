@@ -343,9 +343,13 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
                 className: 'btn btn-danger',
                 innerText: 'Delete',
                 type: 'button',
-                disabled: group.rows && group.cols,
                 onClick: async () => {
-                  await repos.thumnail.remove(id)
+                  if (group.rows && group.cols) {
+                    await repos.thumnail.update(id, { reset: true })
+                  } else {
+                    await repos.thumnail.remove(id)
+                  }
+
                   render(selectedGroupId)
                 }
               })
