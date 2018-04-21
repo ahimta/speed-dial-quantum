@@ -87,8 +87,6 @@ export default function () {
         return
       }
 
-      event.preventDefault()
-
       up()
 
       altKeyDown = event.code === 'AltLeft' || event.code === 'AltRight'
