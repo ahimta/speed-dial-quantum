@@ -93,6 +93,7 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 
 ## Todo
 
+* Fix `Alt` shortcuts don't work properly on Firefox Windows:sweat_smile:
 * Fix can't use default-browser `{Alt,Ctrl}+<number>`:sweat_smile:
 * Add support for adding thumbnails for the url-bar/context-menu
 * Fix `base64` image URLs slow down everything:sweat_smile:
