@@ -111,7 +111,13 @@ export const thumnail = {
   },
   update: async (
     id,
-    { url = null, groupId = null, title = null, imgUrl = null } = {}
+    {
+      url = null,
+      groupId = null,
+      title = null,
+      imgUrl = null,
+      reset = false
+    } = {}
   ) => {
     const oldThumbnails = await getOldThumbnails()
     const thumbnail = oldThumbnails.filter(t => t.id === id)[0]
@@ -123,13 +129,20 @@ export const thumnail = {
     }
 
     const index = oldThumbnails.indexOf(thumbnail)
-    const newThumbnail = {
-      id: thumbnail.id,
-      groupId: groupId || thumbnail.groupId,
-      title: title || thumbnail.title,
-      url: url || thumbnail.url,
-      imgUrl: imgUrl || thumbnail.imgUrl
-    }
+    const newThumbnail = !reset
+      ? {
+        id: thumbnail.id,
+        groupId: groupId || thumbnail.groupId,
+        title: title || thumbnail.title,
+        url: url || thumbnail.url,
+        imgUrl: imgUrl || thumbnail.imgUrl
+      }
+      : {
+        id: thumbnail.id,
+        groupId: thumbnail.groupId,
+        title: null,
+        imgUrl: null
+      }
 
     const newThumbnails = oldThumbnails
       .slice(0, index)
