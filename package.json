@@ -14,7 +14,7 @@
     "start": "web-ext run",
     "standard": "standard --fix rollup.config.js web-ext-config.js src/*.js",
     "test": "npm run lint",
-    "watch": "npm run build -- --watch"
+    "watch": "rollup --config --watch"
   },
   "devDependencies": {
     "husky": "^0.14.3",
