@@ -1,5 +1,6 @@
 module.exports = {
   ignoreFiles: [
+    '.vscode',
     'node_modules',
     'src',
 
