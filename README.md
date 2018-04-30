@@ -23,27 +23,37 @@ Minimal speed-dial extension with support for keyboard shortcuts & importing Spe
 
 ## Build
 
-1.  `yarn install --emoji`
-2.  `yarn run build`
+```bash
+yarn install --emoji
+yarn run build
+```
 
 ## Development
 
-1.  `yarn install --emoji`
-2.  `yarn run build`
-3.  `yarn start`
-4.  `yarn run watch` (in another terminal tab)
+```bash
+yarn install --emoji
+yarn run build
+yarn start
+
+# in another terminal window/tab
+yarn run watch
+```
 
 ## Test
 
-1.  `yarn install --emoji`
-2.  `yarn run build`
-3.  `yarn test`
+```bash
+yarn install --emoji
+yarn run build
+yarn test
+```
 
 ## Package
 
-1.  `yarn install --emoji`
-2.  `yarn run build`
-3.  `yarn run package`
+```bash
+yarn install --emoji
+yarn run build
+yarn run package
+```
 
 ## Design (in Scala)
 
