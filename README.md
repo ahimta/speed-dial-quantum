@@ -97,5 +97,4 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 * Fix can't use default-browser `{Alt,Ctrl}+<number>`:sweat_smile:
 * Add support for adding thumbnails for the url-bar/context-menu
 * Fix `base64` image URLs slow down everything:sweat_smile:
-* Add cursor to dial view
 * Fix broken `rollup` watch (maybe just use Typescript instead):sweat_smile:

@@ -11,6 +11,11 @@ export default function () {
   function up () {
     if (!dialView) {
       dialView = document.createElement('section')
+      const leftDigit = document.createElement('span')
+      const rightDigit = document.createElement('span')
+      const rest = document.createElement('span')
+
+      dialView.dir = 'ltr'
       dialView.style.fontSize = '1em'
       dialView.style.minHeight = '2em'
       dialView.style.backgroundColor = '#f5f5f5f5'
@@ -21,7 +26,12 @@ export default function () {
       dialView.style.position = 'fixed'
       dialView.style.opacity = '100%'
       dialView.style.zIndex = '2147483647'
-      dialView.innerText = '*_^'
+
+      rest.innerText = '*_^'
+
+      dialView.appendChild(leftDigit)
+      dialView.appendChild(rightDigit)
+      dialView.appendChild(rest)
 
       document.body.appendChild(dialView)
     }
@@ -78,12 +88,16 @@ export default function () {
         digits[digitIndex++ % 2] = digit
 
         const index =
-          digitIndex === 1 ? digits[0] - 1 : digits[0] * 10 + digits[1] - 1
+          digitIndex % 2 !== 0 ? digits[0] - 1 : digits[0] * 10 + digits[1] - 1
 
         const results = await repos.thumnail.list()
         const thumbnail = results[index] || {}
-        dialView.innerText = `${index + 1} - ${thumbnail.title ||
-          '(Empty -_-)'}`
+
+        const [leftDigitView, rightDigitView, restView] = dialView.children
+
+        leftDigitView.innerText = `${digits[0]}`
+        rightDigitView.innerText = digitIndex % 2 !== 0 ? '.' : `${digits[1]}`
+        restView.innerText = ` - ${thumbnail.title || '(Empty -_-)'}`
         return
       }
 
@@ -111,7 +125,7 @@ export default function () {
       }
 
       const index =
-        digitIndex === 1 ? digits[0] - 1 : digits[0] * 10 + digits[1] - 1
+        digitIndex % 2 !== 0 ? digits[0] - 1 : digits[0] * 10 + digits[1] - 1
 
       if (index >= 0) {
         platform.sendMessage({
