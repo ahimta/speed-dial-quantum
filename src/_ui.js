@@ -333,7 +333,7 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
             role: 'group',
             children: [
               createElement('button', {
-                className: 'btn btn-primary',
+                className: 'btn btn-sm btn-primary',
                 innerText: 'Edit...',
                 type: 'button',
                 onClick: () => {
@@ -350,7 +350,7 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
                 }
               }),
               createElement('button', {
-                className: 'btn btn-danger',
+                className: 'btn btn-sm btn-danger',
                 innerText: 'Delete',
                 type: 'button',
                 onClick: async () => {
