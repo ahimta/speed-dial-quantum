@@ -108,3 +108,4 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 * Fix can't use default-browser `{Alt,Ctrl}+<number>`:sweat_smile:
 * Fix rows and columns not displayed correctly:sweat_smile:
 * Fix adding thumbnails is rather hard:sweat_smile:
+* Fix default thumbnails use HTTP URLs:sweat_smile:
