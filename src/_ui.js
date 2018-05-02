@@ -135,7 +135,13 @@ function groupsElements (groups, selectedGroupId) {
               className: 'btn btn-sm btn-danger',
               href: '#',
               innerText: 'DELETE',
-              onClick: () => removeGroup(id, groups, selectedGroupId)
+              onClick: () => {
+                if (!window.confirm('Are you sure you want to delete group?')) {
+                  return
+                }
+
+                removeGroup(id, groups, selectedGroupId)
+              }
             })
           ]
         })
@@ -344,6 +350,14 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
                 innerText: 'Delete',
                 type: 'button',
                 onClick: async () => {
+                  if (
+                    !window.confirm(
+                      'Are you sure you want to remove thumbnail?'
+                    )
+                  ) {
+                    return
+                  }
+
                   if (group.rows && group.cols) {
                     await repos.thumnail.update(id, { reset: true })
                   } else {
