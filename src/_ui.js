@@ -121,7 +121,7 @@ function groupsElements (groups, selectedGroupId) {
             }),
             createElement('button', {
               className: 'btn btn-sm btn-primary',
-              innerText: 'EDIT',
+              innerText: 'EDIT...',
               onClick: () => {
                 // @ts-ignore
                 document.getElementById('editGroupId').value = id
@@ -334,7 +334,7 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
             children: [
               createElement('button', {
                 className: 'btn btn-primary',
-                innerText: 'Edit',
+                innerText: 'Edit...',
                 type: 'button',
                 onClick: () => {
                   // @ts-ignore
