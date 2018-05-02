@@ -383,7 +383,7 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
     .filter(x => x)
 
   const cardGroups = []
-  for (let i = 0; i < elements.length; i = i + 3) {
+  for (let i = 0; i < elements.length; i = i + (group.cols || 3)) {
     const cardGroup = document.createElement('div')
     cardGroup.className = 'card-group'
     cardGroup.style.marginBottom = '1em'
