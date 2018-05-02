@@ -62,6 +62,10 @@ document
     // @ts-ignore
     const img = document.getElementById('editThumbnailImg').files[0]
 
+    if (!(title && url)) {
+      return
+    }
+
     const imgUrl = !img ? null : await getImageUrl(img)
 
     const thumbnail = await repos.thumnail.update(id, { title, url, imgUrl })
