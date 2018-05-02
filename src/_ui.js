@@ -283,10 +283,10 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
               createElement('img', {
                 alt: `${i + 1}`,
                 className: 'card-img-top',
-                height: 150,
+                height: 100,
                 src:
                   imgUrl || `https://via.placeholder.com/350x150?text=${i + 1}`,
-                width: 350,
+                width: 100,
                 onDrop: async event => {
                   event.preventDefault()
 
@@ -315,13 +315,9 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
       const cardBody = createElement('div', {
         className: 'card-body',
         children: [
-          createElement('h5', {
-            className: 'card-title',
-            innerText: `(${i + 1})`
-          }),
           createElement('p', {
             className: 'card-text',
-            innerText: title || '(No Title -_-)'
+            innerText: `(${i + 1}) - ${title || '(No Title -_-)'}`
           })
         ]
       })
