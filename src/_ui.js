@@ -249,6 +249,7 @@ function tabElement (groups, thumbnailsElements, selectedGroupId) {
 
   const cardFooter = createElement('footer', {
     className: 'card-footer',
+    style: { marginTop: '-1em' },
     children: [
       createElement('button', {
         className: 'btn btn-block btn-success',
@@ -391,22 +392,25 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
     cardGroups.push(cardGroup)
   }
 
-  const addThumbnailBtn = document.createElement('button')
-  addThumbnailBtn.type = 'button'
-  addThumbnailBtn.className = 'btn btn-block btn-primary'
-  addThumbnailBtn.innerText = 'Add Thumbnail...'
-  addThumbnailBtn.disabled = group.rows && group.cols
-  addThumbnailBtn.addEventListener('click', async () => {
-    const url = window.prompt('New URL')
-    if (!url) {
-      return
-    }
+  if (!(group.rows && group.cols)) {
+    const addThumbnailBtn = document.createElement('button')
+    addThumbnailBtn.type = 'button'
+    addThumbnailBtn.className = 'btn btn-block btn-primary'
+    addThumbnailBtn.innerText = 'Add Thumbnail...'
+    addThumbnailBtn.disabled = group.rows && group.cols
+    addThumbnailBtn.addEventListener('click', async () => {
+      const url = window.prompt('New URL')
+      if (!url) {
+        return
+      }
 
-    await repos.thumnail.add({ url, groupId: selectedGroupId })
-    render(selectedGroupId)
-  })
+      await repos.thumnail.add({ url, groupId: selectedGroupId })
+      render(selectedGroupId)
+    })
 
-  cardGroups.push(addThumbnailBtn)
+    cardGroups.push(addThumbnailBtn)
+  }
+
   return cardGroups
 }
 
@@ -471,7 +475,7 @@ function createElement (
 
   if (style) {
     Object.keys(style).forEach(styleAttr => {
-      element[styleAttr] = style[styleAttr]
+      element.style[styleAttr] = style[styleAttr]
     })
   }
 
