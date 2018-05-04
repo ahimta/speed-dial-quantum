@@ -100,11 +100,9 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 
 * Keyboard shortcuts only work when the page is focused (because a content
   script is used)
-* `Alt` shortcuts don't work properly on Firefox Windows:sweat_smile:
 
 ## Todo
 
 * Fix loading large images can slow down loading thumbnails:sweat_smile:
-* Fix can't use default-browser `{Alt,Ctrl}+<number>`:sweat_smile:
 * Fix adding thumbnails is rather hard:sweat_smile:
 * Fix default thumbnails use HTTP URLs:sweat_smile:

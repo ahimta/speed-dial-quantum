@@ -4,15 +4,16 @@ import * as repos from './_repos'
 export default function () {
   let altKeyDown = false
   let ctrlKeyDown = false
+  let shiftKeyDown = false
+
   let digits = [0, 0]
   let digitIndex = 0
   let dialView = null
 
   function up () {
+    // @todo: convert to guard condition:smiley:
     if (!dialView) {
       dialView = document.createElement('section')
-      const leftDigit = document.createElement('span')
-      const rightDigit = document.createElement('span')
       const rest = document.createElement('span')
 
       dialView.dir = 'ltr'
@@ -27,17 +28,28 @@ export default function () {
       dialView.style.opacity = '100%'
       dialView.style.zIndex = '2147483647'
 
-      rest.innerText = '*_^'
+      if (altKeyDown) {
+        rest.innerText = 'Please use "Shift" instead of "Alt" :)'
+      } else {
+        const leftDigit = document.createElement('span')
+        const rightDigit = document.createElement('span')
 
-      dialView.appendChild(leftDigit)
-      dialView.appendChild(rightDigit)
+        rest.innerText = '*_^'
+
+        dialView.appendChild(leftDigit)
+        dialView.appendChild(rightDigit)
+      }
+
       dialView.appendChild(rest)
-
       document.body.appendChild(dialView)
     }
   }
 
   function down () {
+    if (!dialView) {
+      return
+    }
+
     document.body.removeChild(dialView)
     dialView = null
     altKeyDown = false
@@ -54,7 +66,9 @@ export default function () {
           event.code === 'AltRight' ||
           event.code === 'ControlLeft' ||
           event.code === 'ControlRight' ||
-          (event.code && (altKeyDown || ctrlKeyDown))
+          event.code === 'ShiftLeft' ||
+          event.code === 'ShiftRight' ||
+          (event.code && (altKeyDown || ctrlKeyDown || shiftKeyDown))
         )
       ) {
         return
@@ -64,11 +78,17 @@ export default function () {
         event.code === 'AltLeft' ||
         event.code === 'AltRight' ||
         event.code === 'ControlLeft' ||
-        event.code === 'ControlRight'
+        event.code === 'ControlRight' ||
+        event.code === 'ShiftLeft' ||
+        event.code === 'ShiftRight'
 
       if (!isControl) {
-        if (!(event.code && (altKeyDown || ctrlKeyDown))) {
+        if (!(event.code && (altKeyDown || ctrlKeyDown || shiftKeyDown))) {
           down()
+          return
+        }
+
+        if (altKeyDown) {
           return
         }
 
@@ -101,11 +121,12 @@ export default function () {
         return
       }
 
-      up()
-
       altKeyDown = event.code === 'AltLeft' || event.code === 'AltRight'
       ctrlKeyDown =
         event.code === 'ControlLeft' || event.code === 'ControlRight'
+      shiftKeyDown = event.code === 'ShiftLeft' || event.code === 'ShiftRight'
+
+      up()
     },
     mousedown: function (event) {
       if (dialView) {
@@ -118,9 +139,16 @@ export default function () {
           (altKeyDown &&
             (event.code === 'AltLeft' || event.code === 'AltRight')) ||
           (ctrlKeyDown &&
-            (event.code === 'ControlLeft' || event.code === 'ControlRight'))
+            (event.code === 'ControlLeft' || event.code === 'ControlRight')) ||
+          (shiftKeyDown &&
+            (event.code === 'ShiftLeft' || event.code === 'ShiftRight'))
         )
       ) {
+        return
+      }
+
+      if (altKeyDown) {
+        down()
         return
       }
 
@@ -130,7 +158,7 @@ export default function () {
       if (index >= 0) {
         platform.sendMessage({
           digit: index + 1,
-          altKey: altKeyDown,
+          altKey: shiftKeyDown,
           ctrlKey: ctrlKeyDown
         })
       }
