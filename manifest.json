@@ -9,16 +9,16 @@
   "version": "0.0.25",
   "permissions": ["storage", "tabs", "unlimitedStorage", "<all_urls>"],
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["dist/background.js"]
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "js": ["dist/content.js"]
     }
   ],
   "chrome_url_overrides": {
-    "newtab": "newtab.html"
+    "newtab": "src/newtab.html"
   },
   "applications": {
     "gecko": {
@@ -27,8 +27,8 @@
     }
   },
   "icons": {
-    "48": "icon.png",
-    "64": "icon@1.34x.png",
-    "96": "icon@2x.png"
+    "48": "icons/icon.png",
+    "64": "icons/icon@1.34x.png",
+    "96": "icons/icon@2x.png"
   }
 }

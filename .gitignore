@@ -6,9 +6,4 @@
 /web-ext-artifacts
 
 # generated rollup bundles and sourcemaps
-/background.js
-/content.js
-/newtab.js
-/background.js.map
-/content.js.map
-/newtab.js.map
+/dist
