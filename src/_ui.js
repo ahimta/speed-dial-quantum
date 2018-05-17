@@ -77,18 +77,20 @@ document
   })
 
 export default async function render (selectedGroupId) {
-  const [groups, thumbnails] = await Promise.all([
+  const [groups, shiftRequired, thumbnails] = await Promise.all([
     repos.group.list(),
+    repos.settings.shiftRequired(),
     repos.thumnail.list()
   ])
+
   const group = groups.filter(({ id }) => id === selectedGroupId)[0]
-  renderTab(groups, thumbnails, selectedGroupId, group)
+  renderTab(groups, thumbnails, selectedGroupId, shiftRequired, group)
   renderGroupModal(groups, selectedGroupId)
 }
 
-function renderTab (groups, thumbnails, selectedGroupId, group) {
+function renderTab (groups, thumbnails, selectedGroupId, shiftRequired, group) {
   const _thumbnails = thumbnailsElements(thumbnails, selectedGroupId, group)
-  const tab = tabElement(groups, _thumbnails, selectedGroupId)
+  const tab = tabElement(groups, _thumbnails, selectedGroupId, shiftRequired)
 
   const root = document.getElementById('root')
   while (root.firstChild) {
@@ -154,46 +156,68 @@ function groupsElements (groups, selectedGroupId) {
   )
 }
 
-function tabElement (groups, thumbnailsElements, selectedGroupId) {
+function tabElement (
+  groups,
+  thumbnailsElements,
+  selectedGroupId,
+  shiftRequired
+) {
   const tab = createElement('section', { className: 'card text-center' })
   const header = createElement('header', {
     className: 'card-header',
     children: [
       createElement('ul', {
         className: 'nav nav-tabs card-header-tabs',
-        children: groups
-          .map(group =>
-            createElement('li', {
-              className: 'nav-item',
-              onMousedown: event => {
-                event.preventDefault()
-
-                if (
-                  event.button === 1 ||
-                  (event.button === 0 && event.ctrlKey)
-                ) {
-                  platform.sendMessage({
-                    type: 'open-all-tabs',
-                    groupId: group.id
-                  })
-                  return
+        children: [
+          createElement('li', {
+            className: 'nav-item',
+            children: [
+              createElement('input', {
+                checked: shiftRequired,
+                title: 'Only activate when "Shift" is clicked',
+                type: 'checkbox',
+                style: { marginRight: '1em' },
+                onChange: async event => {
+                  await repos.settings.shiftRequired(event.target.checked)
                 }
+              })
+            ]
+          })
+        ]
+          .concat(
+            groups.map(group =>
+              createElement('li', {
+                className: 'nav-item',
+                onMousedown: event => {
+                  event.preventDefault()
 
-                render(group.id)
-              },
-              children: [
-                createElement('a', {
-                  className:
-                    group.id === selectedGroupId
-                      ? 'nav-link active'
-                      : 'nav-link',
-                  href: '#',
-                  innerText: !(group.rows && group.cols)
-                    ? group.name
-                    : `${group.name} (${group.rows}x${group.cols})`
-                })
-              ]
-            })
+                  if (
+                    event.button === 1 ||
+                    (event.button === 0 && event.ctrlKey)
+                  ) {
+                    platform.sendMessage({
+                      type: 'open-all-tabs',
+                      groupId: group.id
+                    })
+                    return
+                  }
+
+                  render(group.id)
+                },
+                children: [
+                  createElement('a', {
+                    className:
+                      group.id === selectedGroupId
+                        ? 'nav-link active'
+                        : 'nav-link',
+                    href: '#',
+                    innerText: !(group.rows && group.cols)
+                      ? group.name
+                      : `${group.name} (${group.rows}x${group.cols})`
+                  })
+                ]
+              })
+            )
           )
           .concat(
             createElement('li', {
@@ -418,6 +442,7 @@ function createElement (
   name,
   {
     alt = null,
+    checked = null,
     className = null,
     disabled = null,
     height = null,
@@ -425,6 +450,7 @@ function createElement (
     innerText = null,
     role = null,
     src = null,
+    title = null,
     type = null,
     width = null,
     style = null,
@@ -440,6 +466,9 @@ function createElement (
 
   if (alt) {
     element.alt = alt
+  }
+  if (typeof checked === 'boolean') {
+    element.checked = checked
   }
   if (className) {
     element.className = className
@@ -461,6 +490,9 @@ function createElement (
   }
   if (src) {
     element.src = src
+  }
+  if (title) {
+    element.title = title
   }
   if (type) {
     element.type = type

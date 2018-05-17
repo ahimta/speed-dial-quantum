@@ -46,6 +46,16 @@ export const group = {
   }
 }
 
+export const settings = {
+  shiftRequired: async (required = null) => {
+    if (typeof required === 'boolean') {
+      await platform.set('shiftRequired', required)
+    } else {
+      return platform.get('shiftRequired')
+    }
+  }
+}
+
 export const thumnail = {
   add: async ({ groupId, url = '', title = null, imgUrl = null }) => {
     const oldThumbnails = await getOldThumbnails()

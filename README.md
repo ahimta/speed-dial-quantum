@@ -107,6 +107,5 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 * Fix loading large images can slow down loading thumbnails:sweat_smile:
 * Fix page info/image must be added manually:sweat_smile:
 * Fix watching file doesn't always work:sweat_smile:
-* Fix can't use default-browser `{Alt,Ctrl}+<number>`:sweat_smile:
 * Fix adding thumbnails is rather hard:sweat_smile:
 * Fix default thumbnails use HTTP URLs:sweat_smile:

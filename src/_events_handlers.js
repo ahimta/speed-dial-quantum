@@ -101,6 +101,10 @@ export default function () {
         return
       }
 
+      if (!(event.shiftKey || !(await repos.settings.shiftRequired()))) {
+        return
+      }
+
       up()
 
       altKeyDown = event.code === 'AltLeft' || event.code === 'AltRight'
