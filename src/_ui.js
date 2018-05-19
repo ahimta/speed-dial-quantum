@@ -68,7 +68,11 @@ document
 
     const imgUrl = !img ? null : await getImageUrl(img)
 
-    const thumbnail = await repos.thumnail.update(id, { title, url, imgUrl })
+    const thumbnail = await repos.thumnail.update(id, { title, url })
+
+    if (imgUrl) {
+      await repos.thumnail.imgUrl(thumbnail.id, imgUrl)
+    }
 
     // @note: jQuery is used only for Bootstrap:sweat_smile:
     // @ts-ignore
@@ -328,8 +332,20 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
                       reader.onload = () => resolve(reader.result)
                     }))()
 
-                  await repos.thumnail.update(id, { imgUrl: newImgUrl })
+                  if (newImgUrl) {
+                    await repos.thumnail.imgUrl(id, newImgUrl)
+                  }
+
                   render(selectedGroupId)
+                },
+                map: async element => {
+                  setTimeout(async () => {
+                    const storedImgUrl = await repos.thumnail.imgUrl(id)
+                    element.src =
+                      storedImgUrl ||
+                      imgUrl ||
+                      `https://via.placeholder.com/350x150?text=${i + 1}`
+                  }, 0)
                 }
               })
             ]
