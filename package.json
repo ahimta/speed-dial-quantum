@@ -20,13 +20,20 @@
     "husky": "^0.14.3",
     "lint-staged": "^7.0.4",
     "prettier": "^1.11.1",
-    "rollup": "^0.58.1",
+    "rollup": "^0.59.1",
     "standard": "^11.0.0",
     "web-ext": "^2.4.0"
   },
   "lint-staged": {
-    "{jsconfig.json,manifest.json,README.md}": ["prettier --write", "git add"],
-    "{rollup.config.js,web-ext-config.js,src/*.js}": ["prettier --write", "standard --fix", "git add"]
+    "{jsconfig.json,manifest.json,README.md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "{rollup.config.js,web-ext-config.js,src/*.js}": [
+      "prettier --write",
+      "standard --fix",
+      "git add"
+    ]
   },
   "standard": {
     "globals": [
