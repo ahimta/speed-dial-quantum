@@ -7,7 +7,13 @@
   "homepage_url": "https://github.com/Ahimta/speed-dial-quantum",
   "author": "Abdullah Alansari",
   "version": "0.0.26",
-  "permissions": ["storage", "tabs", "unlimitedStorage", "<all_urls>"],
+  "permissions": [
+    "storage",
+    "tabs",
+    "activeTab",
+    "unlimitedStorage",
+    "<all_urls>"
+  ],
   "background": {
     "scripts": ["dist/background.js"]
   },
@@ -19,6 +25,13 @@
   ],
   "chrome_url_overrides": {
     "newtab": "src/newtab.html"
+  },
+  "browser_action": {
+    "browser_style": true,
+    "default_icon": "icons/icon.png",
+    "default_title": "Speed Dial",
+    "default_popup": "src/popup.html",
+    "show_matches": ["<all_urls>"]
   },
   "applications": {
     "gecko": {

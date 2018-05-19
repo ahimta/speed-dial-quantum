@@ -13,5 +13,10 @@ export default [
     input: 'src/newtab.js',
     output: { file: 'dist/newtab.js', format: 'iife', sourcemap: true },
     watch: { include: 'src/_*.js' }
+  },
+  {
+    input: 'src/popup.js',
+    output: { file: 'dist/popup.js', format: 'iife', sourcemap: true },
+    watch: { include: 'src/_*.js' }
   }
 ]
