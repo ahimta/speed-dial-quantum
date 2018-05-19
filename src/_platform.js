@@ -31,7 +31,8 @@ export const sendMessage =
       ? message => chrome.runtime.sendMessage(message)
       : null
 
-// tabs: createTab, updateTab
+// tabs: activeTab, createTab, updateTab
+
 export const createTab =
   platformName === 'firefox'
     ? options => browser.tabs.create(options)
@@ -45,6 +46,30 @@ export const updateTab =
     : platformName === 'chromium'
       ? options => chrome.tabs.update(options)
       : null
+
+export async function activeTab () {
+  const tab =
+    platformName === 'firefox'
+      ? (await browser.tabs.query({ active: true }))[0]
+      : (await chromiumActiveTabs())[0]
+
+  const { id, title, url } = tab
+  return { id, title, url }
+}
+
+function chromiumActiveTabs () {
+  return new Promise((resolve, reject) => {
+    chrome.tabs.query({ active: true }, activeTabs => {
+      const err = chrome.runtime.lastError
+      if (err) {
+        reject(err)
+        return
+      }
+
+      resolve(activeTabs)
+    })
+  })
+}
 
 async function firefoxGet (key) {
   return (await browser.storage.local.get())[key]
