@@ -2,7 +2,17 @@ module.exports = {
   ignoreFiles: [
     '.vscode',
     'node_modules',
-    'src',
+
+    'src/background.js',
+    'src/content.js',
+    'src/_events_handlers.js',
+    'src/_import_speed_dial.js',
+    'src/newtab.js',
+    'src/_platform.js',
+    'src/popup.js',
+    'src/_repos.js',
+    'src/_ui.js',
+    'src/_uuid.js',
 
     '.editorconfig',
     '.gitignore',
