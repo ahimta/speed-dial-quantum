@@ -72,7 +72,7 @@ function chromiumActiveTabs () {
 }
 
 async function firefoxGet (key) {
-  return (await browser.storage.local.get())[key]
+  return (await browser.storage.local.get(key))[key]
 }
 
 function firefoxSet (key, value) {
