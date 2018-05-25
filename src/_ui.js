@@ -313,8 +313,7 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
                 alt: `${i + 1}`,
                 className: 'card-img-top',
                 height: 100,
-                src:
-                  imgUrl || `https://via.placeholder.com/350x150?text=${i + 1}`,
+                src: imgUrl || '../icons/loading.svg',
                 width: 100,
                 onDrop: async event => {
                   event.preventDefault()
