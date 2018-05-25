@@ -303,6 +303,29 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
         return null
       }
 
+      async function onDrop (event) {
+        event.preventDefault()
+
+        if (!event.dataTransfer.items) {
+          return
+        }
+
+        const img = event.dataTransfer.items[0].getAsFile()
+
+        const reader = new window.FileReader()
+        reader.readAsDataURL(img)
+        const newImgUrl = await (() =>
+          new Promise(resolve => {
+            reader.onload = () => resolve(reader.result)
+          }))()
+
+        if (newImgUrl) {
+          await repos.thumnail.imgUrl(id, newImgUrl)
+        }
+
+        render(selectedGroupId)
+      }
+
       const card = createElement('article', {
         className: 'card',
         children: [
@@ -315,35 +338,25 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
                 height: 100,
                 src: imgUrl || '../icons/loading.svg',
                 width: 100,
-                onDrop: async event => {
-                  event.preventDefault()
-
-                  if (!event.dataTransfer.items) {
-                    return
-                  }
-
-                  const img = event.dataTransfer.items[0].getAsFile()
-
-                  const reader = new window.FileReader()
-                  reader.readAsDataURL(img)
-                  const newImgUrl = await (() =>
-                    new Promise(resolve => {
-                      reader.onload = () => resolve(reader.result)
-                    }))()
-
-                  if (newImgUrl) {
-                    await repos.thumnail.imgUrl(id, newImgUrl)
-                  }
-
-                  render(selectedGroupId)
-                },
+                onDrop,
                 map: async element => {
                   setTimeout(async () => {
                     const storedImgUrl = await repos.thumnail.imgUrl(id)
-                    element.src =
-                      storedImgUrl ||
-                      imgUrl ||
-                      `https://via.placeholder.com/350x150?text=${i + 1}`
+                    const displayableImgUrl = storedImgUrl || imgUrl
+
+                    if (!displayableImgUrl) {
+                      const newElement = createElement('span', {
+                        style: { fontSize: '4em' },
+                        innerText: `${i + 1}`,
+                        onDrop
+                      })
+
+                      element.parentNode.replaceChild(newElement, element)
+                      // element.outerHTML = `<span style="font-size: 4em">${i + 1}</span>`
+                      return
+                    }
+
+                    element.src = displayableImgUrl
                   }, 0)
                 }
               })
