@@ -8,6 +8,9 @@ const submitButton = document.querySelector('button')
 const titleInput = document.querySelector('input[name=thumbnailTitle]')
 const urlInput = document.querySelector('input[name=thumbnailUrl]')
 
+const oldTitleInput = document.querySelector('input[name=oldThumbnailTitle]')
+const oldUrlInput = document.querySelector('input[name=oldThumbnailUrl]')
+
 init()
 
 async function init () {
@@ -45,6 +48,16 @@ async function init () {
     })
   })
 
+  thumbnailsSelect.addEventListener('change', event => {
+    // @ts-ignore
+    const thumbnailIndex =
+      parseInt(event.target.selectedOptions[0].innerText, 10) - 1
+    const thumbnail = thumbnails[thumbnailIndex]
+    console.log({ thumbnailIndex, thumbnail, event })
+
+    updateOldThumbnail(thumbnail)
+  })
+
   groupsElements.forEach(element => groupsSelect.appendChild(element))
 
   const selectedGroupId = groups[0].id
@@ -58,6 +71,7 @@ async function initThumbnails (groups, thumbnails, { selectedGroupId }) {
   )
 
   const firstIndex = thumbnails.indexOf(groupThumbnails[0])
+  const firstThumbnail = thumbnails[firstIndex]
 
   const thumbnailsElements = groupThumbnails.map((thumbnail, i) => {
     const element = document.createElement('option')
@@ -74,10 +88,19 @@ async function initThumbnails (groups, thumbnails, { selectedGroupId }) {
 
   thumbnailsElements.forEach(element => thumbnailsSelect.appendChild(element))
 
+  updateOldThumbnail(firstThumbnail)
+
   const tab = await platform.activeTab()
   const { title, url } = tab
   // @ts-ignore
   titleInput.value = title
   // @ts-ignore
   urlInput.value = url
+}
+
+function updateOldThumbnail (thumbnail) {
+  // @ts-ignore
+  oldTitleInput.value = thumbnail.title || '(No Title :)'
+  // @ts-ignore
+  oldUrlInput.value = thumbnail.url || '(No URL :)'
 }

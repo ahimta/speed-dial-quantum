@@ -104,6 +104,5 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 
 ## Todo
 
-* Fix can't know the previous title & URL when adding a page:sweat_smile:
 * Fix page info/image must be added manually:sweat_smile:
 * Fix favicons not supported:sweat_smile:
