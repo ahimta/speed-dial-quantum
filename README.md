@@ -96,13 +96,14 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 | Platform (thin-layer on-top of browser web-ext. APIs), Speed Dial Import |
 | ES2017 JS (native browser/DOM APIs without any libraries:smiley:)        |
 
-## Know Issues & Limitations
+## Known Issues & Limitations
 
 * Keyboard shortcuts only work when the page is focused (because a content
   script is used)
 * `Alt` shortcuts don't work properly on Firefox Windows:sweat_smile:
+* Watching files seems to stop after a couple of minutes:sweat_smile:
 
 ## Todo
 
-* Fix page info/image must be added manually:sweat_smile:
+* Fix missing dynamic thumbnail image/preview:sweat_smile:
 * Fix favicons not supported:sweat_smile:
