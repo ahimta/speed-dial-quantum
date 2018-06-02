@@ -5,8 +5,8 @@ const groupsSelect = document.querySelector('select[name=groupId]')
 const thumbnailsSelect = document.querySelector('select[name=thumbnailId]')
 const submitButton = document.querySelector('button')
 
-const titleInput = document.querySelector('input[type=text]')
-const urlInput = document.querySelector('input[type=url]')
+const titleInput = document.querySelector('input[name=thumbnailTitle]')
+const urlInput = document.querySelector('input[name=thumbnailUrl]')
 
 init()
 
@@ -39,8 +39,8 @@ async function init () {
   })
 
   groupsSelect.addEventListener('change', async event => {
-    // @ts-ignore
     await initThumbnails(groups, thumbnails, {
+      // @ts-ignore
       selectedGroupId: event.target.value
     })
   })
