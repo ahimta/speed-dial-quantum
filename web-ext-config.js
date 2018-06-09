@@ -12,7 +12,7 @@ module.exports = {
     'src/popup.js',
     'src/_repos.js',
     'src/_ui.js',
-    'src/_uuid.js',
+    'src/_utils.js',
 
     '.editorconfig',
     '.gitignore',
