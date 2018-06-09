@@ -1,13 +1,16 @@
 import * as platform from './_platform'
 import * as repos from './_repos'
+import * as utils from './_utils'
 
 const groupsSelect = document.querySelector('select[name=groupId]')
 const thumbnailsSelect = document.querySelector('select[name=thumbnailId]')
 const submitButton = document.querySelector('button')
 
+const thumbnailImg = document.querySelector('#thumbnailImg')
 const titleInput = document.querySelector('input[name=thumbnailTitle]')
 const urlInput = document.querySelector('input[name=thumbnailUrl]')
 
+const oldThumbnailImg = document.querySelector('#oldThumbnailImg')
 const oldTitleInput = document.querySelector('input[name=oldThumbnailTitle]')
 const oldUrlInput = document.querySelector('input[name=oldThumbnailUrl]')
 
@@ -50,10 +53,9 @@ async function init () {
 
   thumbnailsSelect.addEventListener('change', event => {
     // @ts-ignore
-    const thumbnailIndex =
-      parseInt(event.target.selectedOptions[0].innerText, 10) - 1
+    const selectedOption = event.target.selectedOptions[0]
+    const thumbnailIndex = parseInt(selectedOption.innerText, 10) - 1
     const thumbnail = thumbnails[thumbnailIndex]
-    console.log({ thumbnailIndex, thumbnail, event })
 
     updateOldThumbnail(thumbnail)
   })
@@ -92,6 +94,9 @@ async function initThumbnails (groups, thumbnails, { selectedGroupId }) {
 
   const tab = await platform.activeTab()
   const { title, url } = tab
+
+  // @ts-ignore
+  thumbnailImg.src = utils.getFaviconImgUrl(url)
   // @ts-ignore
   titleInput.value = title
   // @ts-ignore
@@ -99,6 +104,8 @@ async function initThumbnails (groups, thumbnails, { selectedGroupId }) {
 }
 
 function updateOldThumbnail (thumbnail) {
+  // @ts-ignore
+  oldThumbnailImg.src = utils.getFaviconImgUrl(thumbnail.url)
   // @ts-ignore
   oldTitleInput.value = thumbnail.title || '(No Title :)'
   // @ts-ignore

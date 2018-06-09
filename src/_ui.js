@@ -1,6 +1,7 @@
 import importSpeedDial from './_import_speed_dial'
 import * as platform from './_platform'
 import * as repos from './_repos'
+import * as utils from './_utils'
 
 document.getElementById('newGroupBtn').addEventListener('click', async () => {
   // @ts-ignore
@@ -370,10 +371,21 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
         children: [
           createElement('p', {
             className: 'card-text',
-            innerText: `(${i + 1}) - ${title || '(No Title -_-)'}`
+            children: [
+              createElement('img', {
+                src: utils.getFaviconImgUrl(url),
+                width: 16,
+                height: 16,
+                style: { marginRight: '0.25em' }
+              }),
+              createElement('span', {
+                innerText: `(${i + 1}) - ${title || '(No Title -_-)'}`
+              })
+            ]
           })
         ]
       })
+
       const cardFooter = createElement('footer', {
         className: 'card-footer',
         children: [

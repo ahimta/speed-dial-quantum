@@ -1,5 +1,6 @@
 import * as platform from './_platform'
 import * as repos from './_repos'
+import * as utils from './_utils'
 
 export default function () {
   let altKeyDown = false
@@ -11,6 +12,7 @@ export default function () {
   function up () {
     if (!dialView) {
       dialView = document.createElement('section')
+      const faviconImg = document.createElement('img')
       const leftDigit = document.createElement('span')
       const rightDigit = document.createElement('span')
       const rest = document.createElement('span')
@@ -27,8 +29,13 @@ export default function () {
       dialView.style.opacity = '100%'
       dialView.style.zIndex = '2147483647'
 
+      faviconImg.src = ''
+      faviconImg.width = 16
+      faviconImg.height = 16
+      faviconImg.style.marginRight = '1em'
       rest.innerText = '*_^'
 
+      dialView.appendChild(faviconImg)
       dialView.appendChild(leftDigit)
       dialView.appendChild(rightDigit)
       dialView.appendChild(rest)
@@ -93,8 +100,14 @@ export default function () {
         const results = await repos.thumnail.list()
         const thumbnail = results[index] || {}
 
-        const [leftDigitView, rightDigitView, restView] = dialView.children
+        const [
+          faviconImgView,
+          leftDigitView,
+          rightDigitView,
+          restView
+        ] = dialView.children
 
+        faviconImgView.src = utils.getFaviconImgUrl(thumbnail.url)
         leftDigitView.innerText = `${digits[0]}`
         rightDigitView.innerText = digitIndex % 2 !== 0 ? '.' : `${digits[1]}`
         restView.innerText = ` - ${thumbnail.title || '(Empty -_-)'}`

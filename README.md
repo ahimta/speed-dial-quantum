@@ -65,7 +65,8 @@ Thumbnail(
   groupId: String,
   title: Option[String],
   url: Option[String],
-  imgUrl: Option[String]
+  imgUrl: Option[String],
+  faviconImgUrl: () => String
 )
 
 Group(
@@ -106,4 +107,3 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 ## Todo
 
 * Fix missing dynamic thumbnail image/preview:sweat_smile:
-* Fix favicons not supported:sweat_smile:
