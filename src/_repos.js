@@ -1,11 +1,11 @@
 import * as platform from './_platform'
-import uuid from './_uuid'
+import * as utils from './_utils'
 
 export const group = {
   add: async ({ name, rows, cols }) => {
     const oldGroups = await getOldGroups()
     const newGroup = {
-      id: uuid(),
+      id: utils.uuid(),
       name,
       rows: rows || null,
       cols: cols || null
@@ -60,7 +60,7 @@ export const thumnail = {
   add: async ({ groupId, url = '', title = null, imgUrl = null }) => {
     const oldThumbnails = await getOldThumbnails()
     const newThumbnails = oldThumbnails.concat({
-      id: uuid(),
+      id: utils.uuid(),
       groupId,
       title: title || url,
       url,
@@ -114,7 +114,7 @@ export const thumnail = {
       for (let i = 0; i < fillingLength; i++) {
         emptyThumbnails[i] = {
           groupId,
-          id: uuid(),
+          id: utils.uuid(),
           imgUrl: null,
           title: null,
           url: null
@@ -194,7 +194,7 @@ async function getOldGroups () {
     await platform.set('groups', [group])
     await platform.set('thumbnails', [
       {
-        id: uuid(),
+        id: utils.uuid(),
         groupId: 'd7bc0008-67ec-478f-b792-ae9591574939',
         title: null,
         url: null,

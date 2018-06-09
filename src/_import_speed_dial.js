@@ -1,4 +1,4 @@
-import uuid from './_uuid'
+import * as utils from './_utils'
 
 // imports thumbnails of Firefox's pre-quantum famous Speed Dial extension
 export default async function (file) {
@@ -33,7 +33,7 @@ export default async function (file) {
 
   const _groups = __groups.map(({ name, rows, columns }) => ({
     name,
-    id: uuid(),
+    id: utils.uuid(),
     rows,
     cols: columns,
     length: rows * columns
@@ -51,14 +51,14 @@ export default async function (file) {
     const index = parseInt(no, 10) - 1
     const attr = _attr !== 'label' ? _attr : 'title'
     const value = attr !== 'title' ? _value : decodeURIComponent(_value)
-    const thumbnail = thumbnails[index] || { id: uuid(), imgUrl: null }
+    const thumbnail = thumbnails[index] || { id: utils.uuid(), imgUrl: null }
     thumbnail[attr] = value
     thumbnails[index] = thumbnail
   }
 
   for (let i = 0; i < thumbnails.length; i++) {
     thumbnails[i] = thumbnails[i] || {
-      id: uuid(),
+      id: utils.uuid(),
       title: null,
       url: null
     }
