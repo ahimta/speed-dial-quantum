@@ -55,6 +55,15 @@ yarn run build
 yarn run package
 ```
 
+## Upgrade Packages
+
+1.  Run `yarn outdated --emoji`
+2.  Check changelogs from URLs
+3.  Run `yarn upgrade --emoji`
+4.  Run `yarn install <package>@^<version> --emoji` for breaking updates
+5.  Run `yarn run nsp` to check for vulnerabilities
+6.  Make sure `yarn run {build,package,test,watch}` still work correctly
+
 ## Design (in Scala)
 
 ### Entities
@@ -107,3 +116,4 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 ## Todo
 
 - Fix missing dynamic thumbnail image/preview:sweat_smile:
+- Fix can't import/export own thumbnails:sweat_smile:
