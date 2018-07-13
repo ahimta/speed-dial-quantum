@@ -345,7 +345,7 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
                     const storedImgUrl = await repos.thumnail.imgUrl(id)
                     const displayableImgUrl = storedImgUrl || imgUrl
 
-                    if (!displayableImgUrl) {
+                    if (!(displayableImgUrl || url)) {
                       const newElement = createElement('span', {
                         style: { fontSize: '4em' },
                         innerText: `${i + 1}`,
@@ -353,11 +353,11 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
                       })
 
                       element.parentNode.replaceChild(newElement, element)
-                      // element.outerHTML = `<span style="font-size: 4em">${i + 1}</span>`
                       return
                     }
 
-                    element.src = displayableImgUrl
+                    element.src =
+                      displayableImgUrl || `https://mini.s-shot.ru/?${url}`
                   }, 0)
                 }
               })

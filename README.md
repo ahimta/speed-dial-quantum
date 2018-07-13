@@ -115,5 +115,4 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 
 ## Todo
 
-- Fix missing dynamic thumbnail image/preview:sweat_smile:
 - Fix can't import/export own thumbnails:sweat_smile:
