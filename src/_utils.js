@@ -10,7 +10,9 @@ export function getFaviconImgUrl (url) {
   }
 
   const baseUrl = match[0]
-  return `${baseUrl}/favicon.ico`
+  return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(
+    baseUrl
+  )}`
 }
 
 // copied and modified from StackOverflow -_-:
