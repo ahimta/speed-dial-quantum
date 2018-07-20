@@ -112,6 +112,7 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
   script is used)
 - `Alt` shortcuts don't work properly on Firefox Windows:sweat_smile:
 - Watching files seems to stop after a couple of minutes:sweat_smile:
+- Error reporting (using Sentry) doesn't seem to work:sweat_smile:
 
 ## Todo
 

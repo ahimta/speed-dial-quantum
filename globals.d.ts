@@ -1,5 +1,6 @@
 interface Window {
   FileReader: any;
+  Raven: any;
 }
 
 declare var browser: any;
