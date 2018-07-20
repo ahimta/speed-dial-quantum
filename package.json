@@ -22,7 +22,7 @@
     "lint-staged": "^7.0.4",
     "nsp": "^3.2.1",
     "prettier": "^1.11.1",
-    "rollup": "^0.61.2",
+    "rollup": "^0.63.2",
     "standard": "^11.0.0",
     "web-ext": "^2.4.0"
   },
