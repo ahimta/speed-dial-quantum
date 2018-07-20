@@ -60,7 +60,7 @@ yarn run package
 1.  Run `yarn outdated --emoji`
 2.  Check changelogs from URLs
 3.  Run `yarn upgrade --emoji`
-4.  Run `yarn install <package>@^<version> --emoji` for breaking updates
+4.  Run `yarn add <package>@^<version> --emoji` for breaking updates
 5.  Run `yarn run nsp` to check for vulnerabilities
 6.  Make sure `yarn run {build,package,test,watch}` still work correctly
 
