@@ -1,4 +1,4 @@
-import importSpeedDial from './_import_speed_dial'
+import * as backupManager from './_backup_manager'
 import * as platform from './_platform'
 import * as repos from './_repos'
 import * as utils from './_utils'
@@ -268,7 +268,9 @@ function tabElement (
     style: { display: 'none' },
     onChange: async event => {
       const file = event.target.files[0]
-      const { groups, thumbnails } = await importSpeedDial(file)
+      const { groups, thumbnails } = await backupManager.importFirfoxSpeedDial(
+        file
+      )
 
       await repos.group.replace(groups)
       await repos.thumnail.replace(thumbnails)

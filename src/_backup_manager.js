@@ -1,7 +1,7 @@
 import * as utils from './_utils'
 
 // imports thumbnails of Firefox's pre-quantum famous Speed Dial extension
-export default async function (file) {
+export async function importFirfoxSpeedDial (file) {
   const reader = new window.FileReader()
   reader.readAsText(file)
   const text = await (() =>

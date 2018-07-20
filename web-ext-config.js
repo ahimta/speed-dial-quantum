@@ -6,7 +6,7 @@ module.exports = {
     'src/background.js',
     'src/content.js',
     'src/_events_handlers.js',
-    'src/_import_speed_dial.js',
+    'src/_backup_manager.js',
     'src/newtab.js',
     'src/_platform.js',
     'src/popup.js',
