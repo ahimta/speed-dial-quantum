@@ -9,6 +9,13 @@ export const get =
       ? chromiumGet
       : null
 
+export const getAll =
+  platformName === 'firefox'
+    ? firefoxGetAll
+    : platformName === 'chromium'
+      ? chromiumGetAll
+      : null
+
 export const set =
   platformName === 'firefox'
     ? firefoxSet
@@ -75,6 +82,10 @@ async function firefoxGet (key) {
   return (await browser.storage.local.get(key))[key]
 }
 
+async function firefoxGetAll () {
+  return browser.storage.local.get(null)
+}
+
 function firefoxSet (key, value) {
   return browser.storage.local.set({ [key]: value })
 }
@@ -103,6 +114,20 @@ function chromiumGet (key) {
       }
 
       resolve(result[key])
+    })
+  })
+}
+
+function chromiumGetAll () {
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.get(null, result => {
+      const err = chrome.runtime.lastError
+      if (err) {
+        reject(err)
+        return
+      }
+
+      resolve(result)
     })
   })
 }

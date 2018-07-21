@@ -166,6 +166,40 @@ export const thumnail = {
   }
 }
 
+export async function backup () {
+  const storage = await platform.getAll()
+
+  const thumbnails = storage.thumbnails.map(({ id, groupId, title, url }) => ({
+    id,
+    groupId,
+    title: title || null,
+    url: url || null
+  }))
+
+  const groups = storage.groups.map(({ id, name, rows, cols }) => ({
+    id,
+    name,
+    rows: rows || null,
+    cols: cols || null,
+    thumbnails: thumbnails.filter(({ groupId }) => groupId === id)
+  }))
+
+  thumbnails.filter(({ imgUrl }) => imgUrl).forEach(({ id, imgUrl }) => {
+    // @hack
+    storage[`imgUrl-${id}`] = storage[`imgUrl-${id}`] || imgUrl
+  })
+
+  const imgsUrls = Object.keys(storage)
+    .filter(key => key.startsWith('imgUrl-'))
+    .map(key => {
+      const imgUrl = storage[key]
+      const thumbnailId = key.slice('imgUrl-'.length)
+      return { imgUrl, thumbnailId }
+    })
+
+  return { version: 0, groups, imgsUrls }
+}
+
 export async function sync (groups, thumbnails) {
   const thumnailsByGroupId = thumbnails.reduce((byId, thumbnail) => {
     const groupId = thumbnail.groupId

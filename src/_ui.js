@@ -280,15 +280,32 @@ function tabElement (
 
   const cardFooter = createElement('footer', {
     className: 'card-footer',
-    style: { marginTop: '-1em' },
+    style: { marginTop: '-1em', textAlign: 'center' },
     children: [
-      createElement('button', {
-        className: 'btn btn-block btn-success',
-        innerText: 'Import Speed Dial...',
-        type: 'button',
-        onClick: () => {
-          speedDialFile.click()
-        }
+      createElement('div', {
+        className: 'btn-group',
+        children: [
+          createElement('button', {
+            className: 'btn btn-danger',
+            innerText: 'Import...',
+            type: 'button',
+            onClick: () => {
+              speedDialFile.click()
+            }
+          }),
+          createElement('button', {
+            className: 'btn btn-primary',
+            innerText: 'Export...',
+            onClick: async () => {
+              const file = await backupManager.exportSpeedDialQuantum()
+              const href = URL.createObjectURL(file)
+              // @ts-ignore
+              document.querySelector('#importDownload').href = href
+              // @ts-ignore
+              document.querySelector('#importDownload').click()
+            }
+          })
+        ]
       })
     ]
   })

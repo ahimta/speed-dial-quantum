@@ -1,4 +1,21 @@
+import * as repos from './_repos'
 import * as utils from './_utils'
+
+export async function exportSpeedDialQuantum () {
+  const backup = await repos.backup()
+  const now = new Date()
+  const fileName = `speed-dial-quantum-backup-${now.getFullYear()}-${zeroFill(
+    now.getMonth() + 1
+  )}-${zeroFill(
+    now.getDate()
+  )}-${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}.json`
+  // @ts-ignore
+  const file = new window.File([JSON.stringify(backup)], fileName, {
+    type: 'plain/text'
+  })
+
+  return file
+}
 
 // imports thumbnails of Firefox's pre-quantum famous Speed Dial extension
 export async function importFirfoxSpeedDial (file) {
@@ -83,4 +100,8 @@ export async function importFirfoxSpeedDial (file) {
 
   console.log({ groups, thumbnails })
   return { groups, thumbnails }
+}
+
+function zeroFill (x) {
+  return x < 10 ? `0${x}` : `${x}`
 }
