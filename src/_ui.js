@@ -295,6 +295,7 @@ function tabElement (
           }),
           createElement('button', {
             className: 'btn btn-primary',
+            disabled: true,
             innerText: 'Export...',
             onClick: async () => {
               const file = await backupManager.exportSpeedDialQuantum()
