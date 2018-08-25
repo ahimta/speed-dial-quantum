@@ -99,6 +99,11 @@ export async function importFirfoxSpeedDial (file) {
   }))
 
   console.log({ groups, thumbnails })
+
+  if (!(groups.length && thumbnails.length)) {
+    throw Error('Invalid imported thumbnails')
+  }
+
   return { groups, thumbnails }
 }
 
