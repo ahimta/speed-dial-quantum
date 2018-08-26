@@ -116,5 +116,6 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 
 ## Todo
 
-- Fix storing groups & thumbnails separately makes data-corruption bugs waaaaay
-  easier:sweat_smile:
+- Auomated tests, better architecture, etc...
+- Fix drag and drop only works on number
+- Add support for dragging URLs
