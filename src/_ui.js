@@ -268,6 +268,17 @@ function tabElement (
     style: { display: 'none' },
     onChange: async event => {
       const file = event.target.files[0]
+
+      try {
+        await backupManager.importSpeedDialQuantum(file)
+        const groups = await repos.group.list()
+        render(groups[0].id)
+
+        return
+      } catch (err) {
+        console.log({ err })
+      }
+
       const { groups, thumbnails } = await backupManager.importFirfoxSpeedDial(
         file
       )
@@ -295,7 +306,7 @@ function tabElement (
           }),
           createElement('button', {
             className: 'btn btn-primary',
-            disabled: true,
+            disabled: false,
             innerText: 'Export...',
             onClick: async () => {
               const file = await backupManager.exportSpeedDialQuantum()

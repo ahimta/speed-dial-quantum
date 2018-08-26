@@ -118,5 +118,3 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 
 - Fix storing groups & thumbnails separately makes data-corruption bugs waaaaay
   easier:sweat_smile:
-- Fix can't import own thumbnails:sweat_smile:
-- Fix export hangs in Chrome:sweat_smile:

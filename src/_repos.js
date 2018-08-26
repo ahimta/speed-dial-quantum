@@ -167,16 +167,19 @@ export const thumnail = {
 }
 
 export async function backup () {
-  const storage = await platform.getAll()
+  const [storedGroups, storedThumbnails] = await Promise.all([
+    group.list(),
+    thumnail.list()
+  ])
 
-  const thumbnails = storage.thumbnails.map(({ id, groupId, title, url }) => ({
+  const thumbnails = storedThumbnails.map(({ id, groupId, title, url }) => ({
     id,
     groupId,
     title: title || null,
     url: url || null
   }))
 
-  const groups = storage.groups.map(({ id, name, rows, cols }) => ({
+  const groups = storedGroups.map(({ id, name, rows, cols }) => ({
     id,
     name,
     rows: rows || null,
@@ -184,20 +187,14 @@ export async function backup () {
     thumbnails: thumbnails.filter(({ groupId }) => groupId === id)
   }))
 
-  thumbnails.filter(({ imgUrl }) => imgUrl).forEach(({ id, imgUrl }) => {
-    // @hack
-    storage[`imgUrl-${id}`] = storage[`imgUrl-${id}`] || imgUrl
-  })
+  const imgsUrls = (await Promise.all(
+    storedThumbnails.map(async ({ id: thumbnailId, imgUrl }) => ({
+      thumbnailId,
+      imgUrl: (await platform.get(`imgUrl-${thumbnailId}`)) || imgUrl || null
+    }))
+  )).filter(({ imgUrl }) => imgUrl)
 
-  const imgsUrls = Object.keys(storage)
-    .filter(key => key.startsWith('imgUrl-'))
-    .map(key => {
-      const imgUrl = storage[key]
-      const thumbnailId = key.slice('imgUrl-'.length)
-      return { imgUrl, thumbnailId }
-    })
-
-  return { version: 0, groups, imgsUrls }
+  return { groups, imgsUrls }
 }
 
 export async function sync (groups, thumbnails) {

@@ -14,6 +14,8 @@ export async function exportSpeedDialQuantum () {
     type: 'plain/text'
   })
 
+  console.log({ backup })
+
   return file
 }
 
@@ -105,6 +107,47 @@ export async function importFirfoxSpeedDial (file) {
   }
 
   return { groups, thumbnails }
+}
+
+export async function importSpeedDialQuantum (file) {
+  const reader = new window.FileReader()
+  reader.readAsText(file)
+  const text = await (() =>
+    new Promise(resolve => {
+      reader.onload = () => resolve(reader.result)
+    }))()
+
+  const { groups, imgsUrls } = JSON.parse(text)
+  console.log({ groups, imgsUrls })
+
+  const storableGroups = groups.map(({ id, name, rows, cols }) => ({
+    id,
+    name,
+
+    rows: rows || null,
+    cols: cols || null
+  }))
+
+  const storableThumbnails = Array.prototype.concat(
+    ...groups.map(({ thumbnails }) => thumbnails)
+  )
+  const storableImgsUrls = imgsUrls.map(({ thumbnailId, imgUrl }) => ({
+    thumbnailId,
+    imgUrl
+  }))
+
+  console.log({ storableGroups, storableThumbnails, storableImgsUrls })
+
+  await Promise.all([
+    repos.group.replace(storableGroups),
+    repos.thumnail.replace(storableThumbnails)
+  ])
+
+  await Promise.all(
+    storableImgsUrls.map(({ thumbnailId, imgUrl }) =>
+      repos.thumnail.imgUrl(thumbnailId, imgUrl)
+    )
+  )
 }
 
 function zeroFill (x) {
