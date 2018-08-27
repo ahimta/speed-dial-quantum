@@ -218,20 +218,26 @@ async function getOldGroups () {
   if (!Array.isArray(storedGroups) || storedGroups.length === 0) {
     const group = {
       id: 'd7bc0008-67ec-478f-b792-ae9591574939',
-      name: ':)',
-      rows: 1,
-      cols: 1
+      name: 'Your Default Group',
+      rows: 3,
+      cols: 3
     }
-    await platform.set('groups', [group])
-    await platform.set('thumbnails', [
-      {
+
+    const defaultThumbnails = new Array(9)
+
+    for (let i = 0; i < 9; i++) {
+      defaultThumbnails[i] = {
         id: utils.uuid(),
         groupId: 'd7bc0008-67ec-478f-b792-ae9591574939',
         title: null,
         url: null,
         imgUrl: null
       }
-    ])
+    }
+
+    await platform.set('groups', [group])
+    await platform.set('thumbnails', defaultThumbnails)
+
     return [group]
   }
 
