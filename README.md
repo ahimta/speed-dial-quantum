@@ -115,6 +115,7 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 
 ## Todo
 
+- Clean up deprecated `imgUrl` whenever thumbnail image is updated
 - Auomated tests, better architecture, etc...
-- Fix drag and drop only works on number
-- Add support for dragging URLs
+- Show first empty thumbnail in popup
+- Use top sites as default group
