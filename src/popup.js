@@ -41,7 +41,8 @@ async function init () {
 
     await repos.thumnail.update(thumbnailId, { title, url })
     submitButton.disabled = true
-    submitButton.innerText = 'Page Added :)'
+
+    window.close()
   })
 
   groupsSelect.addEventListener('change', async event => {
