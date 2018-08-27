@@ -342,7 +342,22 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
           return
         }
 
-        const img = event.dataTransfer.items[0].getAsFile()
+        const items = event.dataTransfer.items
+        const item = items[0]
+        for (let item of items) {
+          if (item.kind === 'string' && item.type === 'text/plain') {
+            // @todo: use an async helper instead
+            // @todo: add support for title too
+            item.getAsString(async url => {
+              await repos.thumnail.update(id, { url })
+              render(selectedGroupId)
+            })
+
+            return
+          }
+        }
+
+        const img = item.getAsFile()
 
         const reader = new window.FileReader()
         reader.readAsDataURL(img)
