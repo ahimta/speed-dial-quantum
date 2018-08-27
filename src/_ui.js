@@ -375,6 +375,7 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
 
       const card = createElement('article', {
         className: 'card',
+        onDrop,
         children: [
           createElement('a', {
             href: url || '#',
@@ -385,7 +386,6 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
                 height: 100,
                 src: imgUrl || '../icons/loading.svg',
                 width: 100,
-                onDrop,
                 map: async element => {
                   setTimeout(async () => {
                     const storedImgUrl = await repos.thumnail.imgUrl(id)
