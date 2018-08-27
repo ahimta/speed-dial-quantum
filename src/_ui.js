@@ -299,6 +299,7 @@ function tabElement (
           createElement('button', {
             className: 'btn btn-danger',
             innerText: 'Import...',
+            title: 'Supports old Firfox Speed Dial too',
             type: 'button',
             onClick: () => {
               speedDialFile.click()
