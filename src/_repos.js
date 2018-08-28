@@ -70,10 +70,11 @@ export const thumnail = {
     const groups = await group.list()
     await sync(groups, newThumbnails)
   },
-  imgUrl: (id, imgUrl = null) => {
+  imgUrl: async (id, imgUrl = null) => {
     const key = `imgUrl-${id}`
 
     if (imgUrl) {
+      await thumnail.update(id, { deleteDeprecatedImgUrl: true })
       return platform.set(key, imgUrl)
     } else {
       return platform.get(key)
@@ -130,7 +131,13 @@ export const thumnail = {
   },
   update: async (
     id,
-    { url = null, groupId = null, title = null, reset = false } = {}
+    {
+      url = null,
+      groupId = null,
+      title = null,
+      deleteDeprecatedImgUrl = false,
+      reset = false
+    } = {}
   ) => {
     const oldThumbnails = await getOldThumbnails()
     const thumbnail = oldThumbnails.filter(t => t.id === id)[0]
@@ -148,7 +155,7 @@ export const thumnail = {
         groupId: groupId || thumbnail.groupId,
         title: title || thumbnail.title,
         url: url || thumbnail.url,
-        imgUrl: thumbnail.imgUrl
+        imgUrl: deleteDeprecatedImgUrl ? null : thumbnail.imgUrl
       }
       : {
         id: thumbnail.id,
