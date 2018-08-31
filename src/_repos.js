@@ -161,6 +161,7 @@ export const thumnail = {
         id: thumbnail.id,
         groupId: thumbnail.groupId,
         title: null,
+        url: null,
         imgUrl: null
       }
 
@@ -169,6 +170,11 @@ export const thumnail = {
       .concat(newThumbnail, ...oldThumbnails.slice(index + 1))
 
     await updateThumbnails(newThumbnails)
+
+    if (reset) {
+      await removeImgUrl(id)
+    }
+
     return newThumbnail
   }
 }
@@ -249,6 +255,11 @@ async function getOldGroups () {
   }
 
   return storedGroups
+}
+
+function removeImgUrl (id) {
+  const key = `imgUrl-${id}`
+  return platform.set(key, null)
 }
 
 function updateGroups (newGroups) {
