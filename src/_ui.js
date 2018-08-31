@@ -63,7 +63,7 @@ document
     // @ts-ignore
     const img = document.getElementById('editThumbnailImg').files[0]
 
-    if (!(title && url)) {
+    if (!(title || url || img)) {
       return
     }
 
