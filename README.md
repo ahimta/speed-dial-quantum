@@ -115,6 +115,8 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 
 ## Todo
 
+- Add option for different image sizes for thumbnails
+- Replace injected web scripts with global shortcut
 - Auomated tests, better architecture, etc...
 - Show first empty thumbnail in popup
 - Use top sites as default group
