@@ -8,6 +8,7 @@
   "author": "Abdullah Alansari",
   "version": "0.0.40",
   "permissions": [
+    "topSites",
     "storage",
     "tabs",
     "activeTab",

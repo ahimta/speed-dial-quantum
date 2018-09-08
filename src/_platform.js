@@ -57,6 +57,10 @@ export async function activeTab () {
   return { id, title, url }
 }
 
+// topSites
+export const topSites =
+  platformName === 'firefox' ? firefoxTopSites : chromiumTopSites
+
 function chromiumActiveTabs () {
   return new Promise((resolve, reject) => {
     chrome.tabs.query({ active: true }, activeTabs => {
@@ -71,12 +75,33 @@ function chromiumActiveTabs () {
   })
 }
 
+function chromiumTopSites () {
+  return new Promise((resolve, reject) => {
+    chrome.topSites.get(sites => {
+      const err = chrome.runtime.lastError
+
+      if (err) {
+        reject(err)
+        return
+      }
+
+      resolve(sites.map(({ url, title }) => ({ url, title })))
+    })
+  })
+}
+
 async function firefoxGet (key) {
   return (await browser.storage.local.get(key))[key]
 }
 
 function firefoxSet (key, value) {
   return browser.storage.local.set({ [key]: value })
+}
+
+async function firefoxTopSites () {
+  const sites = await browser.topSites.get()
+
+  return sites.map(({ url, title }) => ({ url, title }))
 }
 
 function chromiumSet (key, value) {
