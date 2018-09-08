@@ -1,22 +1,35 @@
+import commonjs from 'rollup-plugin-commonjs'
+import nodeResolve from 'rollup-plugin-node-resolve'
+
+const plugins = [nodeResolve({ jsnext: true, main: true }), commonjs({})]
+
+const name = 'x'
+const format = 'iife'
+const sourcemap = true
+
 export default [
   {
+    plugins,
     input: 'src/background.js',
-    output: { file: 'dist/background.js', format: 'iife', sourcemap: true },
+    output: { name, format, sourcemap, file: 'dist/background.js' },
     watch: { include: 'src/*.js' }
   },
   {
+    plugins,
     input: 'src/content.js',
-    output: { file: 'dist/content.js', format: 'iife', sourcemap: true },
+    output: { name, format, sourcemap, file: 'dist/content.js' },
     watch: { include: 'src/*.js' }
   },
   {
+    plugins,
     input: 'src/newtab.js',
-    output: { file: 'dist/newtab.js', format: 'iife', sourcemap: true },
+    output: { name, format, sourcemap, file: 'dist/newtab.js' },
     watch: { include: 'src/*.js' }
   },
   {
+    plugins,
     input: 'src/popup.js',
-    output: { file: 'dist/popup.js', format: 'iife', sourcemap: true },
+    output: { name, file: 'dist/popup.js', format, sourcemap },
     watch: { include: 'src/*.js' }
   }
 ]
