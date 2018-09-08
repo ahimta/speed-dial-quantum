@@ -1,6 +1,6 @@
-import * as platform from './_platform'
-import * as repos from './_repos'
-import * as utils from './_utils'
+const platform = require('./_platform')
+const repos = require('./_repos')
+const utils = require('./_utils')
 
 const groupsSelect = document.querySelector('select[name=groupId]')
 const thumbnailsSelect = document.querySelector('select[name=thumbnailId]')

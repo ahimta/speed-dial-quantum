@@ -1,5 +1,5 @@
-import * as platform from './_platform'
-import * as repos from './_repos'
+const platform = require('./_platform')
+const repos = require('./_repos')
 
 platform.onMessage(async request => {
   if (request.type === 'open-all-tabs') {

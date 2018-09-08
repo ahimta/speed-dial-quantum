@@ -1,6 +1,6 @@
-import eventsHandlers from './_events_handlers'
-import * as repos from './_repos'
-import render from './_ui'
+const eventsHandlers = require('./_events_handlers')
+const repos = require('./_repos')
+const render = require('./_ui')
 
 window.Raven.config(
   'https://1e7c5d9a607b48de9ce21c3807df07f0@sentry.io/1246981'

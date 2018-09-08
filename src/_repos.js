@@ -1,7 +1,7 @@
-import * as platform from './_platform'
-import * as utils from './_utils'
+const platform = require('./_platform')
+const utils = require('./_utils')
 
-export const group = {
+exports.group = {
   add: async ({ name, rows, cols, thumbnailImgSize = null }) => {
     const oldGroups = await getOldGroups()
     const newGroup = {
@@ -55,7 +55,7 @@ export const group = {
   }
 }
 
-export const settings = {
+exports.settings = {
   shiftRequired: async (required = null) => {
     if (typeof required === 'boolean') {
       await platform.set('shiftRequired', required)
@@ -65,7 +65,7 @@ export const settings = {
   }
 }
 
-export const thumnail = {
+exports.thumnail = {
   add: async ({ groupId, url = '', title = null, imgUrl = null }) => {
     const oldThumbnails = await getOldThumbnails()
     const newThumbnails = oldThumbnails.concat({
@@ -77,14 +77,14 @@ export const thumnail = {
       imgUrl: imgUrl || null
     })
 
-    const groups = await group.list()
-    await sync(groups, newThumbnails)
+    const groups = await exports.group.list()
+    await exports.sync(groups, newThumbnails)
   },
   imgUrl: async (id, imgUrl = null) => {
     const key = `imgUrl-${id}`
 
     if (imgUrl) {
-      await thumnail.update(id, { deleteDeprecatedImgUrl: true })
+      await exports.thumnail.update(id, { deleteDeprecatedImgUrl: true })
       return platform.set(key, imgUrl)
     } else {
       return platform.get(key)
@@ -190,10 +190,10 @@ export const thumnail = {
   }
 }
 
-export async function backup () {
+exports.backup = async () => {
   const [storedGroups, storedThumbnails] = await Promise.all([
-    group.list(),
-    thumnail.list()
+    exports.group.list(),
+    exports.thumnail.list()
   ])
 
   const thumbnails = storedThumbnails.map(({ id, groupId, title, url }) => ({
@@ -227,7 +227,7 @@ export async function backup () {
   return { groups, imgsUrls }
 }
 
-export async function sync (groups, thumbnails) {
+exports.sync = async (groups, thumbnails) => {
   const thumnailsByGroupId = thumbnails.reduce((byId, thumbnail) => {
     const groupId = thumbnail.groupId
     byId[groupId] = byId[groupId] || []
@@ -239,7 +239,10 @@ export async function sync (groups, thumbnails) {
     ...groups.map(({ id }) => thumnailsByGroupId[id] || [])
   )
 
-  await Promise.all([group.replace(groups), thumnail.replace(sortedThumbnails)])
+  await Promise.all([
+    exports.group.replace(groups),
+    exports.thumnail.replace(sortedThumbnails)
+  ])
 }
 
 async function getOldGroups () {

@@ -1,7 +1,7 @@
-import * as backupManager from './_backup_manager'
-import * as platform from './_platform'
-import * as repos from './_repos'
-import * as utils from './_utils'
+const backupManager = require('./_backup_manager')
+const platform = require('./_platform')
+const repos = require('./_repos')
+const utils = require('./_utils')
 
 document.getElementById('newGroupBtn').addEventListener('click', async () => {
   // @ts-ignore
@@ -28,7 +28,7 @@ document.getElementById('newGroupBtn').addEventListener('click', async () => {
   // @note: jQuery is used only for Bootstrap:sweat_smile:
   // @ts-ignore
   $('#newGroupModal').modal('hide')
-  render(group.id)
+  module.exports(group.id)
 })
 
 document.getElementById('editGroupBtn').addEventListener('click', async () => {
@@ -59,7 +59,7 @@ document.getElementById('editGroupBtn').addEventListener('click', async () => {
   // @note: jQuery is used only for Bootstrap:sweat_smile:
   // @ts-ignore
   $('#editGroupModal').modal('hide')
-  render(group.id)
+  module.exports(group.id)
 })
 
 document
@@ -89,10 +89,10 @@ document
     // @note: jQuery is used only for Bootstrap:sweat_smile:
     // @ts-ignore
     $('#editThumbnailModal').modal('hide')
-    render(thumbnail.groupId)
+    module.exports(thumbnail.groupId)
   })
 
-export default async function render (selectedGroupId) {
+module.exports = async function render (selectedGroupId) {
   const [groups, shiftRequired, thumbnails] = await Promise.all([
     repos.group.list(),
     repos.settings.shiftRequired(),
@@ -222,7 +222,7 @@ function tabElement (
                     return
                   }
 
-                  render(group.id)
+                  module.exports(group.id)
                 },
                 children: [
                   createElement('a', {
@@ -298,7 +298,7 @@ function tabElement (
       try {
         await backupManager.importSpeedDialQuantum(file)
         const groups = await repos.group.list()
-        render(groups[0].id)
+        module.exports(groups[0].id)
 
         return
       } catch (err) {
@@ -311,7 +311,7 @@ function tabElement (
 
       await repos.group.replace(groups)
       await repos.thumnail.replace(thumbnails)
-      render(groups[0].id)
+      module.exports(groups[0].id)
     }
   })
 
@@ -377,7 +377,7 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
             // @todo: add support for title too
             item.getAsString(async url => {
               await repos.thumnail.update(id, { url })
-              render(selectedGroupId)
+              module.exports(selectedGroupId)
             })
 
             return
@@ -397,7 +397,7 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
           await repos.thumnail.imgUrl(id, newImgUrl)
         }
 
-        render(selectedGroupId)
+        module.exports(selectedGroupId)
       }
 
       const { maxWidth, maxHeight } = getThumbnailDimensions(
@@ -511,7 +511,7 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
                     await repos.thumnail.remove(id)
                   }
 
-                  render(selectedGroupId)
+                  module.exports(selectedGroupId)
                 }
               })
             ]
@@ -551,7 +551,7 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
       }
 
       await repos.thumnail.add({ url, groupId: selectedGroupId })
-      render(selectedGroupId)
+      module.exports(selectedGroupId)
     })
 
     cardGroups.push(addThumbnailBtn)
@@ -706,7 +706,7 @@ async function moveGroupDown (groupId, groups, selectedGroupId) {
     .concat(groups.slice(index + 2))
 
   await repos.sync(newGroups, await repos.thumnail.list())
-  render(selectedGroupId)
+  module.exports(selectedGroupId)
 }
 
 async function moveGroupUp (groupId, groups, selectedGroupId) {
@@ -724,7 +724,7 @@ async function moveGroupUp (groupId, groups, selectedGroupId) {
     .concat(groups.slice(index + 1))
 
   await repos.sync(newGroups, await repos.thumnail.list())
-  render(selectedGroupId)
+  module.exports(selectedGroupId)
 }
 
 async function removeGroup (groupId, groups, selectedGroupId) {
@@ -732,9 +732,9 @@ async function removeGroup (groupId, groups, selectedGroupId) {
   await repos.sync(newGroups, await repos.thumnail.list())
 
   if (newGroups.length) {
-    render(newGroups[0].id)
+    module.exports(newGroups[0].id)
   } else {
-    render(selectedGroupId)
+    module.exports(selectedGroupId)
   }
 }
 

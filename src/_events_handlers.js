@@ -1,8 +1,8 @@
-import * as platform from './_platform'
-import * as repos from './_repos'
-import * as utils from './_utils'
+const platform = require('./_platform')
+const repos = require('./_repos')
+const utils = require('./_utils')
 
-export default function () {
+module.exports = () => {
   let altKeyDown = false
   let ctrlKeyDown = false
   let digits = [0, 0]

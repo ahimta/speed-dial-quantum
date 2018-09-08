@@ -2,14 +2,14 @@
 const platformName = typeof browser !== 'undefined' ? 'firefox' : 'chromium'
 
 // storage: get, set
-export const get =
+exports.get =
   platformName === 'firefox'
     ? firefoxGet
     : platformName === 'chromium'
       ? chromiumGet
       : null
 
-export const set =
+exports.set =
   platformName === 'firefox'
     ? firefoxSet
     : platformName === 'chromium'
@@ -17,14 +17,14 @@ export const set =
       : null
 
 // messaging: onMessage, sendMessage
-export const onMessage =
+exports.onMessage =
   platformName === 'firefox'
     ? listener => browser.runtime.onMessage.addListener(listener)
     : platformName === 'chromium'
       ? listener => chrome.runtime.onMessage.addListener(listener)
       : null
 
-export const sendMessage =
+exports.sendMessage =
   platformName === 'firefox'
     ? message => browser.runtime.sendMessage(message)
     : platformName === 'chromium'
@@ -33,21 +33,21 @@ export const sendMessage =
 
 // tabs: activeTab, createTab, updateTab
 
-export const createTab =
+exports.createTab =
   platformName === 'firefox'
     ? options => browser.tabs.create(options)
     : platformName === 'chromium'
       ? options => chrome.tabs.create(options)
       : null
 
-export const updateTab =
+exports.updateTab =
   platformName === 'firefox'
     ? options => browser.tabs.update(options)
     : platformName === 'chromium'
       ? options => chrome.tabs.update(options)
       : null
 
-export async function activeTab () {
+exports.activeTab = async () => {
   const tab =
     platformName === 'firefox'
       ? (await browser.tabs.query({ active: true }))[0]
@@ -58,7 +58,7 @@ export async function activeTab () {
 }
 
 // topSites
-export const topSites =
+exports.topSites =
   platformName === 'firefox' ? firefoxTopSites : chromiumTopSites
 
 function chromiumActiveTabs () {
