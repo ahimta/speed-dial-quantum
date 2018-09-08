@@ -11,12 +11,15 @@ document.getElementById('newGroupBtn').addEventListener('click', async () => {
   const rows = parseInt(document.getElementById('newGroupRows').value, 10)
   // @ts-ignore
   const cols = parseInt(document.getElementById('newGroupCols').value, 10)
+  // @ts-ignore
+  const thumbnailImgSize = document.getElementById('newGroupThumbnailImgSize')
+    .value
 
   if (!(name && rows && rows > 0 && rows < 100 && cols > 0 && cols < 100)) {
     return
   }
 
-  const group = await repos.group.add({ name, rows, cols })
+  const group = await repos.group.add({ name, rows, cols, thumbnailImgSize })
 
   for (let i = 0; i < rows * cols; i++) {
     await repos.thumnail.add({ groupId: group.id })
@@ -37,12 +40,20 @@ document.getElementById('editGroupBtn').addEventListener('click', async () => {
   const rows = parseInt(document.getElementById('editGroupRows').value, 10)
   // @ts-ignore
   const cols = parseInt(document.getElementById('editGroupCols').value, 10)
+  // @ts-ignore
+  const thumbnailImgSize = document.getElementById('editGroupThumbnailImgSize')
+    .value
 
   if (!(name && rows && rows > 0 && rows < 100 && cols > 0 && cols < 100)) {
     return
   }
 
-  const group = await repos.group.update(id, { name, rows, cols })
+  const group = await repos.group.update(id, {
+    name,
+    rows,
+    cols,
+    thumbnailImgSize
+  })
   await repos.thumnail.resizeByGroupId(id, rows, cols)
 
   // @note: jQuery is used only for Bootstrap:sweat_smile:
@@ -106,7 +117,7 @@ function renderTab (groups, thumbnails, selectedGroupId, shiftRequired, group) {
 }
 
 function groupsElements (groups, selectedGroupId) {
-  return groups.map(({ id, name, rows, cols }) =>
+  return groups.map(({ id, name, rows, cols, thumbnailImgSize }) =>
     createElement('li', {
       className: 'list-group-item',
       children: [
@@ -138,6 +149,10 @@ function groupsElements (groups, selectedGroupId) {
                 document.getElementById('editGroupRows').value = rows
                 // @ts-ignore
                 document.getElementById('editGroupCols').value = cols
+                // @ts-ignore
+                document.getElementById('editGroupThumbnailImgSize').value =
+                  thumbnailImgSize || 'auto'
+
                 // @ts-ignore
                 $('#editGroupModal').modal('show')
               }
@@ -230,6 +245,17 @@ function tabElement (
               map: element => {
                 element.setAttribute('data-toggle', 'modal')
                 element.setAttribute('data-target', '#newGroupModal')
+              },
+              onClick: () => {
+                // @ts-ignore
+                document.getElementById('newGroupName').value = ''
+                // @ts-ignore
+                document.getElementById('newGroupRows').value = ''
+                // @ts-ignore
+                document.getElementById('newGroupCols').value = ''
+                // @ts-ignore
+                document.getElementById('newGroupThumbnailImgSize').value =
+                  'auto'
               },
               children: [
                 createElement('a', {
@@ -374,6 +400,10 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
         render(selectedGroupId)
       }
 
+      const { maxWidth, maxHeight } = getThumbnailDimensions(
+        group.thumbnailImgSize
+      )
+
       const card = createElement('article', {
         className: 'card',
         onDrop,
@@ -387,6 +417,7 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
                 height: 100,
                 src: imgUrl || '../icons/loading.svg',
                 width: 100,
+                style: { maxWidth, maxHeight },
                 map: async element => {
                   setTimeout(async () => {
                     const storedImgUrl = await repos.thumnail.imgUrl(id)
@@ -394,7 +425,11 @@ function thumbnailsElements (thumbnails, selectedGroupId, group) {
 
                     if (!(displayableImgUrl || url)) {
                       const newElement = createElement('span', {
-                        style: { fontSize: '4em' },
+                        style: {
+                          fontSize: getThumbnailNumberFontSize(
+                            group.thumbnailImgSize
+                          )
+                        },
                         innerText: `${i + 1}`,
                         onDrop
                       })
@@ -630,6 +665,30 @@ async function getImageUrl (img) {
     }))()
 
   return url
+}
+
+function getThumbnailDimensions (thumbnailImgSize) {
+  const defaultValue = { maxWidth: '40em', maxHeight: '40em' }
+  const mapping = {
+    auto: defaultValue,
+    small: { maxWidth: '5em', maxHeight: '5em' },
+    medium: { maxWidth: '50em', maxHeight: '50em' },
+    large: { maxWidth: '500em', maxHeight: '500em' }
+  }
+
+  return mapping[thumbnailImgSize] || defaultValue
+}
+
+function getThumbnailNumberFontSize (thumbnailImgSize) {
+  const defaultValue = '3em'
+  const mapping = {
+    auto: defaultValue,
+    small: '2em',
+    medium: '3em',
+    large: '4em'
+  }
+
+  return mapping[thumbnailImgSize] || defaultValue
 }
 
 async function moveGroupDown (groupId, groups, selectedGroupId) {

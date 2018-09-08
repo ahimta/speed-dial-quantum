@@ -2,16 +2,20 @@ import * as platform from './_platform'
 import * as utils from './_utils'
 
 export const group = {
-  add: async ({ name, rows, cols }) => {
+  add: async ({ name, rows, cols, thumbnailImgSize = null }) => {
     const oldGroups = await getOldGroups()
     const newGroup = {
       id: utils.uuid(),
       name,
+
       rows: rows || null,
-      cols: cols || null
+      cols: cols || null,
+      thumbnailImgSize: thumbnailImgSize || null
     }
+
     const newGroups = oldGroups.concat(newGroup)
     await updateGroups(newGroups)
+
     return newGroup
   },
   list: getOldGroups,
@@ -21,7 +25,10 @@ export const group = {
     await updateGroups(newGroups)
   },
   replace: updateGroups,
-  update: async (id, { name = null, rows = 0, cols = 0 } = {}) => {
+  update: async (
+    id,
+    { name = null, rows = 0, cols = 0, thumbnailImgSize = null } = {}
+  ) => {
     const oldGroups = await getOldGroups()
     const group = oldGroups.filter(t => t.id === id)[0]
 
@@ -35,7 +42,8 @@ export const group = {
       name: name || group.name,
 
       rows: rows || group.rows || null,
-      cols: cols || group.cols || null
+      cols: cols || group.cols || null,
+      thumbnailImgSize: thumbnailImgSize || group.thumbnailImgSize || null
     }
 
     const newGroups = oldGroups
@@ -196,15 +204,18 @@ export async function backup () {
     url: url || null
   }))
 
-  const groups = storedGroups.map(({ id, name, rows, cols }) => ({
-    id,
-    name,
+  const groups = storedGroups.map(
+    ({ id, name, rows, cols, thumbnailImgSize }) => ({
+      id,
+      name,
 
-    rows: rows || null,
-    cols: cols || null,
+      rows: rows || null,
+      cols: cols || null,
+      thumbnailImgSize: thumbnailImgSize || null,
 
-    thumbnails: thumbnails.filter(({ groupId }) => groupId === id)
-  }))
+      thumbnails: thumbnails.filter(({ groupId }) => groupId === id)
+    })
+  )
 
   const imgsUrls = (await Promise.all(
     storedThumbnails.map(async ({ id: thumbnailId, imgUrl }) => ({
@@ -239,7 +250,9 @@ async function getOldGroups () {
       id: 'd7bc0008-67ec-478f-b792-ae9591574939',
       name: 'Your Default Group',
       rows: 3,
-      cols: 3
+      cols: 3,
+
+      thumbnailImgSize: null
     }
 
     const sites = await platform.topSites()
@@ -263,12 +276,13 @@ async function getOldGroups () {
     return [group]
   }
 
-  return storedGroups.map(({ id, name, rows, cols }) => ({
+  return storedGroups.map(({ id, name, rows, cols, thumbnailImgSize }) => ({
     id,
     name,
 
     rows: rows || null,
-    cols: cols || null
+    cols: cols || null,
+    thumbnailImgSize: thumbnailImgSize || null
   }))
 }
 

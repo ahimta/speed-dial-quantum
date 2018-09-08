@@ -120,13 +120,16 @@ export async function importSpeedDialQuantum (file) {
   const { groups, imgsUrls } = JSON.parse(text)
   console.log({ groups, imgsUrls })
 
-  const storableGroups = groups.map(({ id, name, rows, cols }) => ({
-    id,
-    name,
+  const storableGroups = groups.map(
+    ({ id, name, rows, cols, thumbnailImgSize }) => ({
+      id,
+      name,
 
-    rows: rows || null,
-    cols: cols || null
-  }))
+      rows: rows || null,
+      cols: cols || null,
+      thumbnailImgSize: thumbnailImgSize || null
+    })
+  )
 
   const storableThumbnails = Array.prototype.concat(
     ...groups.map(({ thumbnails }) => thumbnails)
