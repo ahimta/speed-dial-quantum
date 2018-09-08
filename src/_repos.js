@@ -33,8 +33,9 @@ export const group = {
     const newGroup = {
       id: group.id,
       name: name || group.name,
-      rows: rows || group.rows,
-      cols: cols || group.cols
+
+      rows: rows || group.rows || null,
+      cols: cols || group.cols || null
     }
 
     const newGroups = oldGroups
@@ -62,9 +63,10 @@ export const thumnail = {
     const newThumbnails = oldThumbnails.concat({
       id: utils.uuid(),
       groupId,
-      title: title || url,
-      url,
-      imgUrl
+
+      title: title || url || null,
+      url: url || null,
+      imgUrl: imgUrl || null
     })
 
     const groups = await group.list()
@@ -153,9 +155,10 @@ export const thumnail = {
       ? {
         id: thumbnail.id,
         groupId: groupId || thumbnail.groupId,
-        title: title || thumbnail.title,
-        url: url || thumbnail.url,
-        imgUrl: deleteDeprecatedImgUrl ? null : thumbnail.imgUrl
+
+        title: title || thumbnail.title || null,
+        url: url || thumbnail.url || null,
+        imgUrl: deleteDeprecatedImgUrl ? null : thumbnail.imgUrl || null
       }
       : {
         id: thumbnail.id,
@@ -188,6 +191,7 @@ export async function backup () {
   const thumbnails = storedThumbnails.map(({ id, groupId, title, url }) => ({
     id,
     groupId,
+
     title: title || null,
     url: url || null
   }))
@@ -195,8 +199,10 @@ export async function backup () {
   const groups = storedGroups.map(({ id, name, rows, cols }) => ({
     id,
     name,
+
     rows: rows || null,
     cols: cols || null,
+
     thumbnails: thumbnails.filter(({ groupId }) => groupId === id)
   }))
 
@@ -257,7 +263,13 @@ async function getOldGroups () {
     return [group]
   }
 
-  return storedGroups
+  return storedGroups.map(({ id, name, rows, cols }) => ({
+    id,
+    name,
+
+    rows: rows || null,
+    cols: cols || null
+  }))
 }
 
 function removeImgUrl (id) {
@@ -271,7 +283,19 @@ function updateGroups (newGroups) {
 
 async function getOldThumbnails () {
   const storedThumbnails = await platform.get('thumbnails')
-  return Array.isArray(storedThumbnails) ? storedThumbnails : []
+
+  if (!Array.isArray(storedThumbnails)) {
+    return []
+  }
+
+  return storedThumbnails.map(({ groupId, id, title, url, imgUrl }) => ({
+    groupId,
+    id,
+
+    title: title || null,
+    url: url || null,
+    imgUrl: imgUrl || null
+  }))
 }
 
 function updateThumbnails (newThumbnails) {
