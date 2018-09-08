@@ -72,17 +72,23 @@ yarn run package
 Thumbnail(
   id: String,
   groupId: String,
+
   title: Option[String],
   url: Option[String],
+  // @deprecated
   imgUrl: Option[String],
+
   faviconImgUrl: () => String
 )
 
 Group(
   id: String,
   name: String,
+
   rows: Option[Int],
   cols: Option[Int],
+  thumbnailImgSize: Option["auto" | "small" | "medium" | "large"],
+
   thumbnails: () => Array[Thumbnail],
 )
 
@@ -115,6 +121,7 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 
 ## Todo
 
-- Add option for different image sizes for thumbnails
 - Replace injected web scripts with global shortcut
 - Auomated tests, better architecture, etc...
+- Submit forms on enter
+- Add FAQ
