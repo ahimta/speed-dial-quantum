@@ -1,19 +1,18 @@
 const platform = require('./_platform')
 const utils = require('./_utils')
 
+const groupEntity = require('./_group_entity')
+
 exports.group = {
   add: async ({ name, rows, cols, thumbnailImgSize = null }) => {
     const oldGroups = await getOldGroups()
-    const newGroup = {
-      id: utils.uuid(),
+    const { newGroup, newGroups } = groupEntity.add(oldGroups, {
       name,
+      rows,
+      cols,
+      thumbnailImgSize
+    })
 
-      rows: rows || null,
-      cols: cols || null,
-      thumbnailImgSize: thumbnailImgSize || null
-    }
-
-    const newGroups = oldGroups.concat(newGroup)
     await updateGroups(newGroups)
 
     return newGroup
@@ -21,7 +20,8 @@ exports.group = {
   list: getOldGroups,
   remove: async id => {
     const oldGroups = await getOldGroups()
-    const newGroups = oldGroups.filter(t => t.id !== id)
+    const newGroups = groupEntity.remove(oldGroups, id)
+
     await updateGroups(newGroups)
   },
   replace: updateGroups,
@@ -30,27 +30,15 @@ exports.group = {
     { name = null, rows = 0, cols = 0, thumbnailImgSize = null } = {}
   ) => {
     const oldGroups = await getOldGroups()
-    const group = oldGroups.filter(t => t.id === id)[0]
-
-    if (!group) {
-      throw new Error(`groupRepo.update: group with id "${id}" not found`)
-    }
-
-    const index = oldGroups.indexOf(group)
-    const newGroup = {
-      id: group.id,
-      name: name || group.name,
-
-      rows: rows || group.rows || null,
-      cols: cols || group.cols || null,
-      thumbnailImgSize: thumbnailImgSize || group.thumbnailImgSize || null
-    }
-
-    const newGroups = oldGroups
-      .slice(0, index)
-      .concat(newGroup, ...oldGroups.slice(index + 1))
+    const { newGroup, newGroups } = groupEntity.update(oldGroups, id, {
+      name,
+      rows,
+      cols,
+      thumbnailImgSize
+    })
 
     await updateGroups(newGroups)
+
     return newGroup
   }
 }
@@ -247,46 +235,17 @@ exports.sync = async (groups, thumbnails) => {
 
 async function getOldGroups () {
   const storedGroups = await platform.get('groups')
+  const { groups, newThumbnails } = await groupEntity.list(
+    storedGroups,
+    platform.topSites
+  )
 
-  if (!Array.isArray(storedGroups) || storedGroups.length === 0) {
-    const group = {
-      id: 'd7bc0008-67ec-478f-b792-ae9591574939',
-      name: 'Your Default Group',
-      rows: 3,
-      cols: 3,
-
-      thumbnailImgSize: null
-    }
-
-    const sites = await platform.topSites()
-    const defaultThumbnails = new Array(9)
-
-    for (let i = 0; i < 9; i++) {
-      const site = sites[i] || { url: null, title: null }
-
-      defaultThumbnails[i] = {
-        id: utils.uuid(),
-        groupId: 'd7bc0008-67ec-478f-b792-ae9591574939',
-        title: site.title || null,
-        url: site.url || null,
-        imgUrl: null
-      }
-    }
-
-    await platform.set('groups', [group])
-    await platform.set('thumbnails', defaultThumbnails)
-
-    return [group]
+  if (newThumbnails) {
+    await platform.set('groups', groups)
+    await platform.set('thumbnails', newThumbnails)
   }
 
-  return storedGroups.map(({ id, name, rows, cols, thumbnailImgSize }) => ({
-    id,
-    name,
-
-    rows: rows || null,
-    cols: cols || null,
-    thumbnailImgSize: thumbnailImgSize || null
-  }))
+  return groups
 }
 
 function removeImgUrl (id) {
@@ -295,7 +254,7 @@ function removeImgUrl (id) {
 }
 
 function updateGroups (newGroups) {
-  return platform.set('groups', newGroups)
+  return platform.set('groups', groupEntity.map(newGroups))
 }
 
 async function getOldThumbnails () {
