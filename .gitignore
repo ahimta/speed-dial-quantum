@@ -7,3 +7,6 @@
 
 # generated rollup bundles and sourcemaps
 /dist
+
+# specs
+/coverage
