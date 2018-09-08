@@ -74,7 +74,11 @@ async function initThumbnails (groups, thumbnails, { selectedGroupId }) {
   )
 
   const firstIndex = thumbnails.indexOf(groupThumbnails[0])
-  const firstThumbnail = thumbnails[firstIndex]
+  const selectedThumbnail =
+    thumbnails.find(
+      ({ groupId, url, title }) => groupId === selectedGroupId && !url && !title
+    ) || thumbnails[firstIndex]
+  const selectedIndex = thumbnails.indexOf(selectedThumbnail)
 
   const thumbnailsElements = groupThumbnails.map((thumbnail, i) => {
     const element = document.createElement('option')
@@ -91,7 +95,12 @@ async function initThumbnails (groups, thumbnails, { selectedGroupId }) {
 
   thumbnailsElements.forEach(element => thumbnailsSelect.appendChild(element))
 
-  updateOldThumbnail(firstThumbnail)
+  updateOldThumbnail(selectedThumbnail)
+
+  // @ts-ignore
+  thumbnailsSelect.value = selectedThumbnail.id
+  // @ts-ignore
+  thumbnailsSelect.label = selectedIndex + 1
 
   const tab = await platform.activeTab()
   const { title, url } = tab
