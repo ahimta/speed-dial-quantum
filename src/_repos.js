@@ -246,7 +246,7 @@ async function getOldGroups () {
     const defaultThumbnails = new Array(9)
 
     for (let i = 0; i < 9; i++) {
-      const site = sites[i]
+      const site = sites[i] || { url: null, title: null }
 
       defaultThumbnails[i] = {
         id: utils.uuid(),
