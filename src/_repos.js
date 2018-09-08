@@ -236,14 +236,17 @@ async function getOldGroups () {
       cols: 3
     }
 
+    const sites = await platform.topSites()
     const defaultThumbnails = new Array(9)
 
     for (let i = 0; i < 9; i++) {
+      const site = sites[i]
+
       defaultThumbnails[i] = {
         id: utils.uuid(),
         groupId: 'd7bc0008-67ec-478f-b792-ae9591574939',
-        title: null,
-        url: null,
+        title: site.title || null,
+        url: site.url || null,
         imgUrl: null
       }
     }
