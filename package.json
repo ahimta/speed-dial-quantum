@@ -37,7 +37,7 @@
       "prettier --write",
       "git add"
     ],
-    "{rollup.config.js,web-ext-config.js,src/*.js}": [
+    "{rollup.config.js,web-ext-config.js,src/*.js,src/entities/*.js}": [
       "prettier --write",
       "standard --fix",
       "git add"

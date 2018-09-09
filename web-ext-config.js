@@ -3,16 +3,20 @@ module.exports = {
     '.vscode',
     'node_modules',
 
-    'src/background.js',
-    'src/content.js',
-    'src/_events_handlers.js',
     'src/_backup_manager.js',
-    'src/newtab.js',
+    'src/_events_handlers.js',
     'src/_platform.js',
-    'src/popup.js',
     'src/_repos.js',
     'src/_ui.js',
     'src/_utils.js',
+
+    'src/content.js',
+    'src/background.js',
+    'src/newtab.js',
+    'src/popup.js',
+
+    'src/entites/group.js',
+    'src/entites/group.spec.js',
 
     '.editorconfig',
     '.gitignore',

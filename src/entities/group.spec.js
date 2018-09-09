@@ -1,5 +1,5 @@
-const factories = require('./_factories')
-const groupEntity = require('./_group_entity')
+const factories = require('../_factories')
+const groupEntity = require('./group')
 
 describe('groupEntity.add()', () => {
   test('With Existing Groups Empty', () => {

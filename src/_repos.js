@@ -1,7 +1,7 @@
 const platform = require('./_platform')
 const utils = require('./_utils')
 
-const groupEntity = require('./_group_entity')
+const groupEntity = require('./entities/group')
 
 exports.group = {
   add: async ({ name, rows, cols, thumbnailImgSize = null }) => {
