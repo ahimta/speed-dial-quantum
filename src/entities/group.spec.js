@@ -89,32 +89,6 @@ describe('groupEntity.list()', () => {
   })
 })
 
-describe('groupEntity.map()', () => {
-  const group = {
-    id: 'uuid:)',
-    name: 'hi',
-    rows: undefined,
-    cols: undefined,
-    thumbnailImgSize: undefined
-  }
-  const expectedGroup = {
-    id: 'uuid:)',
-    name: 'hi',
-
-    rows: null,
-    cols: null,
-    thumbnailImgSize: null
-  }
-
-  test('With a Single Group', () => {
-    expect(groupEntity.map(group)).toEqual(expectedGroup)
-  })
-
-  test('With Multiple Groups', () => {
-    expect(groupEntity.map([group])).toEqual([expectedGroup])
-  })
-})
-
 describe('groupEntity.remove()', () => {
   test('With Groups Non-Existent', () => {
     expect(groupEntity.remove([], 'uuid:)')).toEqual([])

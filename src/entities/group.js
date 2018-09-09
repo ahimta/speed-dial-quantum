@@ -47,12 +47,6 @@ exports.list = async (storedGroupsOrNone, getTopSites) => {
   return { groups: storedGroupsOrNone.map(mapOne), newThumbnails: null }
 }
 
-exports.map = storedGroupOrGroups => {
-  return Array.isArray(storedGroupOrGroups)
-    ? storedGroupOrGroups.map(mapOne)
-    : mapOne(storedGroupOrGroups)
-}
-
 exports.remove = (oldGroups, id) => {
   return oldGroups.filter(t => t.id !== id)
 }

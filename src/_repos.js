@@ -1,7 +1,8 @@
 const platform = require('./_platform')
-const utils = require('./_utils')
 
 const groupEntity = require('./entities/group')
+const tabEntity = require('./entities/tab')
+const thumbnailEntity = require('./entities/thumbnail')
 
 exports.group = {
   add: async ({ name, rows, cols, thumbnailImgSize = null }) => {
@@ -53,20 +54,63 @@ exports.settings = {
   }
 }
 
+exports.tab = {
+  moveGroupDown: async groupId => {
+    const [oldGroups, oldThumbnails] = await Promise.all([
+      exports.group.list(),
+      exports.thumnail.list()
+    ])
+    const { newGroups, newThumbnails } = tabEntity.moveGroupDown(
+      oldGroups,
+      oldThumbnails,
+      groupId
+    )
+
+    await Promise.all([
+      exports.group.replace(newGroups),
+      exports.thumnail.replace(newThumbnails)
+    ])
+  },
+  moveGroupUp: async groupId => {
+    const [oldGroups, oldThumbnails] = await Promise.all([
+      exports.group.list(),
+      exports.thumnail.list()
+    ])
+    const { newGroups, newThumbnails } = tabEntity.moveGroupUp(
+      oldGroups,
+      oldThumbnails,
+      groupId
+    )
+
+    await Promise.all([
+      exports.group.replace(newGroups),
+      exports.thumnail.replace(newThumbnails)
+    ])
+  },
+  removeGroup: async groupId => {
+    const [oldGroups, oldThumbnails] = await Promise.all([
+      exports.group.list(),
+      exports.thumnail.list()
+    ])
+    const { newGroups, newThumbnails } = tabEntity.removeGroup(
+      oldGroups,
+      oldThumbnails,
+      groupId
+    )
+
+    await Promise.all([
+      exports.group.replace(newGroups),
+      exports.thumnail.replace(newThumbnails)
+    ])
+  }
+}
+
 exports.thumnail = {
   add: async ({ groupId, url = '', title = null, imgUrl = null }) => {
-    const oldThumbnails = await getOldThumbnails()
-    const newThumbnails = oldThumbnails.concat({
-      id: utils.uuid(),
-      groupId,
-
-      title: title || url || null,
-      url: url || null,
-      imgUrl: imgUrl || null
-    })
-
-    const groups = await exports.group.list()
-    await exports.sync(groups, newThumbnails)
+    window.alert(
+      'Adding and removing thumbnails for groups with no rows and columns is' +
+        ' no longer supported. Please update your groups to have rows columns :).'
+    )
   },
   imgUrl: async (id, imgUrl = null) => {
     const key = `imgUrl-${id}`
@@ -80,50 +124,19 @@ exports.thumnail = {
   },
   list: getOldThumbnails,
   remove: async id => {
-    const oldThumbnails = await getOldThumbnails()
-    const newThumbnails = oldThumbnails.filter(t => t.id !== id)
-    await updateThumbnails(newThumbnails)
+    window.alert(
+      'Adding and removing thumbnails for groups with no rows and columns is' +
+        ' no longer supported. Please update your groups to have rows columns :).'
+    )
   },
   replace: updateThumbnails,
   resizeByGroupId: async (groupId, rows, cols) => {
-    const oldThumbnails = await getOldThumbnails()
-    const groupThumbnails = oldThumbnails.filter(
-      ({ groupId: gId }) => gId === groupId
+    const newThumbnails = thumbnailEntity.resizeByGroupId(
+      await getOldThumbnails(),
+      groupId,
+      rows,
+      cols
     )
-
-    if (groupThumbnails.length === rows * cols) {
-      return
-    }
-
-    const firstThumbnail = groupThumbnails[0]
-    const lastThumbnail = groupThumbnails[groupThumbnails.length - 1]
-    const firstThumbnailIndex = oldThumbnails.indexOf(firstThumbnail)
-    const lastThumbnailIndex = oldThumbnails.lastIndexOf(lastThumbnail)
-
-    let newThumbnails = null
-    if (groupThumbnails.length > rows * cols) {
-      newThumbnails = oldThumbnails
-        .slice(0, firstThumbnailIndex + rows * cols)
-        .concat(oldThumbnails.slice(lastThumbnailIndex + 1))
-    }
-
-    if (groupThumbnails.length < rows * cols) {
-      const fillingLength = rows * cols - groupThumbnails.length
-      const emptyThumbnails = new Array(fillingLength)
-      for (let i = 0; i < fillingLength; i++) {
-        emptyThumbnails[i] = {
-          groupId,
-          id: utils.uuid(),
-          imgUrl: null,
-          title: null,
-          url: null
-        }
-      }
-      newThumbnails = oldThumbnails
-        .slice(0, lastThumbnailIndex + 1)
-        .concat(emptyThumbnails)
-        .concat(oldThumbnails.slice(lastThumbnailIndex + 1))
-    }
 
     await updateThumbnails(newThumbnails)
   },
@@ -137,36 +150,19 @@ exports.thumnail = {
       reset = false
     } = {}
   ) => {
-    const oldThumbnails = await getOldThumbnails()
-    const thumbnail = oldThumbnails.filter(t => t.id === id)[0]
+    const { newThumbnail, newThumbnails } = thumbnailEntity.update(
+      await getOldThumbnails(),
+      id,
+      {
+        groupId,
 
-    if (!thumbnail) {
-      throw new Error(
-        `thumbnailRepo.update: thumbnail with id "${id}" not found`
-      )
-    }
+        url,
+        title,
 
-    const index = oldThumbnails.indexOf(thumbnail)
-    const newThumbnail = !reset
-      ? {
-        id: thumbnail.id,
-        groupId: groupId || thumbnail.groupId,
-
-        title: title || thumbnail.title || null,
-        url: url || thumbnail.url || null,
-        imgUrl: deleteDeprecatedImgUrl ? null : thumbnail.imgUrl || null
+        deleteDeprecatedImgUrl,
+        reset
       }
-      : {
-        id: thumbnail.id,
-        groupId: thumbnail.groupId,
-        title: null,
-        url: null,
-        imgUrl: null
-      }
-
-    const newThumbnails = oldThumbnails
-      .slice(0, index)
-      .concat(newThumbnail, ...oldThumbnails.slice(index + 1))
+    )
 
     await updateThumbnails(newThumbnails)
 
@@ -215,24 +211,6 @@ exports.backup = async () => {
   return { groups, imgsUrls }
 }
 
-exports.sync = async (groups, thumbnails) => {
-  const thumnailsByGroupId = thumbnails.reduce((byId, thumbnail) => {
-    const groupId = thumbnail.groupId
-    byId[groupId] = byId[groupId] || []
-    byId[groupId].push(thumbnail)
-    return byId
-  }, {})
-
-  const sortedThumbnails = Array.prototype.concat(
-    ...groups.map(({ id }) => thumnailsByGroupId[id] || [])
-  )
-
-  await Promise.all([
-    exports.group.replace(groups),
-    exports.thumnail.replace(sortedThumbnails)
-  ])
-}
-
 async function getOldGroups () {
   const storedGroups = await platform.get('groups')
   const { groups, newThumbnails } = await groupEntity.list(
@@ -254,24 +232,13 @@ function removeImgUrl (id) {
 }
 
 function updateGroups (newGroups) {
-  return platform.set('groups', groupEntity.map(newGroups))
+  return platform.set('groups', newGroups)
 }
 
 async function getOldThumbnails () {
   const storedThumbnails = await platform.get('thumbnails')
 
-  if (!Array.isArray(storedThumbnails)) {
-    return []
-  }
-
-  return storedThumbnails.map(({ groupId, id, title, url, imgUrl }) => ({
-    groupId,
-    id,
-
-    title: title || null,
-    url: url || null,
-    imgUrl: imgUrl || null
-  }))
+  return thumbnailEntity.list(storedThumbnails)
 }
 
 function updateThumbnails (newThumbnails) {

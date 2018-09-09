@@ -692,44 +692,18 @@ function getThumbnailNumberFontSize (thumbnailImgSize) {
 }
 
 async function moveGroupDown (groupId, groups, selectedGroupId) {
-  const group = groups.filter(({ id }) => id === groupId)[0]
-  const index = groups.indexOf(group)
-
-  if (index === groups.length - 1) {
-    return
-  }
-
-  const groupAfter = groups[index + 1]
-  const newGroups = groups
-    .slice(0, index)
-    .concat([groupAfter, group])
-    .concat(groups.slice(index + 2))
-
-  await repos.sync(newGroups, await repos.thumnail.list())
+  await repos.tab.moveGroupDown(groupId)
   module.exports(selectedGroupId)
 }
 
 async function moveGroupUp (groupId, groups, selectedGroupId) {
-  const group = groups.filter(({ id }) => id === groupId)[0]
-  const index = groups.indexOf(group)
-
-  if (index === 0) {
-    return
-  }
-
-  const groupBefore = groups[index - 1]
-  const newGroups = groups
-    .slice(0, index - 1)
-    .concat([group, groupBefore])
-    .concat(groups.slice(index + 1))
-
-  await repos.sync(newGroups, await repos.thumnail.list())
+  await repos.tab.moveGroupUp(groupId)
   module.exports(selectedGroupId)
 }
 
 async function removeGroup (groupId, groups, selectedGroupId) {
-  const newGroups = groups.filter(({ id }) => id !== groupId)
-  await repos.sync(newGroups, await repos.thumnail.list())
+  await repos.tab.removeGroup(groupId)
+  const newGroups = await repos.group.list()
 
   if (newGroups.length) {
     module.exports(newGroups[0].id)
