@@ -1,3 +1,38 @@
+const utils = require('../_utils')
+const groupEntity = require('./group')
+
+exports.addGroup = (
+  oldGroups,
+  oldThumbnails,
+  { name, rows, cols, thumbnailImgSize = 'auto' }
+) => {
+  const groupThumbnails = new Array(rows * cols)
+  const { newGroup, newGroups } = groupEntity.add(oldGroups, {
+    name,
+    rows,
+    cols,
+    thumbnailImgSize
+  })
+
+  for (let i = 0; i < rows * cols; i++) {
+    groupThumbnails[i] = {
+      id: utils.uuid(),
+      groupId: newGroup.id,
+
+      url: null,
+      title: null,
+      imgUrl: null
+    }
+  }
+
+  const { newGroups: ngs, newThumbnails } = sync(
+    newGroups,
+    oldThumbnails.concat(...groupThumbnails)
+  )
+
+  return { newGroups: ngs, newThumbnails, newGroup }
+}
+
 exports.moveGroupDown = (oldGroups, oldThumbnails, groupId) => {
   const group = oldGroups.filter(({ id }) => id === groupId)[0]
   const index = oldGroups.indexOf(group)

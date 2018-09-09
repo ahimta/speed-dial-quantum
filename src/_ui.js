@@ -25,16 +25,18 @@ document.getElementById('newGroupBtn').addEventListener('click', async () => {
     return
   }
 
-  const group = await repos.group.add({ name, rows, cols, thumbnailImgSize })
-
-  for (let i = 0; i < rows * cols; i++) {
-    await repos.thumnail.add({ groupId: group.id })
-  }
+  const newGroup = await repos.tab.addGroup({
+    name,
+    rows,
+    cols,
+    thumbnailImgSize
+  })
 
   // @note: jQuery is used only for Bootstrap:sweat_smile:
   // @ts-ignore
   $('#newGroupModal').modal('hide')
-  module.exports(group.id)
+
+  module.exports(newGroup.id)
 })
 
 document.getElementById('editGroupBtn').addEventListener('click', async () => {

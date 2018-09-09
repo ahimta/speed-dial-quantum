@@ -55,6 +55,25 @@ exports.settings = {
 }
 
 exports.tab = {
+  addGroup: async ({ name, rows, cols, thumbnailImgSize = 'auto' }) => {
+    const [oldGroups, oldThumbnails] = await Promise.all([
+      getOldGroups(),
+      getOldThumbnails()
+    ])
+
+    const { newGroups, newThumbnails, newGroup } = tabEntity.addGroup(
+      oldGroups,
+      oldThumbnails,
+      { name, rows, cols, thumbnailImgSize }
+    )
+
+    await Promise.all([
+      updateGroups(newGroups),
+      updateThumbnails(newThumbnails)
+    ])
+
+    return newGroup
+  },
   moveGroupDown: async groupId => {
     const [oldGroups, oldThumbnails] = await Promise.all([
       exports.group.list(),
