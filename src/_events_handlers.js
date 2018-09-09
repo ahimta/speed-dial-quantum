@@ -98,7 +98,7 @@ module.exports = () => {
           digitIndex % 2 !== 0 ? digits[0] - 1 : digits[0] * 10 + digits[1] - 1
 
         const results = await repos.thumnail.list()
-        const thumbnail = results[index] || {}
+        const thumbnail = results[index] || { title: null, url: null }
 
         const [
           faviconImgView,

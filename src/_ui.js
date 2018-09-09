@@ -3,6 +3,13 @@ const platform = require('./_platform')
 const repos = require('./_repos')
 const utils = require('./_utils')
 
+const newGroupThumbnailImgSizeElement = document.getElementById(
+  'newGroupThumbnailImgSize'
+)
+const editGroupThumbnailImgSizeElement = document.getElementById(
+  'editGroupThumbnailImgSize'
+)
+
 document.getElementById('newGroupBtn').addEventListener('click', async () => {
   // @ts-ignore
   const name = document.getElementById('newGroupName').value
@@ -12,8 +19,7 @@ document.getElementById('newGroupBtn').addEventListener('click', async () => {
   // @ts-ignore
   const cols = parseInt(document.getElementById('newGroupCols').value, 10)
   // @ts-ignore
-  const thumbnailImgSize = document.getElementById('newGroupThumbnailImgSize')
-    .value
+  const thumbnailImgSize = newGroupThumbnailImgSizeElement.value
 
   if (!(name && rows && rows > 0 && rows < 100 && cols > 0 && cols < 100)) {
     return
@@ -41,8 +47,7 @@ document.getElementById('editGroupBtn').addEventListener('click', async () => {
   // @ts-ignore
   const cols = parseInt(document.getElementById('editGroupCols').value, 10)
   // @ts-ignore
-  const thumbnailImgSize = document.getElementById('editGroupThumbnailImgSize')
-    .value
+  const thumbnailImgSize = editGroupThumbnailImgSizeElement.value
 
   if (!(name && rows && rows > 0 && rows < 100 && cols > 0 && cols < 100)) {
     return
