@@ -193,6 +193,7 @@ exports.thumnail = {
   }
 }
 
+// @todo: move most logic to tabEntity.backup()
 exports.backup = async () => {
   const [storedGroups, storedThumbnails] = await Promise.all([
     exports.group.list(),
