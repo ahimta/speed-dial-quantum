@@ -16,7 +16,7 @@
     "start": "web-ext run",
     "standard": "standard --fix rollup.config.js web-ext-config.js src/*.js",
     "test": "npm run lint",
-    "test:unit": "jest src/*.spec.js",
+    "test:unit": "jest src/entities/*.spec.js",
     "watch": "rollup --config --watch"
   },
   "devDependencies": {
