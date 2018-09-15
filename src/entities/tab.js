@@ -38,7 +38,8 @@ exports.moveGroupDown = (oldGroups, oldThumbnails, groupId) => {
   const index = oldGroups.indexOf(group)
 
   if (index === oldGroups.length - 1) {
-    return
+    // @todo: add test case
+    return { newGroups: oldGroups, newThumbnails: oldThumbnails }
   }
 
   const groupAfter = oldGroups[index + 1]
@@ -55,7 +56,8 @@ exports.moveGroupUp = (oldGroups, oldThumbnails, groupId) => {
   const index = oldGroups.indexOf(group)
 
   if (index === 0) {
-    return
+    // @todo: add test case
+    return { newGroups: oldGroups, newThumbnails: oldThumbnails }
   }
 
   const groupBefore = oldGroups[index - 1]
