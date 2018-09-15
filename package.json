@@ -50,7 +50,9 @@
       "chrome",
       "describe",
       "expect",
-      "test"
+      "test",
+
+      "SDQ"
     ]
   }
 }
