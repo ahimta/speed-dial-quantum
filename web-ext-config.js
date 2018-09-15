@@ -6,6 +6,7 @@ module.exports = {
 
     'src/*.js',
     'src/entities/',
+    'src/ui/',
 
     'LICENSE',
     'README.md',

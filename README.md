@@ -127,6 +127,5 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 - Auomated tests, better architecture, etc...
 - Move most backup/import logic to entities
 - Update all deps (especially in `/vendor`)
-- Divide UI module into multiple files
 - Submit forms on enter
 - Add FAQ

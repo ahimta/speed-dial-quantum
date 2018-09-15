@@ -8,7 +8,7 @@ const plugins = [nodeResolve({ jsnext: true, main: true }), commonjs({})]
 const name = 'x'
 const format = 'iife'
 const sourcemap = true
-const watch = { include: ['src/*.js', 'src/entites/*.js'] }
+const watch = { include: ['src/*.js', 'src/entites/*.js', 'src/ui/*.js'] }
 
 const environment = process.env.NODE_ENV || 'development'
 const version = childProcess
