@@ -121,7 +121,13 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 
 ## Todo
 
+- Fix web-ext's `ignoreFiles` doesn't work properly
 - Replace injected web scripts with global shortcut
+- Improve error-reporting (e.g: Sentry's `release`)
+- Add specs for `tab` and `thumbnail` entites
 - Auomated tests, better architecture, etc...
+- Move most backup/import logic to entities
+- Update all deps (especially in `/vendor`)
+- Divide UI module into multiple files
 - Submit forms on enter
 - Add FAQ
