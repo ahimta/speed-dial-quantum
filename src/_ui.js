@@ -265,24 +265,26 @@ function tabElement (
                   'auto'
               },
               children: [
-                createElement('a', {
-                  className: 'nav-link',
-                  href: '#',
+                createElement('button', {
+                  className: 'btn-primary btn-sm',
+                  type: 'button',
+                  style: { cursor: 'pointer', marginLeft: '1em' },
                   innerText: 'Add Group...'
                 })
               ]
             }),
             createElement('li', {
               className: 'nav-item',
+              map: element => {
+                element.setAttribute('data-toggle', 'modal')
+                element.setAttribute('data-target', '#exampleModal')
+              },
               children: [
-                createElement('a', {
-                  className: 'nav-link',
-                  href: '#',
-                  innerText: 'Edit Groups...',
-                  map: element => {
-                    element.setAttribute('data-toggle', 'modal')
-                    element.setAttribute('data-target', '#exampleModal')
-                  }
+                createElement('button', {
+                  className: 'btn-primary btn-sm',
+                  type: 'button',
+                  style: { cursor: 'pointer', marginLeft: '0.5em' },
+                  innerText: 'Edit Groups...'
                 })
               ]
             })
