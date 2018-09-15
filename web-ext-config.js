@@ -1,6 +1,7 @@
 module.exports = {
   ignoreFiles: [
     '.vscode',
+    'coverage',
     'node_modules',
 
     'src/_backup_manager.js',
@@ -17,8 +18,11 @@ module.exports = {
 
     'src/entites/group.js',
     'src/entites/group.spec.js',
+    'src/entites/tab.js',
+    'src/entites/thumbnail.js',
 
     '.editorconfig',
+    '.env',
     '.gitignore',
     '.nvmrc',
     '.prettierrc',
@@ -30,8 +34,9 @@ module.exports = {
     'LICENSE',
     'README.md',
 
-    'packages.json',
+    'package.json',
     'rollup.config.js',
+    'yarn-error.log',
     'yarn.lock'
   ]
 }
