@@ -41,41 +41,7 @@ module.exports = (
             ]
           })
         ]
-          .concat(
-            groups.map(group =>
-              utils.createElement('li', {
-                className: 'nav-item',
-                onMousedown: event => {
-                  event.preventDefault()
-
-                  if (
-                    event.button === 1 ||
-                    (event.button === 0 && event.ctrlKey)
-                  ) {
-                    platform.sendMessage({
-                      type: 'open-all-tabs',
-                      groupId: group.id
-                    })
-                    return
-                  }
-
-                  render(group.id)
-                },
-                children: [
-                  utils.createElement('a', {
-                    className:
-                      group.id === selectedGroupId
-                        ? 'nav-link active'
-                        : 'nav-link',
-                    href: '#',
-                    innerText: !(group.rows && group.cols)
-                      ? group.name
-                      : `${group.name} (${group.rows}x${group.cols})`
-                  })
-                ]
-              })
-            )
-          )
+          .concat(groupsUi(groups, selectedGroupId, { render }))
           .concat(
             utils.createElement('li', {
               className: 'nav-item',
@@ -187,4 +153,46 @@ module.exports = (
   tab.appendChild(cardFooter)
 
   return tab
+}
+
+function groupsUi (groups, selectedGroupId, { render }) {
+  const groupsElements = []
+  let offset = 1
+
+  for (const { id, name, rows, cols } of groups) {
+    groupsElements.push(
+      utils.createElement('li', {
+        className: 'nav-item',
+        onMousedown: event => {
+          event.preventDefault()
+
+          if (event.button === 1 || (event.button === 0 && event.ctrlKey)) {
+            platform.sendMessage({
+              type: 'open-all-tabs',
+              groupId: id
+            })
+
+            return
+          }
+
+          render(id)
+        },
+        children: [
+          utils.createElement('a', {
+            className: id === selectedGroupId ? 'nav-link active' : 'nav-link',
+            href: '#',
+            innerText: !(rows && cols)
+              ? name
+              : `${name} (${offset}-${offset + rows * cols - 1})`
+          })
+        ]
+      })
+    )
+
+    if (rows && cols) {
+      offset += rows * cols
+    }
+  }
+
+  return groupsElements
 }
