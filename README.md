@@ -55,6 +55,13 @@ NODE_ENV=production yarn run build
 yarn run package
 ```
 
+## Publish Packeged Extension
+
+1. Make sure you've made a release commit that only updates the version and have a `Release <version>:smiley:` message
+2. Clone the repo locally and zip it (to upload it later to Mozilla). Using something like `cd <path-to-use> && git clone <local-repo-path> && zip -r speed-dial-quantum.zip speed-dial-quantum`
+3. Go to extension's Mozilla page and submit packaged extension (enabling only desktop platforms and not Android) and don't forget to upload the cloned local repo (required by Mozilla because the code is transformed using Rollup, etc...)
+4. Go to extension's Chrome store page and submit packaged extension and don't forget to publish it
+
 ## Upgrade Packages
 
 1.  Run `yarn outdated --emoji`
@@ -63,6 +70,16 @@ yarn run package
 4.  Run `yarn add <package>@^<version> --emoji` for breaking updates
 5.  Run `yarn run nsp` to check for vulnerabilities
 6.  Make sure `yarn run {build,package,test,watch}` still work correctly
+
+## Download & Update Static Dependencies
+
+1. `cd vendor`
+2. Download using `wget -O <dep-name>-<dep-version>.<dep-extension> <dep-url>`
+3. Run `cat <dep-file-name> | openssl dgst -sha384 -binary | openssl base64 -A`
+4. Copy output and add it as an `integrity` HTML atribute
+5. Update HTML's tag reference (`href` or `src`)
+6. Remove older version files
+7. Try the extension and make sure everything works
 
 ## Design (in Scala)
 
