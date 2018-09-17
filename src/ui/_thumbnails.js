@@ -129,6 +129,7 @@ module.exports = (
 
       const cardFooter = utils.createElement('footer', {
         className: 'card-footer',
+        style: { padding: '0.5em' },
         children: [
           utils.createElement('div', {
             className: 'btn-group',
