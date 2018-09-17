@@ -7,16 +7,16 @@
   "license": "GPL-3.0-only",
   "scripts": {
     "build": "rollup --config",
-    "coverage": "jest --coverage src/*.spec.js",
+    "coverage": "jest --coverage src/**/*.spec.js",
     "lint": "npm run prettier && npm run standard && web-ext lint",
     "nsp": "nsp check",
     "package": "web-ext build",
     "precommit": "lint-staged",
-    "prettier": "prettier --write jsconfig.json packages.json README.md rollup.config.js web-ext-config.js src/*.js",
+    "prettier": "prettier --write jsconfig.json packages.json README.md rollup.config.js web-ext-config.js src/**/*.js",
     "start": "web-ext run",
-    "standard": "standard --fix rollup.config.js web-ext-config.js src/*.js",
+    "standard": "standard --fix rollup.config.js web-ext-config.js src/**/*.js",
     "test": "npm run lint",
-    "test:unit": "jest src/entities/*.spec.js",
+    "test:unit": "jest src/**/*.spec.js",
     "watch": "rollup --config --watch"
   },
   "devDependencies": {
