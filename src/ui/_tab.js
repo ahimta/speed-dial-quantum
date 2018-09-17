@@ -117,7 +117,7 @@ module.exports = (
 
   const cardFooter = utils.createElement('footer', {
     className: 'card-footer',
-    style: { marginTop: '-1em', textAlign: 'center' },
+    style: { marginTop: '-1em', padding: '0.5em', textAlign: 'center' },
     children: [
       utils.createElement('div', {
         className: 'btn-group',
