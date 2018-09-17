@@ -134,7 +134,7 @@ module.exports = (
           utils.createElement('button', {
             className: 'btn btn-primary',
             disabled: false,
-            innerText: 'Export...',
+            innerText: 'Export',
             onClick: async () => {
               const file = await backupManager.exportSpeedDialQuantum()
               const href = URL.createObjectURL(file)
