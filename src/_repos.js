@@ -1,5 +1,6 @@
 const platform = require('./_platform')
 
+const backupEntity = require('./entities/backup')
 const groupEntity = require('./entities/group')
 const tabEntity = require('./entities/tab')
 const thumbnailEntity = require('./entities/thumbnail')
@@ -193,42 +194,17 @@ exports.thumnail = {
   }
 }
 
-// @todo: move most logic to tabEntity.backup()
 exports.backup = async () => {
   const [storedGroups, storedThumbnails] = await Promise.all([
     exports.group.list(),
     exports.thumnail.list()
   ])
 
-  const thumbnails = storedThumbnails.map(({ id, groupId, title, url }) => ({
-    id,
-    groupId,
-
-    title: title || null,
-    url: url || null
-  }))
-
-  const groups = storedGroups.map(
-    ({ id, name, rows, cols, thumbnailImgSize }) => ({
-      id,
-      name,
-
-      rows: rows || null,
-      cols: cols || null,
-      thumbnailImgSize: thumbnailImgSize || null,
-
-      thumbnails: thumbnails.filter(({ groupId }) => groupId === id)
-    })
+  return backupEntity.backupSpeedDialQuantum(
+    storedGroups,
+    storedThumbnails,
+    thumbnailId => platform.get(`imgUrl-${thumbnailId}`)
   )
-
-  const imgsUrls = (await Promise.all(
-    storedThumbnails.map(async ({ id: thumbnailId, imgUrl }) => ({
-      thumbnailId,
-      imgUrl: (await platform.get(`imgUrl-${thumbnailId}`)) || imgUrl || null
-    }))
-  )).filter(({ imgUrl }) => imgUrl)
-
-  return { groups, imgsUrls }
 }
 
 async function getOldGroups () {
