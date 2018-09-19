@@ -141,5 +141,4 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 - Replace injected web scripts with global shortcut
 - Add specs for `tab` and `thumbnail` entites
 - Auomated tests, better architecture, etc...
-- Submit forms on enter
 - Add FAQ

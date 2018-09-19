@@ -11,7 +11,52 @@ const editGroupThumbnailImgSizeElement = document.getElementById(
   'editGroupThumbnailImgSize'
 )
 
-document.getElementById('newGroupBtn').addEventListener('click', async () => {
+document
+  .getElementById('newGroupName')
+  .addEventListener('keypress', onEnterFactory(addGroup))
+document
+  .getElementById('newGroupRows')
+  .addEventListener('keypress', onEnterFactory(addGroup))
+document
+  .getElementById('newGroupCols')
+  .addEventListener('keypress', onEnterFactory(addGroup))
+
+document
+  .getElementById('editThumbnailTitle')
+  .addEventListener('keypress', onEnterFactory(editThumbnail))
+document
+  .getElementById('editThumbnailUrl')
+  .addEventListener('keypress', onEnterFactory(editThumbnail))
+
+document
+  .getElementById('editGroupName')
+  .addEventListener('keypress', onEnterFactory(editGroup))
+document
+  .getElementById('editGroupRows')
+  .addEventListener('keypress', onEnterFactory(editGroup))
+document
+  .getElementById('editGroupCols')
+  .addEventListener('keypress', onEnterFactory(editGroup))
+
+document.getElementById('newGroupBtn').addEventListener('click', addGroup)
+document.getElementById('editGroupBtn').addEventListener('click', editGroup)
+document
+  .getElementById('editThumbnailBtn')
+  .addEventListener('click', editThumbnail)
+
+module.exports = async function render (selectedGroupId) {
+  const [groups, shiftRequired, thumbnails] = await Promise.all([
+    repos.group.list(),
+    repos.settings.shiftRequired(),
+    repos.thumnail.list()
+  ])
+
+  const group = groups.filter(({ id }) => id === selectedGroupId)[0]
+  renderTab(groups, thumbnails, selectedGroupId, shiftRequired, group)
+  renderGroupModal(groups, selectedGroupId)
+}
+
+async function addGroup () {
   // @ts-ignore
   const name = document.getElementById('newGroupName').value
 
@@ -38,9 +83,9 @@ document.getElementById('newGroupBtn').addEventListener('click', async () => {
   $('#newGroupModal').modal('hide')
 
   module.exports(newGroup.id)
-})
+}
 
-document.getElementById('editGroupBtn').addEventListener('click', async () => {
+async function editGroup () {
   // @ts-ignore
   const id = document.getElementById('editGroupId').value
   // @ts-ignore
@@ -68,48 +113,44 @@ document.getElementById('editGroupBtn').addEventListener('click', async () => {
   // @ts-ignore
   $('#editGroupModal').modal('hide')
   module.exports(group.id)
-})
+}
 
-document
-  .getElementById('editThumbnailBtn')
-  .addEventListener('click', async () => {
-    // @ts-ignore
-    const id = document.getElementById('editThumbnailId').value
-    // @ts-ignore
-    const title = document.getElementById('editThumbnailTitle').value
-    // @ts-ignore
-    const url = document.getElementById('editThumbnailUrl').value
-    // @ts-ignore
-    const img = document.getElementById('editThumbnailImg').files[0]
+async function editThumbnail () {
+  // @ts-ignore
+  const id = document.getElementById('editThumbnailId').value
+  // @ts-ignore
+  const title = document.getElementById('editThumbnailTitle').value
+  // @ts-ignore
+  const url = document.getElementById('editThumbnailUrl').value
+  // @ts-ignore
+  const img = document.getElementById('editThumbnailImg').files[0]
 
-    if (!(title || url || img)) {
+  if (!(title || url || img)) {
+    return
+  }
+
+  const imgUrl = !img ? null : await getImageUrl(img)
+
+  const thumbnail = await repos.thumnail.update(id, { title, url })
+
+  if (imgUrl) {
+    await repos.thumnail.imgUrl(thumbnail.id, imgUrl)
+  }
+
+  // @note: jQuery is used only for Bootstrap:sweat_smile:
+  // @ts-ignore
+  $('#editThumbnailModal').modal('hide')
+  module.exports(thumbnail.groupId)
+}
+
+function onEnterFactory (fn) {
+  return event => {
+    if (!(event.code === 'Enter')) {
       return
     }
 
-    const imgUrl = !img ? null : await getImageUrl(img)
-
-    const thumbnail = await repos.thumnail.update(id, { title, url })
-
-    if (imgUrl) {
-      await repos.thumnail.imgUrl(thumbnail.id, imgUrl)
-    }
-
-    // @note: jQuery is used only for Bootstrap:sweat_smile:
-    // @ts-ignore
-    $('#editThumbnailModal').modal('hide')
-    module.exports(thumbnail.groupId)
-  })
-
-module.exports = async function render (selectedGroupId) {
-  const [groups, shiftRequired, thumbnails] = await Promise.all([
-    repos.group.list(),
-    repos.settings.shiftRequired(),
-    repos.thumnail.list()
-  ])
-
-  const group = groups.filter(({ id }) => id === selectedGroupId)[0]
-  renderTab(groups, thumbnails, selectedGroupId, shiftRequired, group)
-  renderGroupModal(groups, selectedGroupId)
+    return fn()
+  }
 }
 
 function renderTab (groups, thumbnails, selectedGroupId, shiftRequired, group) {

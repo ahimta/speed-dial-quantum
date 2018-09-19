@@ -14,6 +14,9 @@ const oldThumbnailImg = document.querySelector('#oldThumbnailImg')
 const oldTitleInput = document.querySelector('input[name=oldThumbnailTitle]')
 const oldUrlInput = document.querySelector('input[name=oldThumbnailUrl]')
 
+titleInput.addEventListener('keypress', onInputKeypress)
+urlInput.addEventListener('keypress', onInputKeypress)
+
 init()
 
 async function init () {
@@ -31,19 +34,7 @@ async function init () {
     return element
   })
 
-  submitButton.addEventListener('click', async () => {
-    // @ts-ignore
-    const thumbnailId = thumbnailsSelect.value
-    // @ts-ignore
-    const title = titleInput.value
-    // @ts-ignore
-    const url = urlInput.value
-
-    await repos.thumnail.update(thumbnailId, { title, url })
-    submitButton.disabled = true
-
-    window.close()
-  })
+  submitButton.addEventListener('click', addPage)
 
   groupsSelect.addEventListener('change', async event => {
     await initThumbnails(groups, thumbnails, {
@@ -66,6 +57,20 @@ async function init () {
   const selectedGroupId = groups[0].id
 
   await initThumbnails(groups, thumbnails, { selectedGroupId })
+}
+
+async function addPage () {
+  // @ts-ignore
+  const thumbnailId = thumbnailsSelect.value
+  // @ts-ignore
+  const title = titleInput.value
+  // @ts-ignore
+  const url = urlInput.value
+
+  await repos.thumnail.update(thumbnailId, { title, url })
+  submitButton.disabled = true
+
+  window.close()
 }
 
 async function initThumbnails (groups, thumbnails, { selectedGroupId }) {
@@ -111,6 +116,14 @@ async function initThumbnails (groups, thumbnails, { selectedGroupId }) {
   titleInput.value = title
   // @ts-ignore
   urlInput.value = url
+}
+
+function onInputKeypress (event) {
+  if (!(event.code === 'Enter')) {
+    return
+  }
+
+  return addPage()
 }
 
 function updateOldThumbnail (thumbnail) {
