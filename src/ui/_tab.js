@@ -78,6 +78,21 @@ module.exports = (
                   innerText: 'Edit Groups...'
                 })
               ]
+            }),
+            utils.createElement('li', {
+              className: 'nav-item',
+              map: element => {
+                element.setAttribute('data-toggle', 'modal')
+                element.setAttribute('data-target', '#faqModal')
+              },
+              children: [
+                utils.createElement('button', {
+                  className: 'btn-success btn-sm',
+                  type: 'button',
+                  style: { cursor: 'pointer', marginLeft: '0.5em' },
+                  innerText: 'FAQ...'
+                })
+              ]
             })
           )
       })
