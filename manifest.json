@@ -24,13 +24,13 @@
     }
   ],
   "chrome_url_overrides": {
-    "newtab": "src/newtab.html"
+    "newtab": "src/views/newtab.html"
   },
   "browser_action": {
     "browser_style": true,
     "default_icon": "icons/icon.png",
     "default_title": "Speed Dial",
-    "default_popup": "src/popup.html",
+    "default_popup": "src/views/popup.html",
     "show_matches": ["<all_urls>"]
   },
   "applications": {

@@ -74,7 +74,7 @@ module.exports = (
                 alt: `${i + 1}`,
                 className: 'card-img-top',
                 height: 100,
-                src: imgUrl || '../icons/loading.svg',
+                src: imgUrl || '../../icons/loading.svg',
                 width: 100,
                 style: { maxWidth, maxHeight },
                 map: async element => {
