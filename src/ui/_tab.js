@@ -124,8 +124,8 @@ module.exports = (
         file
       )
 
-      await repos.group.replace(groups)
-      await repos.thumnail.replace(thumbnails)
+      await repos.tab.replace(groups, thumbnails)
+
       render(groups[0].id)
     }
   })

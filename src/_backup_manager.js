@@ -33,10 +33,7 @@ exports.restore = async file => {
     imgsUrls: storableImgsUrls
   } = backupEntity.restore(groups, imgsUrls)
 
-  await Promise.all([
-    repos.group.replace(storableGroups),
-    repos.thumnail.replace(storableThumbnails)
-  ])
+  await repos.tab.replace(storableGroups, storableThumbnails)
 
   await Promise.all(
     storableImgsUrls.map(({ thumbnailId, imgUrl }) =>

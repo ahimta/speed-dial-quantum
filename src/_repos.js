@@ -26,7 +26,6 @@ exports.group = {
 
     await updateGroups(newGroups)
   },
-  replace: updateGroups,
   update: async (
     id,
     { name = null, rows = 0, cols = 0, thumbnailImgSize = null } = {}
@@ -86,10 +85,7 @@ exports.tab = {
       groupId
     )
 
-    await Promise.all([
-      exports.group.replace(newGroups),
-      exports.thumnail.replace(newThumbnails)
-    ])
+    await exports.tab.replace(newGroups, newThumbnails)
   },
   moveGroupUp: async groupId => {
     const [oldGroups, oldThumbnails] = await Promise.all([
@@ -102,10 +98,7 @@ exports.tab = {
       groupId
     )
 
-    await Promise.all([
-      exports.group.replace(newGroups),
-      exports.thumnail.replace(newThumbnails)
-    ])
+    await exports.tab.replace(newGroups, newThumbnails)
   },
   removeGroup: async groupId => {
     const [oldGroups, oldThumbnails] = await Promise.all([
@@ -118,9 +111,12 @@ exports.tab = {
       groupId
     )
 
+    await exports.tab.replace(newGroups, newThumbnails)
+  },
+  replace: async (newGroups, newThumbnails) => {
     await Promise.all([
-      exports.group.replace(newGroups),
-      exports.thumnail.replace(newThumbnails)
+      updateGroups(newGroups),
+      updateThumbnails(newThumbnails)
     ])
   }
 }
@@ -149,7 +145,6 @@ exports.thumnail = {
         ' no longer supported. Please update your groups to have rows columns :).'
     )
   },
-  replace: updateThumbnails,
   resizeByGroupId: async (groupId, rows, cols) => {
     const newThumbnails = thumbnailEntity.resizeByGroupId(
       await getOldThumbnails(),
