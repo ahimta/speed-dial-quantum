@@ -1,10 +1,6 @@
 const utils = require('../_utils')
 
-exports.backupSpeedDialQuantum = async (
-  oldGroups,
-  oldThumbnails,
-  getImgUrl
-) => {
+exports.backup = async (oldGroups, oldThumbnails, getImgUrl) => {
   const thumbnails = oldThumbnails.map(({ id, groupId, title, url }) => ({
     id,
     groupId,
@@ -34,6 +30,35 @@ exports.backupSpeedDialQuantum = async (
   )).filter(({ imgUrl }) => imgUrl)
 
   return { fileName: getBackupFileName(), groups, imgsUrls }
+}
+
+exports.restore = (groups, imgsUrls) => {
+  const storableGroups = groups.map(
+    ({ id, name, rows, cols, thumbnailImgSize }) => ({
+      id,
+      name,
+
+      rows: rows || null,
+      cols: cols || null,
+      thumbnailImgSize: thumbnailImgSize || null
+    })
+  )
+
+  const storableThumbnails = Array.prototype.concat(
+    ...groups.map(({ thumbnails }) => thumbnails)
+  )
+  const storableImgsUrls = imgsUrls.map(({ thumbnailId, imgUrl }) => ({
+    thumbnailId,
+    imgUrl
+  }))
+
+  console.log({ storableGroups, storableThumbnails, storableImgsUrls })
+
+  return {
+    groups: storableGroups,
+    thumbnails: storableThumbnails,
+    imgsUrls: storableImgsUrls
+  }
 }
 
 exports.restoreFirefoxSpeedDial = text => {
@@ -117,35 +142,6 @@ exports.restoreFirefoxSpeedDial = text => {
   }
 
   return { groups, thumbnails }
-}
-
-exports.restoreSpeedDialQuantum = (groups, imgsUrls) => {
-  const storableGroups = groups.map(
-    ({ id, name, rows, cols, thumbnailImgSize }) => ({
-      id,
-      name,
-
-      rows: rows || null,
-      cols: cols || null,
-      thumbnailImgSize: thumbnailImgSize || null
-    })
-  )
-
-  const storableThumbnails = Array.prototype.concat(
-    ...groups.map(({ thumbnails }) => thumbnails)
-  )
-  const storableImgsUrls = imgsUrls.map(({ thumbnailId, imgUrl }) => ({
-    thumbnailId,
-    imgUrl
-  }))
-
-  console.log({ storableGroups, storableThumbnails, storableImgsUrls })
-
-  return {
-    groups: storableGroups,
-    thumbnails: storableThumbnails,
-    imgsUrls: storableImgsUrls
-  }
 }
 
 function getBackupFileName () {

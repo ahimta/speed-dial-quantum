@@ -200,7 +200,7 @@ exports.backup = async () => {
     exports.thumnail.list()
   ])
 
-  return backupEntity.backupSpeedDialQuantum(
+  return backupEntity.backup(
     storedGroups,
     storedThumbnails,
     thumbnailId => platform.get(`imgUrl-${thumbnailId}`)

@@ -111,7 +111,7 @@ module.exports = (
       const file = event.target.files[0]
 
       try {
-        await backupManager.importSpeedDialQuantum(file)
+        await backupManager.restore(file)
         const groups = await repos.group.list()
         render(groups[0].id)
 
@@ -120,7 +120,7 @@ module.exports = (
         console.log({ err })
       }
 
-      const { groups, thumbnails } = await backupManager.importFirfoxSpeedDial(
+      const { groups, thumbnails } = await backupManager.restoreFirfoxSpeedDial(
         file
       )
 
@@ -151,7 +151,7 @@ module.exports = (
             disabled: false,
             innerText: 'Export',
             onClick: async () => {
-              const file = await backupManager.exportSpeedDialQuantum()
+              const file = await backupManager.backup()
               const href = URL.createObjectURL(file)
 
               importDownloadAnchor.href = href

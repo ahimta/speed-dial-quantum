@@ -2,7 +2,7 @@ const repos = require('./_repos')
 
 const backupEntity = require('./entities/backup')
 
-exports.exportSpeedDialQuantum = async () => {
+exports.backup = async () => {
   const { fileName, groups, imgsUrls } = await repos.backup()
   const backup = { groups, imgsUrls }
 
@@ -16,20 +16,7 @@ exports.exportSpeedDialQuantum = async () => {
   return file
 }
 
-// imports thumbnails of Firefox's pre-quantum famous Speed Dial extension
-exports.importFirfoxSpeedDial = async file => {
-  const reader = new window.FileReader()
-
-  reader.readAsText(file)
-  const text = await (() =>
-    new Promise(resolve => {
-      reader.onload = () => resolve(reader.result)
-    }))()
-
-  return backupEntity.restoreFirefoxSpeedDial(text)
-}
-
-exports.importSpeedDialQuantum = async file => {
+exports.restore = async file => {
   const reader = new window.FileReader()
   reader.readAsText(file)
   const text = await (() =>
@@ -44,7 +31,7 @@ exports.importSpeedDialQuantum = async file => {
     groups: storableGroups,
     thumbnails: storableThumbnails,
     imgsUrls: storableImgsUrls
-  } = backupEntity.restoreSpeedDialQuantum(groups, imgsUrls)
+  } = backupEntity.restore(groups, imgsUrls)
 
   await Promise.all([
     repos.group.replace(storableGroups),
@@ -56,4 +43,17 @@ exports.importSpeedDialQuantum = async file => {
       repos.thumnail.imgUrl(thumbnailId, imgUrl)
     )
   )
+}
+
+// imports thumbnails of Firefox's pre-quantum famous Speed Dial extension
+exports.restoreFirfoxSpeedDial = async file => {
+  const reader = new window.FileReader()
+
+  reader.readAsText(file)
+  const text = await (() =>
+    new Promise(resolve => {
+      reader.onload = () => resolve(reader.result)
+    }))()
+
+  return backupEntity.restoreFirefoxSpeedDial(text)
 }
