@@ -4,10 +4,7 @@ module.exports = {
     'coverage/',
     'node_modules/',
 
-    'src/*.js',
-    'src/browser/',
-    'src/entities/',
-    'src/ui/',
+    'src/**/*.js',
 
     'LICENSE',
     'README.md',

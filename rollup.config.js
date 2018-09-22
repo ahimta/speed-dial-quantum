@@ -9,7 +9,7 @@ const name = 'x'
 const format = 'iife'
 const sourcemap = true
 const watch = {
-  include: ['src/*.js', 'src/browser/*.js', 'src/entites/*.js', 'src/ui/*.js']
+  include: ['src/**/*.js']
 }
 
 const environment = process.env.NODE_ENV || 'development'
