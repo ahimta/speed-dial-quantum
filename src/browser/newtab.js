@@ -1,6 +1,6 @@
-const eventsHandlers = require('./_events_handlers')
-const repos = require('./_repos')
-const render = require('./_ui')
+const eventsHandlers = require('../_events_handlers')
+const repos = require('../_repos')
+const render = require('../_ui')
 
 // @ts-ignore
 const { environment, version: release } = window && window.SDQ

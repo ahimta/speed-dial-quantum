@@ -8,7 +8,9 @@ const plugins = [nodeResolve({ jsnext: true, main: true }), commonjs({})]
 const name = 'x'
 const format = 'iife'
 const sourcemap = true
-const watch = { include: ['src/*.js', 'src/entites/*.js', 'src/ui/*.js'] }
+const watch = {
+  include: ['src/*.js', 'src/browser/*.js', 'src/entites/*.js', 'src/ui/*.js']
+}
 
 const environment = process.env.NODE_ENV || 'development'
 const version = childProcess
@@ -22,25 +24,25 @@ export default [
   {
     plugins,
     watch,
-    input: 'src/background.js',
+    input: 'src/browser/background.js',
     output: { name, format, sourcemap, intro, file: 'dist/background.js' }
   },
   {
     plugins,
     watch,
-    input: 'src/content.js',
+    input: 'src/browser/content.js',
     output: { name, format, sourcemap, intro, file: 'dist/content.js' }
   },
   {
     plugins,
     watch,
-    input: 'src/newtab.js',
+    input: 'src/browser/newtab.js',
     output: { name, format, sourcemap, intro, file: 'dist/newtab.js' }
   },
   {
     plugins,
     watch,
-    input: 'src/popup.js',
+    input: 'src/browser/popup.js',
     output: { name, format, sourcemap, intro, file: 'dist/popup.js' }
   }
 ]

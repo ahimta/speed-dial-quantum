@@ -3,5 +3,11 @@
     "target": "es2015",
     "checkJs": true
   },
-  "include": ["src/*.js", "src/entities/*.js", "src/ui/*.js", "globals.d.ts"]
+  "include": [
+    "src/*.js",
+    "src/browser/*.js",
+    "src/entities/*.js",
+    "src/ui/*.js",
+    "globals.d.ts"
+  ]
 }

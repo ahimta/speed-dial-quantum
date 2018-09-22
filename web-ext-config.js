@@ -5,6 +5,7 @@ module.exports = {
     'node_modules/',
 
     'src/*.js',
+    'src/browser/',
     'src/entities/',
     'src/ui/',
 
