@@ -12,9 +12,9 @@
     "nsp": "nsp check",
     "package": "web-ext build",
     "precommit": "lint-staged",
-    "prettier": "prettier --write jsconfig.json packages.json README.md rollup.config.js web-ext-config.js src/**/*.js",
+    "prettier": "prettier --write *.json *.md *.js src/**/*.js",
     "start": "web-ext run",
-    "standard": "standard --fix rollup.config.js web-ext-config.js src/**/*.js",
+    "standard": "standard --fix *.js src/**/*.js",
     "test": "npm run lint",
     "test:unit": "jest src/**/*.spec.js",
     "watch": "rollup --config --watch"
@@ -33,11 +33,11 @@
     "web-ext": "^2.4.0"
   },
   "lint-staged": {
-    "{jsconfig.json,manifest.json,README.md}": [
+    "{*.json,*.md}": [
       "prettier --write",
       "git add"
     ],
-    "{rollup.config.js,web-ext-config.js,src/**/*.js}": [
+    "{*.js,src/**/*.js}": [
       "prettier --write",
       "standard --fix",
       "git add"
