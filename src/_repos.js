@@ -20,8 +20,10 @@ exports.group = {
     return newGroup
   },
   list: getOldGroups,
+  // @todo: remove (no longer used)
   remove: async id => {
     const oldGroups = await getOldGroups()
+    // @todo: remove (no longer used)
     const newGroups = groupEntity.remove(oldGroups, id)
 
     await updateGroups(newGroups)
@@ -67,10 +69,7 @@ exports.tab = {
       { name, rows, cols, thumbnailImgSize }
     )
 
-    await Promise.all([
-      updateGroups(newGroups),
-      updateThumbnails(newThumbnails)
-    ])
+    await updateGroupsAndThumbnails(newGroups, newThumbnails)
 
     return newGroup
   },
@@ -113,12 +112,7 @@ exports.tab = {
 
     await exports.tab.replace(newGroups, newThumbnails)
   },
-  replace: async (newGroups, newThumbnails) => {
-    await Promise.all([
-      updateGroups(newGroups),
-      updateThumbnails(newThumbnails)
-    ])
-  }
+  replace: updateGroupsAndThumbnails
 }
 
 exports.thumnail = {
@@ -210,8 +204,7 @@ async function getOldGroups () {
   )
 
   if (newThumbnails) {
-    await platform.set('groups', groups)
-    await platform.set('thumbnails', newThumbnails)
+    await updateGroupsAndThumbnails(groups, newThumbnails)
   }
 
   return groups
@@ -224,6 +217,10 @@ function removeImgUrl (id) {
 
 function updateGroups (newGroups) {
   return platform.set('groups', newGroups)
+}
+
+function updateGroupsAndThumbnails (groups, thumbnails) {
+  return platform.setMany({ groups, thumbnails })
 }
 
 async function getOldThumbnails () {
