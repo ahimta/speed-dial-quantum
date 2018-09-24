@@ -16,6 +16,13 @@ exports.set =
       ? chromiumSet
       : null
 
+exports.setMany =
+  platformName === 'firefox'
+    ? firefoxSetMany
+    : platformName === 'chromium'
+      ? chromiumSetMany
+      : null
+
 // messaging: onMessage, sendMessage
 exports.onMessage =
   platformName === 'firefox'
@@ -95,7 +102,11 @@ async function firefoxGet (key) {
 }
 
 function firefoxSet (key, value) {
-  return browser.storage.local.set({ [key]: value })
+  return firefoxSetMany({ [key]: value })
+}
+
+function firefoxSetMany (obj) {
+  return browser.storage.local.set(obj)
 }
 
 async function firefoxTopSites () {
@@ -105,8 +116,12 @@ async function firefoxTopSites () {
 }
 
 function chromiumSet (key, value) {
+  return chromiumSetMany({ [key]: value })
+}
+
+function chromiumSetMany (obj) {
   return new Promise((resolve, reject) => {
-    chrome.storage.local.set({ [key]: value }, () => {
+    chrome.storage.local.set(obj, () => {
       const err = chrome.runtime.lastError
       if (err) {
         reject(err)
