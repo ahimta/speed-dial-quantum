@@ -101,13 +101,12 @@ async function editGroup () {
     return
   }
 
-  const group = await repos.group.update(id, {
+  const group = await repos.tab.updateGroup(id, {
     name,
     rows,
     cols,
     thumbnailImgSize
   })
-  await repos.thumnail.resizeByGroupId(id, rows, cols)
 
   // @note: jQuery is used only for Bootstrap:sweat_smile:
   // @ts-ignore

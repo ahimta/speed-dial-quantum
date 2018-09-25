@@ -6,23 +6,7 @@ const tabEntity = require('./entities/tab')
 const thumbnailEntity = require('./entities/thumbnail')
 
 exports.group = {
-  list: getOldGroups,
-  update: async (
-    id,
-    { name = null, rows = 0, cols = 0, thumbnailImgSize = null } = {}
-  ) => {
-    const oldGroups = await getOldGroups()
-    const { newGroup, newGroups } = groupEntity.update(oldGroups, id, {
-      name,
-      rows,
-      cols,
-      thumbnailImgSize
-    })
-
-    await updateGroups(newGroups)
-
-    return newGroup
-  }
+  list: getOldGroups
 }
 
 exports.settings = {
@@ -91,7 +75,30 @@ exports.tab = {
 
     await exports.tab.replace(newGroups, newThumbnails)
   },
-  replace: updateGroupsAndThumbnails
+  replace: updateGroupsAndThumbnails,
+  updateGroup: async (
+    id,
+    { name = null, rows = 0, cols = 0, thumbnailImgSize = null } = {}
+  ) => {
+    const oldGroups = await getOldGroups()
+    const { newGroup, newGroups } = groupEntity.update(oldGroups, id, {
+      name,
+      rows,
+      cols,
+      thumbnailImgSize
+    })
+
+    const newThumbnails = thumbnailEntity.resizeByGroupId(
+      await getOldThumbnails(),
+      id,
+      rows,
+      cols
+    )
+
+    await updateGroupsAndThumbnails(newGroups, newThumbnails)
+
+    return newGroup
+  }
 }
 
 exports.thumnail = {
@@ -117,16 +124,6 @@ exports.thumnail = {
       'Adding and removing thumbnails for groups with no rows and columns is' +
         ' no longer supported. Please update your groups to have rows columns :).'
     )
-  },
-  resizeByGroupId: async (groupId, rows, cols) => {
-    const newThumbnails = thumbnailEntity.resizeByGroupId(
-      await getOldThumbnails(),
-      groupId,
-      rows,
-      cols
-    )
-
-    await updateThumbnails(newThumbnails)
   },
   update: async (
     id,
@@ -192,10 +189,6 @@ async function getOldGroups () {
 function removeImgUrl (id) {
   const key = `imgUrl-${id}`
   return platform.set(key, null)
-}
-
-function updateGroups (newGroups) {
-  return platform.set('groups', newGroups)
 }
 
 function updateGroupsAndThumbnails (groups, thumbnails) {
