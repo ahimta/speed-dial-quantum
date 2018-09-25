@@ -6,28 +6,7 @@ const tabEntity = require('./entities/tab')
 const thumbnailEntity = require('./entities/thumbnail')
 
 exports.group = {
-  add: async ({ name, rows, cols, thumbnailImgSize = null }) => {
-    const oldGroups = await getOldGroups()
-    const { newGroup, newGroups } = groupEntity.add(oldGroups, {
-      name,
-      rows,
-      cols,
-      thumbnailImgSize
-    })
-
-    await updateGroups(newGroups)
-
-    return newGroup
-  },
   list: getOldGroups,
-  // @todo: remove (no longer used)
-  remove: async id => {
-    const oldGroups = await getOldGroups()
-    // @todo: remove (no longer used)
-    const newGroups = groupEntity.remove(oldGroups, id)
-
-    await updateGroups(newGroups)
-  },
   update: async (
     id,
     { name = null, rows = 0, cols = 0, thumbnailImgSize = null } = {}
