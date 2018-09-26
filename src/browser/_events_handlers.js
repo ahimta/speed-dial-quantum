@@ -107,7 +107,7 @@ module.exports = () => {
           restView
         ] = dialView.children
 
-        faviconImgView.src = utils.getFaviconImgUrl(thumbnail.url)
+        faviconImgView.src = utils.faviconImageUrl(thumbnail.url)
         leftDigitView.innerText = `${digits[0]}`
         rightDigitView.innerText = digitIndex % 2 !== 0 ? '.' : `${digits[1]}`
         restView.innerText = ` - ${thumbnail.title || '(Empty -_-)'}`

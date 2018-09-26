@@ -44,13 +44,7 @@ module.exports = (
         }
 
         const img = item.getAsFile()
-
-        const reader = new window.FileReader()
-        reader.readAsDataURL(img)
-        const newImgUrl = await (() =>
-          new Promise(resolve => {
-            reader.onload = () => resolve(reader.result)
-          }))()
+        const newImgUrl = await utils.imageUrl(img)
 
         if (newImgUrl) {
           await repos.thumnail.imgUrl(id, newImgUrl)
@@ -114,7 +108,7 @@ module.exports = (
             className: 'card-text',
             children: [
               utils.createElement('img', {
-                src: getFaviconImgUrl(url),
+                src: utils.faviconImageUrl(url),
                 width: 16,
                 height: 16,
                 style: { marginRight: '0.25em' }
@@ -237,21 +231,4 @@ function getThumbnailNumberFontSize (thumbnailImgSize) {
   }
 
   return mapping[thumbnailImgSize] || defaultValue
-}
-
-function getFaviconImgUrl (url) {
-  if (!url) {
-    return ''
-  }
-
-  const match = url.match(/^https?:\/\/([^/]+)/)
-
-  if (!match) {
-    return ''
-  }
-
-  const baseUrl = match[0]
-  return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(
-    baseUrl
-  )}`
 }

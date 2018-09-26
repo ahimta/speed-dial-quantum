@@ -1,4 +1,4 @@
-exports.getFaviconImgUrl = url => {
+exports.faviconImageUrl = url => {
   if (!url) {
     return ''
   }
@@ -13,6 +13,18 @@ exports.getFaviconImgUrl = url => {
   return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(
     baseUrl
   )}`
+}
+
+exports.imageUrl = async img => {
+  const reader = new window.FileReader()
+  reader.readAsDataURL(img)
+
+  const url = await (() =>
+    new Promise(resolve => {
+      reader.onload = () => resolve(reader.result)
+    }))()
+
+  return url
 }
 
 // copied and modified from StackOverflow -_-:

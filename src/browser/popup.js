@@ -111,7 +111,7 @@ async function initThumbnails (groups, thumbnails, { selectedGroupId }) {
   const { title, url } = tab
 
   // @ts-ignore
-  thumbnailImg.src = utils.getFaviconImgUrl(url)
+  thumbnailImg.src = utils.faviconImageUrl(url)
   // @ts-ignore
   titleInput.value = title
   // @ts-ignore
@@ -128,7 +128,7 @@ function onInputKeypress (event) {
 
 function updateOldThumbnail (thumbnail) {
   // @ts-ignore
-  oldThumbnailImg.src = utils.getFaviconImgUrl(thumbnail.url)
+  oldThumbnailImg.src = utils.faviconImageUrl(thumbnail.url)
   // @ts-ignore
   oldTitleInput.value = thumbnail.title || '(No Title :)'
   // @ts-ignore

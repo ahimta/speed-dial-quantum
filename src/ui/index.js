@@ -1,4 +1,5 @@
 const repos = require('../repos')
+const utils = require('./_utils')
 
 const editGroupsUi = require('./_edit_groups')
 const tabUi = require('./_tab')
@@ -128,7 +129,7 @@ async function editThumbnail () {
     return
   }
 
-  const imgUrl = !img ? null : await getImageUrl(img)
+  const imgUrl = !img ? null : await utils.imageUrl(img)
 
   const thumbnail = await repos.thumnail.update(id, { title, url })
 
@@ -181,17 +182,6 @@ function renderTab (groups, thumbnails, selectedGroupId, shiftRequired, group) {
   }
 
   root.appendChild(tab)
-}
-
-async function getImageUrl (img) {
-  const reader = new window.FileReader()
-  reader.readAsDataURL(img)
-  const url = await (() =>
-    new Promise(resolve => {
-      reader.onload = () => resolve(reader.result)
-    }))()
-
-  return url
 }
 
 function renderGroupModal (groups, selectedGroupId) {

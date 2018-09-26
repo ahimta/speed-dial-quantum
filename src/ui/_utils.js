@@ -1,3 +1,5 @@
+const globalUtils = require('../utils')
+
 exports.createElement = (
   name,
   {
@@ -94,14 +96,6 @@ exports.createElement = (
   return element
 }
 
-exports.getImageUrl = async img => {
-  const reader = new window.FileReader()
-  reader.readAsDataURL(img)
+exports.faviconImageUrl = globalUtils.faviconImageUrl
 
-  const url = await (() =>
-    new Promise(resolve => {
-      reader.onload = () => resolve(reader.result)
-    }))()
-
-  return url
-}
+exports.imageUrl = globalUtils.imageUrl
