@@ -1,6 +1,5 @@
 const platform = require('./_platform')
 
-const backupEntity = require('./entities/backup')
 const groupEntity = require('./entities/group')
 const tabEntity = require('./entities/tab')
 const thumbnailEntity = require('./entities/thumbnail')
@@ -47,7 +46,7 @@ exports.tab = {
       groupId
     )
 
-    await exports.tab.replace(newGroups, newThumbnails)
+    await updateGroupsAndThumbnails(newGroups, newThumbnails)
   },
   moveGroupUp: async groupId => {
     const [oldGroups, oldThumbnails] = await Promise.all([
@@ -60,7 +59,7 @@ exports.tab = {
       groupId
     )
 
-    await exports.tab.replace(newGroups, newThumbnails)
+    await updateGroupsAndThumbnails(newGroups, newThumbnails)
   },
   removeGroup: async groupId => {
     const [oldGroups, oldThumbnails] = await Promise.all([
@@ -73,9 +72,8 @@ exports.tab = {
       groupId
     )
 
-    await exports.tab.replace(newGroups, newThumbnails)
+    await updateGroupsAndThumbnails(newGroups, newThumbnails)
   },
-  replace: updateGroupsAndThumbnails,
   updateGroup: async (
     id,
     { name = null, rows = 0, cols = 0, thumbnailImgSize = null } = {}
@@ -160,15 +158,21 @@ exports.thumnail = {
 }
 
 exports.backup = async () => {
-  const [storedGroups, storedThumbnails] = await Promise.all([
+  const [groups, thumbnails] = await Promise.all([
     exports.group.list(),
     exports.thumnail.list()
   ])
 
-  return backupEntity.backup(
-    storedGroups,
-    storedThumbnails,
-    thumbnailId => platform.get(`imgUrl-${thumbnailId}`)
+  return { groups, thumbnails }
+}
+
+exports.restore = async (groups, thumbnails, imgsUrls) => {
+  await updateGroupsAndThumbnails(groups, thumbnails)
+
+  await Promise.all(
+    imgsUrls.map(({ thumbnailId, imgUrl }) =>
+      exports.thumnail.imgUrl(thumbnailId, imgUrl)
+    )
   )
 }
 

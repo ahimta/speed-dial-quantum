@@ -3,7 +3,17 @@ const repos = require('./_repos')
 const backupEntity = require('./entities/backup')
 
 exports.backup = async () => {
-  const { fileName, groups, imgsUrls } = await repos.backup()
+  const {
+    groups: storedGroups,
+    thumbnails: storedThumbnails
+  } = await repos.backup()
+
+  const { fileName, groups, imgsUrls } = await backupEntity.backup(
+    storedGroups,
+    storedThumbnails,
+    thumbnailId => repos.thumnail.imgUrl(thumbnailId)
+  )
+
   const backup = { groups, imgsUrls }
 
   // @ts-ignore
@@ -33,13 +43,7 @@ exports.restore = async file => {
     imgsUrls: storableImgsUrls
   } = backupEntity.restore(groups, imgsUrls)
 
-  await repos.tab.replace(storableGroups, storableThumbnails)
-
-  await Promise.all(
-    storableImgsUrls.map(({ thumbnailId, imgUrl }) =>
-      repos.thumnail.imgUrl(thumbnailId, imgUrl)
-    )
-  )
+  await repos.restore(storableGroups, storableThumbnails, storableImgsUrls)
 }
 
 // imports thumbnails of Firefox's pre-quantum famous Speed Dial extension
