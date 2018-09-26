@@ -1,4 +1,4 @@
-const repos = require('./_repos')
+const repos = require('./repos')
 
 const backupEntity = require('./entities/backup')
 

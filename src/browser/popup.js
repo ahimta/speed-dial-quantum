@@ -1,6 +1,6 @@
 const platform = require('../platform')
-const repos = require('../_repos')
-const utils = require('../_utils')
+const repos = require('../repos')
+const utils = require('../utils')
 
 const groupsSelect = document.querySelector('select[name=groupId]')
 const thumbnailsSelect = document.querySelector('select[name=thumbnailId]')

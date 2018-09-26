@@ -1,4 +1,4 @@
-const utils = require('../_utils')
+const utils = require('../utils')
 const groupEntity = require('./group')
 
 exports.addGroup = (

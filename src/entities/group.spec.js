@@ -1,4 +1,4 @@
-const factories = require('../_factories')
+const factories = require('../factories.spec')
 const groupEntity = require('./group')
 
 describe('groupEntity.add()', () => {

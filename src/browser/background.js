@@ -1,5 +1,5 @@
 const platform = require('../platform')
-const repos = require('../_repos')
+const repos = require('../repos')
 
 platform.onMessage(async request => {
   if (request.type === 'open-all-tabs') {

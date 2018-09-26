@@ -1,4 +1,4 @@
-const repos = require('../_repos')
+const repos = require('../repos')
 
 const editGroupsUi = require('./_edit_groups')
 const tabUi = require('./_tab')

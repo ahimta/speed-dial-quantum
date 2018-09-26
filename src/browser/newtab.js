@@ -1,5 +1,5 @@
-const eventsHandlers = require('../_events_handlers')
-const repos = require('../_repos')
+const eventsHandlers = require('./_events_handlers')
+const repos = require('../repos')
 const render = require('../ui')
 
 // @ts-ignore

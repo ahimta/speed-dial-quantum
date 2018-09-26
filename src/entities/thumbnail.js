@@ -1,4 +1,4 @@
-const utils = require('../_utils')
+const utils = require('../utils')
 
 exports.list = storedThumbnailsOrNone => {
   if (!Array.isArray(storedThumbnailsOrNone)) {

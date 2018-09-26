@@ -1,6 +1,6 @@
-const platform = require('./platform')
-const repos = require('./_repos')
-const utils = require('./_utils')
+const platform = require('../platform')
+const repos = require('../repos')
+const utils = require('../utils')
 
 module.exports = () => {
   let altKeyDown = false

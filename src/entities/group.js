@@ -1,4 +1,4 @@
-const utils = require('../_utils')
+const utils = require('../utils')
 
 exports.add = (oldGroups, { name, rows, cols, thumbnailImgSize = null }) => {
   const newGroup = mapOne({

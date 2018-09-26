@@ -1,4 +1,4 @@
-const utils = require('../_utils')
+const utils = require('../utils')
 
 exports.backup = async (oldGroups, oldThumbnails, getImgUrl) => {
   const thumbnails = oldThumbnails.map(({ id, groupId, title, url }) => ({
