@@ -134,7 +134,6 @@ Tab#groups.map(g => g.thumbnails().length).sum() == Tab#thumbnails.length
 - Keyboard shortcuts only work when the page is focused (because a content
   script is used)
 - `Alt` shortcuts don't work properly on Firefox Windows:sweat_smile:
-- Watching files seems to stop after a couple of minutes:sweat_smile:
 
 ## Todo
 
