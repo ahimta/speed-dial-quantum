@@ -27,13 +27,7 @@ exports.backup = async () => {
 }
 
 exports.restore = async file => {
-  const reader = new window.FileReader()
-
-  reader.readAsText(file)
-  const text = await (() =>
-    new Promise(resolve => {
-      reader.onload = () => resolve(reader.result)
-    }))()
+  const text = await getFileText(file)
 
   try {
     const { groups, imgsUrls } = JSON.parse(text)
@@ -52,4 +46,16 @@ exports.restore = async file => {
 
     await repos.restore(groups, thumbnails, [])
   }
+}
+
+async function getFileText (file) {
+  const reader = new window.FileReader()
+
+  reader.readAsText(file)
+  const text = await (() =>
+    new Promise(resolve => {
+      reader.onload = () => resolve(reader.result)
+    }))()
+
+  return text
 }
