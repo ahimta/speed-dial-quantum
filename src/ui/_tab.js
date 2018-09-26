@@ -110,22 +110,9 @@ module.exports = (
     onChange: async event => {
       const file = event.target.files[0]
 
-      try {
-        await backupManager.restore(file)
-        const groups = await repos.group.list()
-        render(groups[0].id)
+      await backupManager.restore(file)
 
-        return
-      } catch (err) {
-        console.log({ err })
-      }
-
-      const { groups, thumbnails } = await backupManager.restoreFirfoxSpeedDial(
-        file
-      )
-
-      await repos.tab.replace(groups, thumbnails)
-
+      const groups = await repos.group.list()
       render(groups[0].id)
     }
   })
