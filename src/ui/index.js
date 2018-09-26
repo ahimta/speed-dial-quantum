@@ -1,8 +1,8 @@
-const repos = require('./_repos')
+const repos = require('../_repos')
 
-const editGroupsUi = require('./ui/_edit_groups')
-const tabUi = require('./ui/_tab')
-const thumbnailsUi = require('./ui/_thumbnails')
+const editGroupsUi = require('./_edit_groups')
+const tabUi = require('./_tab')
+const thumbnailsUi = require('./_thumbnails')
 
 const newGroupThumbnailImgSizeElement = document.getElementById(
   'newGroupThumbnailImgSize'
