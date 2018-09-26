@@ -1,4 +1,4 @@
-const platform = require('../_platform')
+const platform = require('../platform')
 const repos = require('../_repos')
 const utils = require('../_utils')
 

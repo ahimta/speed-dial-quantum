@@ -1,4 +1,4 @@
-const platform = require('../_platform')
+const platform = require('../platform')
 const repos = require('../_repos')
 
 platform.onMessage(async request => {

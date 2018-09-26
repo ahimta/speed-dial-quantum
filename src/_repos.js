@@ -1,4 +1,4 @@
-const platform = require('./_platform')
+const platform = require('./platform')
 
 const groupEntity = require('./entities/group')
 const tabEntity = require('./entities/tab')
