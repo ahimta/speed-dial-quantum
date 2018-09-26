@@ -1,4 +1,4 @@
-const eventsHandlers = require('./_events_handlers')
+const dialView = require('./_dial_view')
 const repos = require('../repos')
 const render = require('../ui')
 
@@ -11,10 +11,11 @@ window.Raven.config(
 ).install()
 
 window.Raven.context(() => {
-  const handlers = eventsHandlers()
-  document.addEventListener('keydown', handlers.keydown)
-  document.addEventListener('mousedown', handlers.mousedown)
-  document.addEventListener('keyup', handlers.keyup)
+  const view = dialView()
+
+  document.addEventListener('keydown', view.keydown)
+  document.addEventListener('mousedown', view.mousedown)
+  document.addEventListener('keyup', view.keyup)
   ;(async () => {
     const groups = await repos.group.list()
     render(groups[0].id)
