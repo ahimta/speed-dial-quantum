@@ -91,7 +91,7 @@ yarn run package
 
 ## Clean
 
-`git clean -idx`
+`yarn run clean`
 
 ## Design (in Scala)
 
