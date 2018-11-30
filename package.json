@@ -6,6 +6,7 @@
   "author": "Abdullah Alansari",
   "license": "GPL-3.0-only",
   "scripts": {
+    "audit": "yarn audit",
     "build": "rollup --config",
     "clean": "git clean -idx",
     "coverage": "jest --coverage src/**/*.spec.js",
