@@ -21,6 +21,11 @@
 
 Minimal speed-dial extension with support for keyboard shortcuts & importing Speed Dial pages
 
+## Prerequisites
+
+1. Node (using version in `.nvmrc`)
+2. yarn (can be installed using just `npm install --global yarn`)
+
 ## Build
 
 ```bash
@@ -45,6 +50,9 @@ yarn run watch
 yarn install --emoji
 yarn run build
 yarn test
+
+# for test coverage (`coverage/lcov-report/index.html` will be generated)
+yarn run coverage
 ```
 
 ## Package
@@ -80,6 +88,10 @@ yarn run package
 5. Update HTML's tag reference (`href` or `src`)
 6. Remove older version files
 7. Try the extension and make sure everything works
+
+## Clean
+
+`git clean -idx`
 
 ## Design (in Scala)
 
