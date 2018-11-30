@@ -35,45 +35,9 @@ exports.tab = {
 
     return newGroup
   },
-  moveGroupDown: async groupId => {
-    const [oldGroups, oldThumbnails] = await Promise.all([
-      exports.group.list(),
-      exports.thumnail.list()
-    ])
-    const { newGroups, newThumbnails } = tabEntity.moveGroupDown(
-      oldGroups,
-      oldThumbnails,
-      groupId
-    )
-
-    await updateGroupsAndThumbnails(newGroups, newThumbnails)
-  },
-  moveGroupUp: async groupId => {
-    const [oldGroups, oldThumbnails] = await Promise.all([
-      exports.group.list(),
-      exports.thumnail.list()
-    ])
-    const { newGroups, newThumbnails } = tabEntity.moveGroupUp(
-      oldGroups,
-      oldThumbnails,
-      groupId
-    )
-
-    await updateGroupsAndThumbnails(newGroups, newThumbnails)
-  },
-  removeGroup: async groupId => {
-    const [oldGroups, oldThumbnails] = await Promise.all([
-      exports.group.list(),
-      exports.thumnail.list()
-    ])
-    const { newGroups, newThumbnails } = tabEntity.removeGroup(
-      oldGroups,
-      oldThumbnails,
-      groupId
-    )
-
-    await updateGroupsAndThumbnails(newGroups, newThumbnails)
-  },
+  moveGroupDown: changeTabGroupFactory(tabEntity.moveGroupDown),
+  moveGroupUp: changeTabGroupFactory(tabEntity.moveGroupUp),
+  removeGroup: changeTabGroupFactory(tabEntity.removeGroup),
   updateGroup: async (
     id,
     { name = null, rows = 0, cols = 0, thumbnailImgSize = null } = {}
@@ -174,6 +138,19 @@ exports.restore = async (groups, thumbnails, imgsUrls) => {
       exports.thumnail.imgUrl(thumbnailId, imgUrl)
     )
   )
+}
+
+function changeTabGroupFactory (fn) {
+  return async groupId => {
+    const [oldGroups, oldThumbnails] = await Promise.all([
+      exports.group.list(),
+      exports.thumnail.list()
+    ])
+
+    const { newGroups, newThumbnails } = fn(oldGroups, oldThumbnails, groupId)
+
+    await updateGroupsAndThumbnails(newGroups, newThumbnails)
+  }
 }
 
 async function getOldGroups () {
