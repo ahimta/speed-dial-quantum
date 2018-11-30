@@ -45,10 +45,7 @@ module.exports = (
           .concat(
             utils.createElement('li', {
               className: 'nav-item',
-              map: element => {
-                element.setAttribute('data-toggle', 'modal')
-                element.setAttribute('data-target', '#newGroupModal')
-              },
+              map: bindToModalFactory('newGroupModal'),
               onClick: () => {
                 newGroupNameInput.value = ''
                 newGroupRowsInput.value = ''
@@ -66,10 +63,7 @@ module.exports = (
             }),
             utils.createElement('li', {
               className: 'nav-item',
-              map: element => {
-                element.setAttribute('data-toggle', 'modal')
-                element.setAttribute('data-target', '#exampleModal')
-              },
+              map: bindToModalFactory('exampleModal'),
               children: [
                 utils.createElement('button', {
                   className: 'btn-primary btn-sm',
@@ -81,10 +75,7 @@ module.exports = (
             }),
             utils.createElement('li', {
               className: 'nav-item',
-              map: element => {
-                element.setAttribute('data-toggle', 'modal')
-                element.setAttribute('data-target', '#faqModal')
-              },
+              map: bindToModalFactory('faqModal'),
               children: [
                 utils.createElement('button', {
                   className: 'btn-success btn-sm',
@@ -155,6 +146,13 @@ module.exports = (
   tab.appendChild(cardFooter)
 
   return tab
+}
+
+function bindToModalFactory (modalId) {
+  return element => {
+    element.setAttribute('data-toggle', 'modal')
+    element.setAttribute('data-target', `#${modalId}`)
+  }
 }
 
 function groupsUi (groups, selectedGroupId, { render }) {
