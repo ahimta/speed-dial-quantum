@@ -9,9 +9,11 @@ platform.onMessage(async request => {
     const groupThumbnails = thumbnails.filter(
       ({ groupId: gId }) => gId === groupId
     )
-    groupThumbnails.filter(({ url }) => url).forEach(async ({ url }) => {
-      await platform.createTab({ url })
-    })
+    groupThumbnails
+      .filter(({ url }) => url)
+      .forEach(async ({ url }) => {
+        await platform.createTab({ url })
+      })
 
     return
   }
