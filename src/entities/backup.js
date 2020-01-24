@@ -22,12 +22,14 @@ exports.backup = async (oldGroups, oldThumbnails, getImgUrl) => {
     })
   )
 
-  const imgsUrls = (await Promise.all(
-    oldThumbnails.map(async ({ id: thumbnailId, imgUrl }) => ({
-      thumbnailId,
-      imgUrl: (await getImgUrl(thumbnailId)) || imgUrl || null
-    }))
-  )).filter(({ imgUrl }) => imgUrl)
+  const imgsUrls = (
+    await Promise.all(
+      oldThumbnails.map(async ({ id: thumbnailId, imgUrl }) => ({
+        thumbnailId,
+        imgUrl: (await getImgUrl(thumbnailId)) || imgUrl || null
+      }))
+    )
+  ).filter(({ imgUrl }) => imgUrl)
 
   return { fileName: getBackupFileName(), groups, imgsUrls }
 }
