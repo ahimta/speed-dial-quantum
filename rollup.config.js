@@ -1,5 +1,5 @@
-import commonjs from 'rollup-plugin-commonjs'
-import nodeResolve from 'rollup-plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
+import nodeResolve from '@rollup/plugin-node-resolve'
 
 const childProcess = require('child_process')
 
@@ -19,7 +19,7 @@ export default [
 ]
 
 function getConfig (inputPath, outputPath) {
-  const plugins = [nodeResolve({ jsnext: true, main: true }), commonjs({})]
+  const plugins = [nodeResolve({ mainFields: ['jsnext', 'main'] }), commonjs()]
 
   const name = 'x'
   const format = 'iife'
