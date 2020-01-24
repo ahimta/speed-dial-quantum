@@ -1,0 +1,1 @@
+# Speed Dial Quantum Changelog
