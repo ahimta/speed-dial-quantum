@@ -1,7 +1,7 @@
 const platform = require('../platform')
 const repos = require('../repos')
 
-platform.onMessage(async request => {
+platform.onMessage(async (request) => {
   if (request.type === 'open-all-tabs') {
     const groupId = request.groupId
     const thumbnails = await repos.thumnail.list()

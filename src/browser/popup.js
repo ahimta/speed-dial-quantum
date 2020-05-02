@@ -36,14 +36,14 @@ async function init () {
 
   submitButton.addEventListener('click', addPage)
 
-  groupsSelect.addEventListener('change', async event => {
+  groupsSelect.addEventListener('change', async (event) => {
     await initThumbnails(groups, thumbnails, {
       // @ts-ignore
       selectedGroupId: event.target.value
     })
   })
 
-  thumbnailsSelect.addEventListener('change', event => {
+  thumbnailsSelect.addEventListener('change', (event) => {
     // @ts-ignore
     const selectedOption = event.target.selectedOptions[0]
     const thumbnailIndex = parseInt(selectedOption.innerText, 10) - 1
@@ -52,7 +52,7 @@ async function init () {
     updateOldThumbnail(thumbnail)
   })
 
-  groupsElements.forEach(element => groupsSelect.appendChild(element))
+  groupsElements.forEach((element) => groupsSelect.appendChild(element))
 
   const selectedGroupId = groups[0].id
 
@@ -98,7 +98,7 @@ async function initThumbnails (groups, thumbnails, { selectedGroupId }) {
     thumbnailsSelect.removeChild(thumbnailsSelect.firstChild)
   }
 
-  thumbnailsElements.forEach(element => thumbnailsSelect.appendChild(element))
+  thumbnailsElements.forEach((element) => thumbnailsSelect.appendChild(element))
 
   updateOldThumbnail(selectedThumbnail)
 

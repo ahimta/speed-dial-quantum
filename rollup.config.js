@@ -4,10 +4,7 @@ import nodeResolve from '@rollup/plugin-node-resolve'
 const childProcess = require('child_process')
 
 const environment = process.env.NODE_ENV || 'development'
-const version = childProcess
-  .execSync('git rev-parse HEAD')
-  .toString()
-  .trim()
+const version = childProcess.execSync('git rev-parse HEAD').toString().trim()
 
 const intro = `window.SDQ = { environment: '${environment}', version: '${version}' }`
 

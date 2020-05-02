@@ -48,7 +48,7 @@ exports.list = async (storedGroupsOrNone, getTopSites) => {
 }
 
 exports.remove = (oldGroups, id) => {
-  return oldGroups.filter(t => t.id !== id)
+  return oldGroups.filter((t) => t.id !== id)
 }
 
 exports.update = (
@@ -56,7 +56,7 @@ exports.update = (
   id,
   { name = null, rows = 0, cols = 0, thumbnailImgSize = null } = {}
 ) => {
-  const group = oldGroups.find(t => t.id === id)
+  const group = oldGroups.find((t) => t.id === id)
 
   if (!group) {
     throw new Error(`groupRepo.update: group with id "${id}" not found`)

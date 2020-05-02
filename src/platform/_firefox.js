@@ -1,12 +1,12 @@
 module.exports = {
   // storage: get, set
-  get: async key => (await browser.storage.local.get(key))[key],
+  get: async (key) => (await browser.storage.local.get(key))[key],
   set: (key, value) => module.exports.setMany({ [key]: value }),
-  setMany: obj => browser.storage.local.set(obj),
+  setMany: (obj) => browser.storage.local.set(obj),
 
   // messaging: onMessage, sendMessage
-  onMessage: listener => browser.runtime.onMessage.addListener(listener),
-  sendMessage: message => browser.runtime.sendMessage(message),
+  onMessage: (listener) => browser.runtime.onMessage.addListener(listener),
+  sendMessage: (message) => browser.runtime.sendMessage(message),
 
   // tabs: activeTab, createTab, updateTab
   activeTab: async () => {
@@ -15,8 +15,8 @@ module.exports = {
 
     return { id, title, url }
   },
-  createTab: options => browser.tabs.create(options),
-  updateTab: options => browser.tabs.update(options),
+  createTab: (options) => browser.tabs.create(options),
+  updateTab: (options) => browser.tabs.update(options),
 
   // topSites
   topSites: async () => {

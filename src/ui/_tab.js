@@ -34,7 +34,7 @@ module.exports = (
                 title: 'Only activate when "Shift" is clicked',
                 type: 'checkbox',
                 style: { marginRight: '1em' },
-                onChange: async event => {
+                onChange: async (event) => {
                   await repos.settings.shiftRequired(event.target.checked)
                 }
               })
@@ -98,7 +98,7 @@ module.exports = (
   const speedDialFile = utils.createElement('input', {
     type: 'file',
     style: { display: 'none' },
-    onChange: async event => {
+    onChange: async (event) => {
       const file = event.target.files[0]
 
       await backupManager.restore(file)
@@ -149,7 +149,7 @@ module.exports = (
 }
 
 function bindToModalFactory (modalId) {
-  return element => {
+  return (element) => {
     element.setAttribute('data-toggle', 'modal')
     element.setAttribute('data-target', `#${modalId}`)
   }
@@ -163,7 +163,7 @@ function groupsUi (groups, selectedGroupId, { render }) {
     groupsElements.push(
       utils.createElement('li', {
         className: 'nav-item',
-        onMousedown: event => {
+        onMousedown: (event) => {
           event.preventDefault()
 
           if (event.button === 1 || (event.button === 0 && event.ctrlKey)) {

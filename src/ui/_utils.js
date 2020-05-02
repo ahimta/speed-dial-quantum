@@ -64,11 +64,11 @@ exports.createElement = (
   }
 
   if (children.length) {
-    children.forEach(child => element.appendChild(child))
+    children.forEach((child) => element.appendChild(child))
   }
 
   if (style) {
-    Object.keys(style).forEach(styleAttr => {
+    Object.keys(style).forEach((styleAttr) => {
       element.style[styleAttr] = style[styleAttr]
     })
   }
@@ -80,7 +80,7 @@ exports.createElement = (
     element.addEventListener('click', onClick)
   }
   if (onDrop) {
-    element.addEventListener('dragover', event => {
+    element.addEventListener('dragover', (event) => {
       event.preventDefault()
     })
     element.addEventListener('drop', onDrop)

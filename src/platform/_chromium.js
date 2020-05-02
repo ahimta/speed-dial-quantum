@@ -1,8 +1,8 @@
 module.exports = {
   // storage: get, set
-  get: key =>
+  get: (key) =>
     new Promise((resolve, reject) => {
-      chrome.storage.local.get([key], result => {
+      chrome.storage.local.get([key], (result) => {
         const err = chrome.runtime.lastError
         if (err) {
           reject(err)
@@ -13,7 +13,7 @@ module.exports = {
       })
     }),
   set: (key, value) => module.exports.setMany({ [key]: value }),
-  setMany: obj =>
+  setMany: (obj) =>
     new Promise((resolve, reject) => {
       chrome.storage.local.set(obj, () => {
         const err = chrome.runtime.lastError
@@ -27,13 +27,13 @@ module.exports = {
     }),
 
   // messaging: onMessage, sendMessage
-  onMessage: listener => chrome.runtime.onMessage.addListener(listener),
-  sendMessage: message => chrome.runtime.sendMessage(message),
+  onMessage: (listener) => chrome.runtime.onMessage.addListener(listener),
+  sendMessage: (message) => chrome.runtime.sendMessage(message),
 
   // tabs: activeTab, createTab, updateTab
   activeTab: () =>
     new Promise((resolve, reject) => {
-      chrome.tabs.query({ active: true }, activeTabs => {
+      chrome.tabs.query({ active: true }, (activeTabs) => {
         const err = chrome.runtime.lastError
         if (err) {
           reject(err)
@@ -46,13 +46,13 @@ module.exports = {
         resolve({ id, title, url })
       })
     }),
-  createTab: options => chrome.tabs.create(options),
-  updateTab: options => chrome.tabs.update(options),
+  createTab: (options) => chrome.tabs.create(options),
+  updateTab: (options) => chrome.tabs.update(options),
 
   // topSites
   topSites: () =>
     new Promise((resolve, reject) => {
-      chrome.topSites.get(sites => {
+      chrome.topSites.get((sites) => {
         const err = chrome.runtime.lastError
 
         if (err) {

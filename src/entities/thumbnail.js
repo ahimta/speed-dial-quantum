@@ -1,6 +1,6 @@
 const utils = require('../utils')
 
-exports.list = storedThumbnailsOrNone => {
+exports.list = (storedThumbnailsOrNone) => {
   if (!Array.isArray(storedThumbnailsOrNone)) {
     return []
   }
@@ -63,7 +63,7 @@ exports.update = (
     reset = false
   } = {}
 ) => {
-  const thumbnail = oldThumbnails.find(t => t.id === id)
+  const thumbnail = oldThumbnails.find((t) => t.id === id)
 
   if (!thumbnail) {
     throw new Error(`thumbnailRepo.update: thumbnail with id "${id}" not found`)

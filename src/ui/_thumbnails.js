@@ -34,7 +34,7 @@ module.exports = (
           if (item.kind === 'string' && item.type === 'text/plain') {
             // @todo: use an async helper instead
             // @todo: add support for title too
-            item.getAsString(async url => {
+            item.getAsString(async (url) => {
               await repos.thumnail.update(id, { url })
               render(selectedGroupId)
             })
@@ -71,7 +71,7 @@ module.exports = (
                 src: imgUrl || '../../icons/loading.svg',
                 width: 100,
                 style: { maxWidth, maxHeight },
-                map: async element => {
+                map: async (element) => {
                   setTimeout(async () => {
                     const storedImgUrl = await repos.thumnail.imgUrl(id)
                     const displayableImgUrl = storedImgUrl || imgUrl
@@ -172,7 +172,7 @@ module.exports = (
       card.appendChild(cardFooter)
       return card
     })
-    .filter(x => x)
+    .filter((x) => x)
 
   const cardGroups = []
   for (let i = 0; i < elements.length; i = i + (group.cols || 3)) {

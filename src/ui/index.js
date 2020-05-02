@@ -144,7 +144,7 @@ async function editThumbnail () {
 }
 
 function onEnterFactory (fn) {
-  return event => {
+  return (event) => {
     if (!(event.code === 'Enter')) {
       return
     }
@@ -205,5 +205,5 @@ function renderGroupModal (groups, selectedGroupId) {
     groupsList.removeChild(groupsList.firstChild)
   }
 
-  _groupsElements.forEach(group => groupsList.appendChild(group))
+  _groupsElements.forEach((group) => groupsList.appendChild(group))
 }

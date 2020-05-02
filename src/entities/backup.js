@@ -63,12 +63,12 @@ exports.restore = (groups, imgsUrls) => {
   }
 }
 
-exports.restoreFirefoxSpeedDial = text => {
+exports.restoreFirefoxSpeedDial = (text) => {
   const lines = text.split(/[\r\n]+/)
-  const groupsLines = lines.filter(line =>
+  const groupsLines = lines.filter((line) =>
     line.match(/^group-\d+-((columns)|(rows)|(title))=.+$/g)
   )
-  const thumbnailsLines = lines.filter(line =>
+  const thumbnailsLines = lines.filter((line) =>
     line.match(/^thumbnail-\d+-((label)|(url))=.+$/g)
   )
   const groupsLength = Math.ceil(groupsLines.length / 3)
